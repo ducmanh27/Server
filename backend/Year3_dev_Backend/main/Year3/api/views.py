@@ -1053,32 +1053,7 @@ def getAqiRef(request, *args, **kwargs):
     except:
         return Response({"Response": 0}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-##
-# @brief: This view is for sending Weatherdata to Frontend, component Weatherdata
-#
-# @params: 
-#       urls: "api/weatherdata"
-# @return:
-#  
-#      if there is none:
-#       []
-from api.models import WeatherData
-from api.serializers import WeatherDataSerializer
-@api_view(["GET"])
-# @authentication_classes([jwtauthentication.JWTAuthentication])  #!< use JWTAuthentication
-# @permission_classes([permissions.IsAuthenticated])              #!< permitted to use APi only if JWT is authenticated
-def getWeatherdata(request, *args, **kwargs):
-    try:
-        if WeatherData.objects.count() == 0:
-            return Response({"Response": "No data"}, status=status.HTTP_204_NO_CONTENT)
-        else:
-            new_data = WeatherDataSerializer(
-                WeatherData.objects.order_by("-id"), many=True
-            ).data
-            return Response({"Response": new_data[0]}, status=status.HTTP_200_OK)
- 
-    except:
-        return Response({"Response": 0}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
 #DELETE superuser
@@ -1099,4 +1074,69 @@ class CustomTokeObtainPairview(TokenObtainPairView):
 
 
 
+from api.models import WeatherData
+from api.serializers import WeatherDataSerializer
+@api_view(["GET"])
+# @authentication_classes([jwtauthentication.JWTAuthentication])  #!< use JWTAuthentication
+# @permission_classes([permissions.IsAuthenticated])              #!< permitted to use APi only if JWT is authenticated
+def getWeatherdata(request, *args, **kwargs):
+    try:
+        if WeatherData.objects.count() == 0:
+            return Response({"Response": "No data"}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            new_data = WeatherDataSerializer(
+                WeatherData.objects.order_by("-id"), many=True
+            ).data
+            return Response({"Response": new_data[0]}, status=status.HTTP_200_OK)
+ 
+    except:
+        return Response({"Response": 0}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 
+##
+# @brief: This view is for getting energy data 
+#
+# @params: 
+#       urls: "api/energydata"
+# @return:
+#       
+#      if there is none:
+#       []
+#       
+##
+# @brief: This view is for sending Weatherdata to Frontend, component Weatherdata
+#
+# @params: 
+#       urls: "api/weatherdata"
+# @return:
+#  
+#      if there is none:
+#       []
+from .models import EnergyData
+from .serializers import EnergyDataSerializer
+class EnergyDataAPIView(generics.RetrieveAPIView):
+
+    queryset = EnergyData.objects.all()
+    serializer_class = EnergyDataSerializer
+    # lookup_field = 'pk'
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        
+        room_id = self.kwargs.get("pk")
+
+        obj = models.EnergyData.objects.filter(room_id = room_id).order_by('-time')[:5]
+        print(obj)
+        # May raise a permission denied
+        self.check_object_permissions(self.request, obj)
+        return obj.first()
+    def retrieve(self, request, *args, **kwargs):
+
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+    
+    def get(self, request, *args, **kwargs):
+        
+        return self.retrieve(request, *args, **kwargs)
+    

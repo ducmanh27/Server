@@ -67,3 +67,5 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
        data = super(MyTokenObtainPairSerializer, self).validate(attrs)
        data["is_superuser"] = '1' if self.user.is_superuser else '0'
        return data
+    
+
