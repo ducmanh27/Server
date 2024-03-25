@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -8,39 +9,73 @@ import Container from '@mui/material/Container';
 import CallIcon from '@mui/icons-material/Call';
 import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import GoogleIcon from '@mui/icons-material/Google';
-import FacebookIcon from '@mui/icons-material/Facebook';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import mapboxgl from 'mapbox-gl';
 
 function Copyright(props) {
     return (
       <Typography variant="body2" color="text.secondary" align="center" {...props}>
         {'Copyright © '}
         <Link color="inherit" href="https://hust.edu.vn/">
-          hust
+          IPAC
         </Link>
         {' '}
         {new Date().getFullYear()}
         {'.'}
       </Typography>
     );
-  }
+}
+
+const MapboxMap = () => {
+  mapboxgl.accessToken = 'pk.eyJ1IjoicXVhbmdhbmgwMTEwIiwiYSI6ImNsdTVzcDd1YTFxZDUyamw4a3Eyd3kzeHgifQ.Cjd2-WvzHRTbBvLTQww1ew';
+  const COORDINATE = [105.8431, 21.0054];
+  const MARKER_INFO = '<h3>Hanoi University of Science and Technology</h3><h4>IPAC, C5-102, HUST</h4>';
+
+  useEffect(() => { 
+    const map = new mapboxgl.Map({
+      container: 'map-container',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: COORDINATE, // Example coordinates
+      zoom: 17,
+    });
+
+    const marker = new mapboxgl.Marker()
+      .setLngLat(COORDINATE)
+      .addTo(map);
+
+    const popup = new mapboxgl.Popup({ 
+      offset: 10 
+    })
+      .setHTML(MARKER_INFO);
+
+    marker.setPopup(popup)
+
+    // Add navigation controls
+    map.addControl(new mapboxgl.NavigationControl());
+
+    // Clean up
+    return () => map.remove();
+  }, []);
+
+  return <div id="map-container" style={{ width: '200%', height: '250px', borderRadius: '10px' }} />;
+};
 
 const Footer = (props) => {
     const footers = [
         {
             title: "Phone",
             icon: (<CallIcon/>),
-            description: "Phone: ........................."
+            description: "Phone: ................................................"
         },
         {
             title: "Email",
             icon: (<EmailIcon/>),
-            description: "Email: ..........................",
+            description: "Email: ................................................",
         },
         {
             title: "Address",
             icon: (<LocationOnIcon/>),
-            description: "Address: .......................",
+            description: "Address: ..............................................",
         },
       ];
       
@@ -49,7 +84,7 @@ const Footer = (props) => {
 
     return (
         <Container
-            maxWidth="md"
+            maxWidth="lg"
             component="footer"
             sx={{
                 borderTop: (theme) => `1px solid ${theme.palette.divider}`,
@@ -57,9 +92,8 @@ const Footer = (props) => {
                 py: [3, 6],
             }}
         >
-            
-            {/* <Grid container spacing={4} justifyContent="space-evenly">
-                <Grid item xs={6} sm={3}>
+            <Grid container spacing={5} justifyContent="center">
+                <Grid item xs={12} sm={12} md={4} justifyContent="right">
                     <Box 
                         display="flex"
                         justifyContent="center"
@@ -70,12 +104,12 @@ const Footer = (props) => {
                     </Box>
 
                     {footers.map((footer) => (
-                        <Box key= {footer.title} display="flex" gap="10px">
+                        <Box key= {footer.title} display="flex" gap="10px" marginY='10px' justifyContent='center'>
                             <Box>
                                 {footer.icon}
                             </Box>
                             <Box>
-                                <Typography variant="h6" color="text.primary" gutterBottom>
+                                <Typography variant="h5" color="text.primary" gutterBottom>
                                 {footer.description}
                                 </Typography>
                             </Box>
@@ -83,30 +117,31 @@ const Footer = (props) => {
                     ))}
                 </Grid>
 
-                <Grid item xs={6} sm={3}>
+                <Grid item xs={12} sm={12} md={6} justifyContent="left">
                     <Box 
                         display="flex"
                         justifyContent="center"
                     >
                         <Typography variant="h4" color="text.primary" gutterBottom>
-                            Social
+                            Location
                         </Typography>
                     </Box>
                     <Box 
                         display="flex" 
                         justifyContent="center"
+                        borderRadius="50%"
                     >
-                        <Link color="inherit" href="https://hust.edu.vn/">
+                        {/* <Link color="inherit" href="https://hust.edu.vn/">
                             <GoogleIcon/>
                         </Link>
                         <Link color="inherit" href="https://hust.edu.vn/">
                             <FacebookIcon/>
-                        </Link>
+                        </Link> */}
+                        <MapboxMap />
                     </Box>
                 </Grid>
-            </Grid> */}
+            </Grid>
             <Copyright sx={{ mt: 5 }} />
-
         </Container>
     );
 }

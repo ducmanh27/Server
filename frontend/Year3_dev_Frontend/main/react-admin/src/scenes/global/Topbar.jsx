@@ -68,7 +68,7 @@ const Topbar = ({setIsSignin}) => {
 					<Link to="/configuration">
 						<IconButton >
 							<SettingsIcon style={{ fill: 'white' }}/>
-							<Typography variant="h5" 
+							<Typography variant='h5'
 										color="white" 
 										display="inline"
 										paddingLeft="5%">

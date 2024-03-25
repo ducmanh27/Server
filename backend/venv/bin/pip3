@@ -1,4 +1,4 @@
-#!/home/ipac/Documents/smart_construction/backend/venv/bin/python3
+#!/home/quanganh0110/Desktop/lab/Server/backend/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

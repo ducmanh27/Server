@@ -17,7 +17,7 @@ import Weatherdata from "./scenes/weatherdata/Weatherdata";
 
 const debug_mode = false;
 // export const host = "27.71.227.1:8002";
-export const host = "192.168.1.199:8000";
+export const host = "localhost:8000";
 
 
 export const  UserContext = createContext();
