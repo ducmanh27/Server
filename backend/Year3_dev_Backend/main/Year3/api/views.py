@@ -1129,6 +1129,7 @@ class EnergyDataAPIView(generics.RetrieveAPIView):
         print(obj)
         # May raise a permission denied
         self.check_object_permissions(self.request, obj)
+        print(f"object first: {obj.first}")
         return obj.first()
     def retrieve(self, request, *args, **kwargs):
 
