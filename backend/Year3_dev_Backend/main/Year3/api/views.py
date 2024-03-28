@@ -1112,6 +1112,18 @@ def getWeatherdata(request, *args, **kwargs):
 #  
 #      if there is none:
 #       []
+#           {  "node_id":[8],
+#              "voltage":[225.8],
+#              "current":[0.92],
+#              "active_power":[],
+#              "red":[],
+#              "light":[],
+#              "co2":[],
+#              "blue":[],
+#              "motion":[],
+#              "time":[],
+#              "temp":[],
+#              "dust":[]}
 from .models import EnergyData
 from .serializers import EnergyDataSerializer
 class EnergyDataAPIView(generics.RetrieveAPIView):
@@ -1129,7 +1141,7 @@ class EnergyDataAPIView(generics.RetrieveAPIView):
         print(obj)
         # May raise a permission denied
         self.check_object_permissions(self.request, obj)
-        print(f"object first: {obj.first}")
+        # print(f"object first: {obj.first}")
         return obj.first()
     def retrieve(self, request, *args, **kwargs):
 
@@ -1140,4 +1152,112 @@ class EnergyDataAPIView(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         
         return self.retrieve(request, *args, **kwargs)
-    
+
+
+'''
+    {
+        "operator": "keep_alive",
+        "info":
+            {
+                "room_id": 1,
+                "IP": "192.168.1.192",
+                "time": 1711620315s
+            }
+    }
+'''
+import paho.mqtt.client as mqtt
+from rest_framework import generics, status
+from rest_framework.response import Response
+from .models import Gateway
+from .serializers import GatewaySerializer
+from . import config
+class GatewayListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Gateway.objects.all()
+    serializer_class = GatewaySerializer
+    def send_json_to_mqtt_server(self, json_data, broker_address="192.168.1.199", broker_port=1883, topic="farm/monitor/alive"):
+        print(json_data)
+        client = mqtt.Client()
+        client.connect(broker_address, broker_port)
+        client.publish(topic, json_data)
+        client.disconnect()
+        time.sleep(0.01)
+    def get_queryset(self):
+        return list(Gateway.objects.filter(ip = "192.168.1.192"))
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        ActiveGateways = Gateway.objects.filter(status = "INACTIVE")
+        for gateway in ActiveGateways:
+            data = {
+                "operator": "keep_alive",
+                "info": {
+                    "room_id": gateway.room_id.room_id,
+                    "IP": gateway.ip,
+                    "time": int(datetime.datetime.now().timestamp())
+                }
+            }
+            
+            json_data = json.dumps(data)
+            print(json_data)
+            self.send_json_to_mqtt_server(json_data, config.BROKER_ADDRESS, config.BROKER_PORT, config.BROKER_TOPIC_ALIVE)
+        # print(serializer)
+        # print(serializer.data)
+        return Response(serializer.data)
+    def create(self, request, *args, **kwargs):
+        # Extract data from request
+        '''
+            {
+                'add_gateway': 'true',
+                'room_id': '1',
+                'ip_start': '192.168.1.180',
+                'ip_end': '192.168.1.198'
+            }
+        '''
+        add_gateway = request.data.get('add_gateway')
+        room_id = int(request.data.get('room_id', 1))  # Default room_id is 1
+        ip_start = request.data.get('ip_start')
+        ip_end = request.data.get('ip_end')
+
+        # Check if add_gateway is true
+        if add_gateway == 'true':
+            # Get the Room object based on room_id
+            try:
+                room = Room.objects.get(room_id=room_id)
+            except Room.DoesNotExist:
+                return Response({'error': f'Room with id {room_id} does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Validate and calculate IP range
+            try:
+                ip_start_parts = list(map(int, ip_start.split('.')))
+                ip_end_parts = list(map(int, ip_end.split('.')))
+            except ValueError:
+                return Response({'error': 'Invalid IP format'}, status=status.HTTP_400_BAD_REQUEST)
+
+            if len(ip_start_parts) != 4 or len(ip_end_parts) != 4:
+                return Response({'error': 'Invalid IP format'}, status=status.HTTP_400_BAD_REQUEST)
+
+            ip_range = [f"192.168.1.{i}" for i in range(ip_start_parts[3], ip_end_parts[3] + 1)]
+
+            # Get the current Unix timestamp
+            current_unix_timestamp = int(time.time())
+
+            # Insert records
+            for ip in ip_range:
+                Gateway.objects.create(
+                    room_id=room,
+                    ip=ip,
+                    status='INACTIVE',
+                    error="null",
+                    time=current_unix_timestamp
+                )
+
+            return Response({'message': 'Records inserted successfully'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({'error': 'Invalid add_gateway parameter'}, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+

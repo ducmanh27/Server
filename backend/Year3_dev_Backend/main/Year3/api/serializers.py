@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import Room, Registration, RawSensorMonitor, SensorMonitor, EnergyData
+from api.models import Room, Registration, RawSensorMonitor, SensorMonitor, EnergyData, Gateway
 from api.models import RawActuatorMonitor, ActuatorMonitor, ControlSetpoint, SetTimerHistory, NodeConfigBuffer
 from api.models import AqiRef, WeatherData
 from django.contrib.auth.models import User
@@ -67,5 +67,20 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
        data = super(MyTokenObtainPairSerializer, self).validate(attrs)
        data["is_superuser"] = '1' if self.user.is_superuser else '0'
        return data
-    
-
+   
+class GatewaySerializer(serializers.ModelSerializer):
+   class Meta:
+      model = Gateway
+      fields = "__all__"
+'''
+   {
+      "operator": "keep_alive",
+      "info":{
+         "room_id":3,
+         "IP":"192.168.1.192",
+         "time": ...s
+      }
+   }
+'''
+class KeepAliveSerializer(serializers.Serializer):
+   pass

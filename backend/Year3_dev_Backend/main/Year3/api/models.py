@@ -16,6 +16,22 @@ class Room(models.Model):
     x_length = models.IntegerField(db_column="x_length")
     y_length = models.IntegerField(db_column="y_length")
     information = models.TextField(null=False, db_column="information")
+##
+# @brief This table is for storing gateway, for synchronizing time from server to gateway
+#
+class Gateway(models.Model):
+    id = models.BigAutoField(primary_key=True,db_column="id",)
+    room_id = models.ForeignKey(Room, 
+                                to_field='room_id',
+                                verbose_name=("Refering to id of room where this node is implemented"),
+                                on_delete=models.CASCADE,
+                                null=False, 
+                                db_column="room_id",
+                                )
+    ip = models.TextField(unique = True,null=False, db_column="ip",)
+    status = models.TextField(null=False, db_column="status",)
+    error = models.TextField(null=False, db_column="error",)
+    time = models.BigIntegerField(null=False, db_column="time",)
 
 ##
 # @brief This table is for storing node data, including how many node are being emplemented,
