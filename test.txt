@@ -1,4 +1,4 @@
-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
+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
 psql -h hostname -d databasename -U username -f file.sql
 pg_dump -U username -d dbname -f output.sql
 
