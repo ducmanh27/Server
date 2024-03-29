@@ -75,9 +75,6 @@ const SmallFilter = ({setNumberOfData, setDataChart, setIsLoading}) =>
                     <Box m={1}/>
                     <Box
                     sx={{
-                        // backgroundColor: "black",
-                        // padding: "5px 8px",
-                        // "min-width": "30px",
                         fontSize: "20px",
                         fontWeight: 800,
                         }}>{ctime}

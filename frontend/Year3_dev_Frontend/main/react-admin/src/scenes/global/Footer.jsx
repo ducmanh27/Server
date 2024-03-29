@@ -9,8 +9,11 @@ import Container from '@mui/material/Container';
 import CallIcon from '@mui/icons-material/Call';
 import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import GoogleIcon from '@mui/icons-material/Google';
+import FacebookIcon from '@mui/icons-material/Facebook';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
+import { Language, Public, Share, Twitter } from '@mui/icons-material';
 
 function Copyright(props) {
     return (
@@ -115,6 +118,38 @@ const Footer = (props) => {
                             </Box>
                         </Box>
                     ))}
+                    <Box 
+                        display="flex"
+                        justifyContent="center"
+                    >
+                        <Typography variant="h4" color="text.primary" marginY={2} gutterBottom>
+                        Follow us
+                        </Typography>
+                    </Box>
+
+                    <Box
+                        display="flex"
+                        justifyContent="space-evenly"
+                    > 
+                        <Link color="inherit" href="https://hust.edu.vn/">
+                            <GoogleIcon/>
+                        </Link>
+                        <Link color="inherit" href="https://hust.edu.vn/">
+                            <FacebookIcon/>
+                        </Link>
+                        <Link color="inherit" href="https://hust.edu.vn/">
+                            <Language/>
+                        </Link>
+                        <Link color="inherit" href="https://hust.edu.vn/">
+                            <Twitter/>
+                        </Link>
+                        <Link color="inherit" href="https://hust.edu.vn/">
+                            <Public/>
+                        </Link>
+                        <Link color="inherit" href="https://hust.edu.vn/">
+                            <Share/>
+                        </Link>
+                </Box>
                 </Grid>
 
                 <Grid item xs={12} sm={12} md={6} justifyContent="left">
@@ -129,14 +164,7 @@ const Footer = (props) => {
                     <Box 
                         display="flex" 
                         justifyContent="center"
-                        borderRadius="50%"
                     >
-                        {/* <Link color="inherit" href="https://hust.edu.vn/">
-                            <GoogleIcon/>
-                        </Link>
-                        <Link color="inherit" href="https://hust.edu.vn/">
-                            <FacebookIcon/>
-                        </Link> */}
                         <MapboxMap />
                     </Box>
                 </Grid>

@@ -183,3 +183,11 @@ margin-top: 0rem;
     left: 0px;
     transform: translateX(-50%);
   }
+
+  @media only screen and (max-width: 1600px) {
+    .VictoryContainer {
+        user-select: auto !important;
+        pointer-events: auto !important;
+        touch-action: auto !important;
+    }
+}

@@ -1,15 +1,9 @@
 import React, {useState, useEffect} from "react"
-import MultipleYAxis from "../components/ApexChart/MixChartApex"
-import { LineChartApex } from "../components/ApexChart/LineChartApex"
 import { Box } from "@mui/material"
 import Grid from "@mui/material/Grid"
 import {host} from "../App"
-import * as V from 'victory';
-import VictoryBarChart from "../components/VictoryChart/VictoryBarChart"
 import VictoryLineChart from "../components/VictoryChart/VictoryLineChart"
 import Header from "../components/Header"
-import VictoryBarChartV2 from "../components/VictoryChart/VictoryBarChartVert2"
-import {Button} from "@mui/material";
 import SmallFilter from "./SmallFilter";
 import Container from "@mui/material/Container";
 import FilterNode from "../components/RoomMap/FilterNode";
@@ -28,10 +22,8 @@ const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformatio
     const [nodeIdFilter, setNodeIdFilter] = useState(0);
     const url = `http://${backend_host}/api/v1.1/monitor/data?room_id=${room_id}&filter=${numberOfData}&node_id=${nodeIdFilter}`;
 
-
     const verify_and_get_data = async (fetch_data_function, callbackSetSignIn, backend_host, url) => 
     {
-
         const token = {access_token: null, refresh_token: null}
         // const backend_host = host;
         if(localStorage.getItem("access") !== null && localStorage.getItem("refresh") !== null)
@@ -111,7 +103,7 @@ const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformatio
             }
         }
 
-        const  verifyAccessToken_response = await verifyAccessToken();
+        const verifyAccessToken_response = await verifyAccessToken();
 
         if(verifyAccessToken_response === true)
         {
@@ -142,6 +134,7 @@ const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformatio
 
     }
 
+    // tao ban tin moi
     const get_chart_data = async (url, access_token) => 
     {
         const headers = 
@@ -191,8 +184,6 @@ const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformatio
         }
     }
 
-
-
     useEffect(() => {
         if(timedelay === 0)
         {
@@ -212,45 +203,21 @@ const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformatio
                 return () => clearTimeout(timer);
             }
         }
-        // if(optionData==="now")
-        // {
-        //     if(dataChart.co2 === null)
-        //     {
-        //         verify_and_get_data(get_chart_data, callbackSetSignIn, host, url); 
-        //     }
-        //     else
-        //     {
-        //         setTimeout(() => {
-        //                         verify_and_get_data(get_chart_data, callbackSetSignIn, host, url); 
-        //                     }, timedelay)
-        //     }
-        // }
-        // else
-        // {
-        //     verify_and_get_data(get_chart_data, callbackSetSignIn, host, url);
-        // }
     },[isLoading, dataChart])
-
-    
 
     return (
         <>
         {/* Container of filterNode */}
         <Grid
-            container
+            container justifyContent="space-evenly"
         >
             <Grid
-                item={true}
-                xs={12}
-                sm={12}
-                lg={6}
+                item={true} xs={12} sm={12} lg={3}
                 display="flex"
                 direction="column"
                 alignItems="center"
                 justify="center"
-                        
             >
-                
                     <Box
                         display="flex" 
                         flexDirection="column"
@@ -267,7 +234,7 @@ const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformatio
                             ml="40px"
                             mt="6px"
                         >
-                            <FilterNode  setNodeIdFilter={setNodeIdFilter}
+                            <FilterNode setNodeIdFilter={setNodeIdFilter}
                                         apiInformationTag={apiInformationTag} 
                                         callbackSetSignIn={callbackSetSignIn}
                                         backend_host={backend_host}
@@ -280,16 +247,11 @@ const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformatio
             </Grid>
 
             <Grid
-                paddingLeft="10px"
-                item={true}
-                xs={12}
-                sm={12}
-                lg={6}
+                paddingLeft="10px" item={true} xs={12} sm={12} lg={3}
                 display="flex"
                 direction="column"
                 alignItems="center"
                 justify="center"
-                        
             >
                 {/* Container of filterParameter */}
                 
@@ -311,10 +273,6 @@ const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformatio
                         >
                             <FilterParameter  
                                 setParaFilter={setParaFilter}
-                                apiInformatiionTag={apiInformationTag} 
-                                callbackSetSignIn={callbackSetSignIn}
-                                backend_host={backend_host}
-                                setIsLoadingChart={setIsLoading}
                             />
                             <Box m={1} />
                         </Box>
@@ -323,26 +281,12 @@ const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformatio
             </Grid>
 
         </Grid>
-
-
-        <Box m="20px"/>
-        
-
-        
+        <Box m="20px"/>        
         <SmallFilter  setNumberOfData={setNumberOfData} setDataChart={setDataChart} setIsLoading={setIsLoading}/>
         {
             isLoading ? 
             <>
-
-                <Grid
-                    xs={12}
-                    sm={12}
-                    md={12}
-                    lg={12}
-                    item
-                    style={{width: "100%"}}
-                // backgroundColor={colors.primary[400]}
-                >
+                <Grid xs={12} sm={12} md={12} lg={12} item style={{width: "100%"}}>
                     <Box height="400px" mt="0px">   
                         <h1>Loading chart...</h1>
                     </Box>
@@ -359,39 +303,10 @@ const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformatio
                         return(
                             <>
 
-                            <Grid
-                                xs={12}
-                                sm={12}
-                                md={12}
-                                lg={12}
-                                item
-                                style={{width: "100%"}}
-                            // backgroundColor={colors.primary[400]}
-                            >
-                                {/* <Header title={para_name[1]} fontSize="20px" />
-                                <Box
-                                    item
-                                    style={{
-                                        width: "100%", 
-                                        border: "2px solid",
-                                        }}
-                                // backgroundColor={colors.primary[400]}
-                                >
-                                    <VictoryBarChartV2 data_x={dataChart["time"]} data_y={dataChart[para_filter_dict[1]]} option_data={optionData}/>
-                                </Box> */}
-                            </Grid>
+                            {/* <Grid xs={12} sm={12} md={12} lg={12} item style={{width: "100%"}}></Grid>
+                            <Box m={2} /> */}
 
-                            <Box m={2} />
-
-                            <Grid
-                                xs={12}
-                                sm={12}
-                                md={12}
-                                lg={12}
-                                item
-                                style={{width: "100%"}}
-                            // backgroundColor={colors.primary[400]}
-                            >
+                            <Grid xs={12} sm={12} md={12} lg={12} item style={{width: "100%"}}>
                                 <Header title={para_name[1]} fontSize="20px" />
                                 <Box
                                     item
@@ -401,127 +316,15 @@ const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformatio
                                         }}
                                 // backgroundColor={colors.primary[400]}
                                 >
-                                    <VictoryLineChart data_x={dataChart["time"] + 7*60*60} data_y={dataChart[para_filter_dict[1]]} option_data={optionData}/>
+                                    <VictoryLineChart 
+                                        data_x={dataChart["time"] + 7*60*60}
+                                        data_y={dataChart[para_filter_dict[1]]} 
+                                        option_data={optionData}
+                                        parameter_type={paraFilter}
+                                    />
                                 </Box>
                             </Grid>
-
                             <Box m={2} />
-
-                            <Grid
-                                xs={12}
-                                sm={12}
-                                md={12}
-                                lg={12}
-                                item
-                                style={{width: "100%",}}
-                            // backgroundColor={colors.primary[400]}
-                            >
-                                <Header title={para_name[2]} fontSize="20px" />
-                                <Box
-                                    item
-                                    style={{
-                                        width: "100%", 
-                                        border: "2px solid",
-                                        }}
-                                // backgroundColor={colors.primary[400]}
-                                >
-                                    <VictoryLineChart data_x={dataChart["time"]} data_y={dataChart[para_filter_dict[2]]} option_data={optionData}/>
-                                </Box>
-                            </Grid>
-
-                            <Box m={2} />
-
-                            <Grid
-                                xs={12}
-                                sm={12}
-                                md={12}
-                                lg={12}
-                                item
-                                style={{width: "100%"}}
-                            // backgroundColor={colors.primary[400]}
-                            >
-                                <Header title={para_name[3]} fontSize="20px" />
-                                <Box
-                                    item
-                                    style={{
-                                        width: "100%", 
-                                        border: "2px solid",
-                                        }}
-                                // backgroundColor={colors.primary[400]}
-                                >
-                                    <VictoryLineChart data_x={dataChart["time"]} data_y={dataChart[para_filter_dict[3]]} option_data={optionData}/>
-                                </Box>
-                            </Grid>
-
-                            <Box m={2} />
-
-                            <Grid
-                                xs={12}
-                                sm={12}
-                                md={12}
-                                lg={12}
-                                item
-                                style={{width: "100%"}}
-                            // backgroundColor={colors.primary[400]}
-                            >
-                                <Header title={para_name[4]} fontSize="20px" />
-                                <Box
-                                    item
-                                    style={{
-                                        width: "100%", 
-                                        border: "2px solid",
-                                        }}
-                                // backgroundColor={colors.primary[400]}
-                                >
-                                    <VictoryLineChart data_x={dataChart["time"]} data_y={dataChart[para_filter_dict[4]]} option_data={optionData}/>
-                                </Box>
-                            </Grid>
-
-                            <Box m={2} />
-
-                            <Grid
-                                xs={12}
-                                sm={12}
-                                md={12}
-                                lg={12}
-                                item
-                                style={{width: "100%"}}
-                            // backgroundColor={colors.primary[400]}
-                            >
-                                <Header title={para_name[5]} fontSize="20px" />
-                                <Box
-                                    item
-                                    style={{
-                                        width: "100%", 
-                                        border: "2px solid",
-                                        }}
-                                // backgroundColor={colors.primary[400]}
-                                >
-                                    <VictoryLineChart data_x={dataChart["time"]} data_y={dataChart[para_filter_dict[5]]} option_data={optionData}/>
-                                </Box>
-                            </Grid>
-
-                            <Grid
-                                xs={12}
-                                sm={12}t 
-                                md={12}
-                                lg={12}
-                                item
-                                style={{width: "100%"}}
-                            // backgroundColor={colors.primary[400]}
-                            >
-                                <Header title={para_name[6]} fontSize="20px" />
-                                <Box
-                                    item
-                                    style={{
-                                        width: "100%", 
-                                        border: "2px solid",
-                                        }}
-                                // backgroundColor={colors.primary[400]}
-                                >
-                                    <VictoryLineChart data_x={dataChart["time"]} data_y={dataChart[para_filter_dict[6]]} option_data={optionData}/>
-                                </Box>
-                            </Grid>
                             </>
                         );
                     }
@@ -529,26 +332,20 @@ const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformatio
                     {
                         return(
                         <>
-                        
-                        <Grid
-                            xs={12}
-                            sm={12}
-                            md={12}
-                            lg={12}
-                            item
-                            style={{width: "100%"}}
-                        // backgroundColor={colors.primary[400]}
-                        >
+                        <Grid xs={12} sm={12} md={12} lg={12} item style={{width: "100%"}}>
                             <Header title={para_name[paraFilter]} fontSize="20px" />
                             <Box
                                 item
                                 style={{
                                     width: "100%", 
                                     border: "2px solid",
-                                    }}
-                            // backgroundColor={colors.primary[400]}
+                                }}
                             >
-                                <VictoryLineChart data_x={dataChart["time"]} data_y={dataChart[para_filter_dict[paraFilter]]} option_data={optionData}/>
+                                <VictoryLineChart data_x={dataChart["time"]}
+                                    data_y={dataChart[para_filter_dict[paraFilter]]}
+                                    option_data={optionData}
+                                    parameter_type={paraFilter}
+                                />
                             </Box>
                         </Grid>
                         </>
@@ -559,10 +356,8 @@ const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformatio
             }
             </>
         }
-        
         </>
     );
 }
-
 
 export default Chart;
