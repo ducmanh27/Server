@@ -290,7 +290,7 @@ def kriging(request, *args, **kwargs):
         default_X = []          #default axis x of id 3,4,5,6
         default_Y = []     #default axis y of id 3,4,5,6
         default_value = []    #this is default-type value of all known-points
-        all_sensor_node_in_this_room = RegistrationSerializer(Registration.objects.filter(room_id=room_id, function="sensor", status="sync"), 
+        all_sensor_node_in_this_room = RegistrationSerializer(Registration.objects.filter(room_id=room_id, function="sensor", status="sync", aim = "air_monitor"), 
                                                                 many=True).data #!< have to add many=True
         print(all_sensor_node_in_this_room)
         room_size = RoomSerializer(Room.objects.filter(room_id=room_id), many=True).data[0] #!< have to add many=True

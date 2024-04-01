@@ -52,6 +52,7 @@ class Registration(models.Model):
     function = models.TextField(null=False, db_column="function",)
     mac = models.TextField(null=False, db_column="mac",)
     status = models.TextField(null=False, db_column="status",)
+    aim = models.TextField(null = True, db_column="aim",)
     time = models.BigIntegerField(null=False, db_column="time",)
 
 

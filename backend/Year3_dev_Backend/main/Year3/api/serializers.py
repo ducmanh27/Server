@@ -82,5 +82,3 @@ class GatewaySerializer(serializers.ModelSerializer):
       }
    }
 '''
-class KeepAliveSerializer(serializers.Serializer):
-   pass

@@ -110,7 +110,7 @@ def sendNodeConfigToGateway(client: Client, data: dict, command):
             print(f"Receive data from sync_node_ack: {temp}")
             if temp != None:
                 # client.unsubscribe("farm/sync_node_ack")
-                print(f"RRRRRRRRRRRRRRRReceived `{temp}`")
+                # print(f"RRRRRRRRRRRRRRRReceived `{temp}`")
                 msg = json.loads(temp)
                 if action == 1:
                     if msg["operator"] == "server_add_ack":
