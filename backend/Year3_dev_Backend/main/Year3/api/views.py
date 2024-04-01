@@ -1193,7 +1193,7 @@ class GatewayListCreateAPIView(generics.ListCreateAPIView):
                 "info": {
                     "room_id": gateway.room_id.room_id,
                     "IP": gateway.ip,
-                    "time": int(datetimedatetime.now().timestamp())
+                    "time": int(datetime.datetime.now().timestamp())
                 }
             }
             
