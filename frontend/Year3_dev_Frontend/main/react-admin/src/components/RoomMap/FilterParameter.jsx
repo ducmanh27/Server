@@ -7,7 +7,7 @@ import Select from '@mui/material/Select';
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from '../../theme';
 
-const FilterParameter = ({setParaFilter, apiInformatiionTag, callbackSetSignIn, backend_host, setIsLoadingChart}) => 
+const FilterParameter = ({setParaFilter}) => 
 {
 	const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -18,7 +18,7 @@ const FilterParameter = ({setParaFilter, apiInformatiionTag, callbackSetSignIn, 
 		// setNodeIdFilter(event.target.value);
 	};
     const para_filter_dict = [
-        {index: 0, value: "all"}, 
+        {index: 0, value: "none"}, 
         {index: 1, value: "temperature"}, 
         {index: 2, value: "humidity"}, 
         {index: 3, value: "co2"}, 
@@ -62,19 +62,12 @@ const FilterParameter = ({setParaFilter, apiInformatiionTag, callbackSetSignIn, 
 			<Box m={1} />
 			
 			<Button
-				// sx={{
-				// 	backgroundColor: colors.blueAccent[400],
-				// 	color: colors.grey[100],
-				// 	fontSize: "15px",
-				// 	fontWeight: "bold",
-				// 	padding: "8px 18px",
-				// 	}}
                 sx={{
-                    backgroundColor: "black",
-                    fontSize: "14px",
-                    fontWeight: "bold",
-                    padding: "8px 18px",
-                    }}
+					backgroundColor: "black",
+					fontSize: "14px",
+					fontWeight: "bold",
+					padding: "8px 18px",
+				}}
                 variant="contained"
 				onClick={()=>{
 					setParaFilter(paraState);

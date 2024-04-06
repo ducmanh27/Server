@@ -1,23 +1,30 @@
 import datetime
 import requests
-
-if __name__ == "__main__":
-
-
-    # Define the URL of the Django server
-    url = 'http://192.168.1.199:8000/api/gateway'
-
-    # Define the payload for the POST request
+import time
+start_ip = 180
+end_ip = 198
+baseURL = 'http://192.168.1.199:8000/api'
+urlGatewaySync = f'{baseURL}/gateway'
+urlActuatorStatus = f'{baseURL}/actuator_status'
+def getTimeCurrent():
+    return datetime.datetime.now()
+def send_request():
+    response = requests.get(urlGatewaySync)
+    timeCurrent = getTimeCurrent()
+    print(response.text)
+    print(timeCurrent)
+def add_gateway():
     payload = {
         'add_gateway': 'true',
         'room_id': '1',
-        'ip_start': '192.168.1.180',
-        'ip_end': '192.168.1.198'
+        'ip_start': f'192.168.1.{start_ip}',
+        'ip_end': f'192.168.1.{end_ip}'
     }
-
-    # Send the POST request
-    # response = requests.post(url, data=payload)
-    response = requests.get(url)
-    # response = requests.get(url)
-    # Print the response
+    response = requests.post(urlGatewaySync, payload)
+    timeCurrent = getTimeCurrent()
     print(response.text)
+    print(timeCurrent)
+if __name__ == "__main__":
+    while True:
+        send_request()
+        time.sleep(1800)  

@@ -4,18 +4,20 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import FormControlLabel from '@mui/material';
+import FormGroup from '@mui/material';
 import { tokens } from '../../theme';
+import Checkbox from '@mui/material';
 
 export default function FilterNode({setNodeIdFilter, apiInformationTag, callbackSetSignIn, backend_host, setIsLoadingChart}) {
 	const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 	const [isLoading, setIsLoading] = useState(true);
-	const [sensorNodeIdState, setSensorNodeIdState] = useState(0)
+	const [sensorNodeIdState, setSensorNodeIdState] = useState(0);
+	const node_id_dict = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6};
 	const handleChange = (event) => {
 		setSensorNodeIdState(event.target.value);
 		console.log(event.target.value);
-		// setNodeIdFilter(event.target.value);
-		//#< DONING IN THISS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>4
 	};
 	const [sensorNodeInfo, setSensorNodeInfo] = useState([])
 
@@ -177,10 +179,9 @@ export default function FilterNode({setNodeIdFilter, apiInformationTag, callback
 
 	}
 
-
-  useEffect(()=>{
-		verify_and_get_data(get_sensor_node_info, callbackSetSignIn, backend_host, apiInformationTag);
-  },[])
+	useEffect(()=>{
+			verify_and_get_data(get_sensor_node_info, callbackSetSignIn, backend_host, apiInformationTag);
+	},[])
 
   return (
 	<>
@@ -196,19 +197,15 @@ export default function FilterNode({setNodeIdFilter, apiInformationTag, callback
 			flexDirection="row"
 			alignItems="center"
 		>
-			<Box sx={{ minWidth: 100 }}
-				
-				>
-				<FormControl
-					fullWidth
-				>
+			<Box sx={{ minWidth: 100 }}>
+				<FormControl fullWidth>
 					<InputLabel id="demo-simple-select-label">Sensor id</InputLabel>
 					<Select
-					labelId="demo-simple-select-label"
-					id="demo-simple-select"
-					value={sensorNodeIdState}
-					label="Sensor Node"
-					onChange={handleChange}
+						labelId="demo-simple-select-label"
+						id="demo-simple-select"
+						value={sensorNodeIdState}
+						label="Sensor Node"
+						onChange={handleChange}
 					>
 						{
 							sensorNodeInfo.map((i)=>{
@@ -221,7 +218,9 @@ export default function FilterNode({setNodeIdFilter, apiInformationTag, callback
 								else
 								{
 									return (
-										<MenuItem value={i}>{i}</MenuItem>
+										<MenuItem value={i}>
+											{i}
+										</MenuItem>
 									);		
 								}
 							})
@@ -229,17 +228,9 @@ export default function FilterNode({setNodeIdFilter, apiInformationTag, callback
 					</Select>
 				</FormControl>
 			</Box>
-
 			<Box m={1} />
 			
 			<Button
-				// sx={{
-				// 	backgroundColor: colors.blueAccent[400],
-				// 	color: colors.grey[100],
-				// 	fontSize: "15px",
-				// 	fontWeight: "bold",
-				// 	padding: "8px 18px",
-				// 	}}
                 sx={{
                     backgroundColor: "black",
                     fontSize: "14px",
@@ -256,7 +247,6 @@ export default function FilterNode({setNodeIdFilter, apiInformationTag, callback
 			>
 				Submit
 			</Button>
-		
 		</Box>
 	}
 	</>

@@ -14,18 +14,19 @@ import { useState } from 'react';
                 { x: 5, y: 7 },
                 ]}
  */
-const VictoryLineChart = ({data_x, data_y, option_data}) => 
+const VictoryLineChart = ({data_x, data_y, option_data, parameter_type}) => 
 {
 
     let data = [];
     let label_x;
+    // bo phan optiondata di
     if(option_data === "now")
     {
         label_x = data_x.map((t)=>{
-                                    let unixTimestamp = t - 7*60*60;
-                                    let date = new Date(unixTimestamp * 1000);
-                                    return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}-\n${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`; 
-                                });
+            let unixTimestamp = t;
+            let date = new Date(unixTimestamp * 1000);
+            return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}-\n${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`; 
+        });
     }
     else
     {
@@ -42,102 +43,97 @@ const VictoryLineChart = ({data_x, data_y, option_data}) =>
         }
     }
 
-    for(let i=0; i<data_x.length; ++i)
-    {
+    for(let i=0; i<data_x.length; ++i) {
         data.push({x: label_x[i], y: data_y[i]});
     }
     
     let label_y = [];
     let value_y = [];
 
-    for(let i=0; i<=Math.round((Math.max(...data_y))+5)/5; ++i)
-    {
+    for(let i=0; i<=Math.round((Math.max(...data_y))+5)/5; ++i) {
         value_y.push(i*5);
         label_y.push(i*5);
     }
+    console.log(data);
     
-
+    let strokeColor;
+    switch (parameter_type) {
+        case 1:        // temp
+            strokeColor = "orange";
+            break;
+        case 2:         // hum
+            strokeColor = "aqua";
+            break;
+        case 3:         // co2
+            strokeColor = "darkgreen";
+            break;
+        case 4:        // tvoc
+            strokeColor = "red";
+            break;
+        case 5:       // light
+            strokeColor = "magenta";
+            break;
+        case 6:        // dust
+            strokeColor = "darkgray";
+            break;
+        default:
+            strokeColor = "black"; // Default color if type_of_data doesn't match any case
+    }
+    
     return (
         <VictoryChart
-        // adding the material theme provided with Victory
-        theme={VictoryTheme.material}
-        // domainPadding will add space to each side of VictoryLine to
-        // prevent it from overlapping the axis
-        // domainPadding={20}
-        padding={{ 
-            top: 10, 
-            bottom: 30, 
-            left: 30, 
-            right: 20, 
+            theme={VictoryTheme.material}
+            // domainPadding will add space to each side of VictoryLine to
+            // prevent it from overlapping the axis
+            padding={{ 
+                top: 10, 
+                bottom: 30, 
+                left: 30, 
+                right: 20, 
             }}
-        height={150}
-        domain={{ y: [Math.min(...data_y), Math.max(...data_y)] }}
-        domainPadding={{x: 20, y: 10 }}
-        containerComponent={
-            <VictoryZoomContainer 
-
-            />
-          }
+            height={150}
+            domain={{ y: [Math.min(...data_y), Math.max(...data_y)] }}
+            domainPadding={{x: 20, y: 10 }}
+            containerComponent={
+                <VictoryZoomContainer
+                    //  minZoom={{y: Math.min(...data_y) - 1}} // Minimum zoom level
+                    //  maxZoom={{y: Math.max(...data_y) + 1}} // Maximum zoom level
+                />
+            }
         >
             <VictoryAxis  
             fixLabelOverlap={true}  
             // tickValues specifies both the number of ticks and where
             // they are placed on the axis
             dependentAxis={false}       //x-axis
-            // tickValues={data_x}
-            // tickFormat={(t)=>{
-            //     if(option_data === "now")
-            //     {
-            //         let unixTimestamp = t;
-            //         let date = new Date(unixTimestamp * 1000);
-            //         return date.getHours().toString() + 
-            //         ":" + date.getMinutes().toString() + 
-            //         ":" + date.getSeconds().toString();
-            //     }
-            //     else
-            //     {
-            //         return t;
-            //     }
-            // }}
+            tickLength={0}
             style={{
                 data: { width: 10 },
                 labels: { padding: 20 },
-                // axis: {stroke: "#756f6a"},
-                // axisLabel: {fontSize: "1000px", padding: 2},    //size of the value on top of each point
-                // grid: {stroke: ({ tick }) => tick > 0.5 ? "red" : "grey"},
-                // ticks: {stroke: "grey", size: 5},
+                axis: { stroke: "black" },
+                ticks: { stroke: "black", size: 0},
                 tickLabels: {fontSize: 4, padding: 10} //size of label of x-axis value and position of them
-              }}
-            // tickCount={15}   //number of label on x-axis
+            }}
             />
-            <VictoryAxis
-            // fixLabelOverlap={true}  
-            dependentAxis={true}   //y_axis
-            // tickValues={label_y}
-            // tickFormat specifies how ticks should be displayed
-            // tickFormat={label_y}
-            style={{
-                // axis: {stroke: "#756f6a"},
-                // axisLabel: {fontSize: "100px", padding: 2},     //size of the value on each point
-                // grid: {stroke: ({ tick }) => tick > 0.5 ? "red" : "grey"},
-                // ticks: {stroke: "grey", size: 5},    
-                tickLabels: {fontSize: 5, padding: 8}       //size of label of y-axis value, padding: position of them
-              }}
-            tickCount={10}  //number of label on y-axis
+            <VictoryAxis 
+                fixLabelOverlap={false}  
+                dependentAxis={true}   //y_axis
+                style={{
+                    axis: { stroke: "black" },
+                    ticks: { stroke: "black", size: 0},
+                    tickLabels: { fontSize: 5, padding: 8}       //size of label of y-axis value, padding: position of them
+                }}
+                tickCount={6}  //number of label on y-axis
             />
             <VictoryLine
-                // style={{
-                //     data: { stroke: "#c43a31" },
-                //     parent: { border: "1px solid #ccc"}
-                //   }}
-                style={{ data: { stroke: "blue", strokeWidth: 1, strokeLinecap: "round" } }}
-                // animate={{
-                //     duration: 2000,
-                //     onLoad: { duration: 1000 }
-                //   }}
+                style={{ 
+                    data: {
+                        stroke: strokeColor,
+                        strokeWidth: 1,
+                        strokeLinecap: "round"
+                    } 
+                }}
                 data={data}
-                // categories={{x: data_x, y: data_y}}
-                // labels={({ datum }) => datum.y}
             />
         </VictoryChart>
     );

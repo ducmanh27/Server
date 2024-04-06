@@ -494,15 +494,16 @@ def getRoomInformationTag(request, *args, **kwargs):
         print(room_id)
         if RawSensorMonitor.objects.count() != 0:
             # 1.Get all node_id s that belong to this room
-            if Registration.objects.filter(room_id=room_id, function="sensor", status="sync").count() == 0:
+            if Registration.objects.filter(room_id=room_id, function="sensor", status="sync", aim = "air_monitor").count() == 0:
                 parameter_key_list = {"co2", "temp", "hum", "light", "dust", "sound", "red", "green", "blue", "tvoc", "motion"}
                 average_data_to_return = {}
                 for i in parameter_key_list:
                     average_data_to_return[i] = -1
                     average_data_to_return["time"] = 0
                 return Response(average_data_to_return, status=status.HTTP_200_OK)
-            all_node_id_of_this_room_id = Registration.objects.filter(room_id=room_id, function="sensor", status="sync")
+            all_node_id_of_this_room_id = Registration.objects.filter(room_id=room_id, function="sensor", status="sync", aim="air_monitor")
             RegistrationSerializer_instance = RegistrationSerializer(all_node_id_of_this_room_id, many=True)   #!< Have to add many=True
+            
             all_node_id_of_this_room_id_list = [ i["node_id"] for i in RegistrationSerializer_instance.data]
             print(all_node_id_of_this_room_id_list)
             # 2.get the latest data for each node_id
@@ -533,7 +534,7 @@ def getRoomInformationTag(request, *args, **kwargs):
                     continue
             # 5. Get nodes information
             sensor_node_information_in_this_room_list = RegistrationSerializer(
-                            Registration.objects.filter(room_id=room_id, function="sensor", status="sync"), many=True).data #!< have to add many=True
+                            Registration.objects.filter(room_id=room_id, function="sensor", status="sync", aim = "air_monitor"), many=True).data #!< have to add many=True
             actuator_node_information_in_this_room_list = RegistrationSerializer(
                             Registration.objects.filter(room_id=room_id, status="sync"), many=True).data  #!< have to add many=True
             real_actuator_node_information_in_this_room_list = []
@@ -546,7 +547,7 @@ def getRoomInformationTag(request, *args, **kwargs):
             # 6. Get room size 
             room_size_data = RoomSerializer(Room.objects.filter(room_id=room_id), many=True).data #!< have to include many=True
             average_data_to_return["room_size"] = {"x_length": room_size_data[0]["x_length"], "y_length": room_size_data[0]["y_length"]}
-                
+            print(average_data_to_return)
             return Response(average_data_to_return, status=status.HTTP_200_OK)
             # data = RawSensorMonitor.objects.order_by('-time')[0]     #!< get the latest record in model according to timeline
             # RawSensorMonitorSerializer_instance = RawSensorMonitorSerializer(data)
@@ -952,12 +953,13 @@ def signUp(request, *args, **kwargs):
 # @brief: This view is for fetching the latest data status of the actuator to see if it is on or off
 #
 # @params: 
-#       urls: "api/actuator_status"
+#       urls: "/api/actuator_status?room_id=1&node_id=9"
 
 @api_view(["GET"])
 # @authentication_classes([jwtauthentication.JWTAuthentication])  #!< use JWTAuthentication
 # @permission_classes([permissions.IsAuthenticated])              #!< permitted to use APi only if JWT is authenticated
 def getActuatorStatus(request, *args, **kwargs):
+    print(request)
     room_id = request.GET.get("room_id")
     node_id = request.GET.get("node_id")
     print(room_id)
@@ -1186,7 +1188,7 @@ class GatewayListCreateAPIView(generics.ListCreateAPIView):
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
-        ActiveGateways = Gateway.objects.filter(status = "INACTIVE")
+        ActiveGateways = Gateway.objects.filter(status = "ACTIVE")
         for gateway in ActiveGateways:
             data = {
                 "operator": "keep_alive",
