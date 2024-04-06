@@ -6,7 +6,9 @@ import mqtt
 import time
 import json
 import random
-broker = "192.168.1.199"
+import os
+broker = os.environ.get('BROKER_ADDRESS')
+port = os.environ.get('BROKER_PORT')
 topic = "farm/test"
 data = {
     "operator": "room_sync",
@@ -45,7 +47,7 @@ import datetime
 
 
 client = mqtt.Client(topic)
-client.connect(broker, int(1883), 60)
+client.connect(broker, int(port), 60)
 client.loop_start()
 while True:
     temp = client.msg_arrive()
