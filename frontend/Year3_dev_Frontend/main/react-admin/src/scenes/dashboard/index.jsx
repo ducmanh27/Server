@@ -183,8 +183,19 @@ const Dashboard = () => {
                         />
                     </Box>
                 </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Energy />
+                <Grid xs={12} sm={12} md={12} lg={12} p='10px'>
+                <Box 
+                        sx={{boxShadow: 1,
+                            borderRadius: '5px', 
+                            backgroundColor: "white"}}
+                        width="100%" height="100%"
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="center"
+                        justify="center"
+                    >
+                        <Energy />
+                    </Box>
                 </Grid>
 
             </Grid>
