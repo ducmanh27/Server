@@ -10,11 +10,10 @@ import FilterNode from "../components/RoomMap/FilterNode";
 import FilterParameter from "../components/RoomMap/FilterParameter";
 
 const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformationTag}) => {
-    const dict_filter = {"1D": 1, "1W": 2, "1M": 3, "6M": 4, "1Y": 5}
-
     const [isLoading, setIsLoading] = useState(true)
     const [numberOfData, setNumberOfData] = useState(1);
-    const [dataChart, setDataChart] = useState({co2: null, hum: null, temp: null, tvoc: null, light: null, dust: null, time: null})
+    const [dataChart, setDataChart] = useState({co2: null, hum: null, temp: null, tvoc: null, light: null, dust: null, time: null});
+    console.log(dataChart);
     const para_filter_dict = {0: "all", 1: "temp", 2: "hum", 3: "co2", 4: "tvoc", 5: "light", 6: "dust"};
     const para_name = {0: "All", 1: "Temperature", 2: "Humidity", 3: "Co2", 4: "TVOC", 5: "Light", 6: "Dust"};
     const backend_host = host;

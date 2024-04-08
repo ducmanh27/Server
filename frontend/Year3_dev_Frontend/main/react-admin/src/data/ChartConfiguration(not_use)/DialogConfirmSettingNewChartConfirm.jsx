@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
-const DialogConfirmSettingNewNodeConfirm = ({dataNodeSetting}) => {
+const DialogConfirmSettingNewChartConfirm = ({dataChartSetting}) => {
     return (
         <React.Fragment>
             <Typography component="h1" variant="h3" align="center">
@@ -21,7 +21,7 @@ const DialogConfirmSettingNewNodeConfirm = ({dataNodeSetting}) => {
                     InputProps={{
                         readOnly: true,
                     }}
-                    value={dataNodeSetting.node_id}
+                    value={dataChartSetting.node_id}
                 />
                 </Grid>
                 
@@ -37,7 +37,7 @@ const DialogConfirmSettingNewNodeConfirm = ({dataNodeSetting}) => {
                     InputProps={{
                         readOnly: true,
                     }}
-                    value={dataNodeSetting.x_axis}
+                    value={dataChartSetting.x_axis}
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -52,7 +52,7 @@ const DialogConfirmSettingNewNodeConfirm = ({dataNodeSetting}) => {
                     InputProps={{
                         readOnly: true,
                     }}
-                    value={dataNodeSetting.y_axis}
+                    value={dataChartSetting.y_axis}
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -67,7 +67,7 @@ const DialogConfirmSettingNewNodeConfirm = ({dataNodeSetting}) => {
                     InputProps={{
                         readOnly: true,
                     }}
-                    value={dataNodeSetting.function}
+                    value={dataChartSetting.function}
                 />
                 </Grid>
             </Grid>
@@ -75,4 +75,4 @@ const DialogConfirmSettingNewNodeConfirm = ({dataNodeSetting}) => {
     );
 }
 
-export default DialogConfirmSettingNewNodeConfirm;
+export default DialogConfirmSettingNewChartConfirm;

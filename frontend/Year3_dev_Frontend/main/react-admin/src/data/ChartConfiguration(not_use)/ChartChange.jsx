@@ -1,19 +1,16 @@
 import * as React from 'react';
 import { useState } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import NewNode from './NewNode';
-import ConfirmNode from './ConfirmNode';
+import ConfirmChart from './ConfirmChart';
 import { host } from '../../../App';
 
 const steps = ['Create Node', 'Confirm'];
@@ -23,14 +20,11 @@ function getStepContent(step, setDataCreateNode, dataCreateNode) {
     case 0:
       return <NewNode setDataCreateNode={setDataCreateNode} dataCreateNode= {dataCreateNode}/>;
     case 1:
-      return <ConfirmNode dataCreateNode={dataCreateNode}/>;
+      return <ConfirmChart dataCreateNode={dataCreateNode}/>;
     default:
       throw new Error('Unknown step');
   }
 }
-
-
-
 
 export default function NodeChange({configurationNodeAll, callbackSetSignIn, nodeConfigLoading, roomIdForNodeConfig, roomSize}) {
     const api = `http://${host}/api/configuration/node/command`;
@@ -257,7 +251,7 @@ export default function NodeChange({configurationNodeAll, callbackSetSignIn, nod
     return (
         <React.Fragment>
         <CssBaseline />
-        <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+        <Container component="main" maxWidth="xl" sx={{ mb: 4 }}>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
             <Typography component="h1" variant="h3" align="center">
                 New Node

@@ -87,7 +87,7 @@ const VictoryLineChart = ({data_x, data_y, option_data, parameter_type}) =>
             // prevent it from overlapping the axis
             padding={{ 
                 top: 10, 
-                bottom: 30, 
+                bottom: 20, 
                 left: 30, 
                 right: 20, 
             }}

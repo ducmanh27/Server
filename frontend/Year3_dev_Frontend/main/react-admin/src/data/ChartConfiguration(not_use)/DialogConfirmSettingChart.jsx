@@ -1,40 +1,62 @@
 import * as React from 'react';
 import { useState } from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Toolbar from '@mui/material/Toolbar';
-import Paper from '@mui/material/Paper';
+import { Box } from '@mui/material';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import PermDataSettingIcon from '@mui/icons-material/PermDataSetting';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
-import NewNode from './NewNode';
-import ConfirmNode from './ConfirmNode';
+import DialogConfirmSettingNewNode from './DialogConfirmSettingNewNode';
+import DialogConfirmSettingNewNodeConfirm from './DialogConfirmSettingNewNodeConfirm';
+import CloseIcon from '@mui/icons-material/Close';
+
+
 import { host } from '../../../App';
 
-const steps = ['Create Node', 'Confirm'];
+const steps = ['Setting Node', 'Confirm'];
 
-function getStepContent(step, setDataCreateNode, dataCreateNode) {
+function getStepContent(step, setDataNodeSetting, dataNodeSetting) {
   switch (step) {
     case 0:
-      return <NewNode setDataCreateNode={setDataCreateNode} dataCreateNode= {dataCreateNode}/>;
+      return <DialogConfirmSettingNewNode setDataNodeSetting={setDataNodeSetting} 
+                                        dataNodeSetting= {dataNodeSetting} 
+                                        />;
     case 1:
-      return <ConfirmNode dataCreateNode={dataCreateNode}/>;
+      return <DialogConfirmSettingNewNodeConfirm dataNodeSetting={dataNodeSetting}/>;
     default:
       throw new Error('Unknown step');
   }
 }
 
+export default function DialogConfirmSettingChart({callbackSetSignIn, 
+    ChartConfigLoading,  
+    row, 
+    configurationChartAll, roomSize,
+    }) 
+{
 
+    let remain_node_id_configurationChartAll = [];
+    console.log(configurationChartAll)
+    if(configurationChartAll !== undefined && configurationChartAll.length > 0)
+    {
+        for(let i=0; i<configurationChartAll.length; ++i)
+        {
+            if(configurationChartAll[i].node_id != row.node_id)
+            {
+                remain_node_id_configurationChartAll.push(configurationChartAll[i].node_id);
+                console.log(remain_node_id_configurationChartAll);
+            }
+        }
+    }
 
-
-export default function NodeChange({configurationNodeAll, callbackSetSignIn, nodeConfigLoading, roomIdForNodeConfig, roomSize}) {
+    const [dataNodeSetting, setDataNodeSetting] = useState({...row});
     const api = `http://${host}/api/configuration/node/command`;
-    const createNewNode = async (url, access_token, data, nodeConfigLoading) => 
+
+    const settingNode = async (url, access_token, dataRoomSetting, ChartConfigLoading) => 
     {
         const headers = 
         {
@@ -43,26 +65,26 @@ export default function NodeChange({configurationNodeAll, callbackSetSignIn, nod
         }
         const option_fetch = 
         {
-            "method": "POST",
+            "method": "PUT",
             "headers": headers,
-            "body": JSON.stringify({...data, "room_id": roomIdForNodeConfig}),
+            "body": JSON.stringify(dataRoomSetting),
         }
         const response = await fetch(url, option_fetch);
         if(response.status == 200)
         {
             const data_response = await response.json();
-            alert(`${data_response.Response}`);
-            nodeConfigLoading[1](!nodeConfigLoading[0]);
+            alert(data_response.Response)
+            ChartConfigLoading[1](!ChartConfigLoading[0]);
         }
         else
         {
             const data_response = await response.json();
-            alert(`${data_response.Response} Error code: ${response.status} ${response.statusText}`);
-            nodeConfigLoading[1](!nodeConfigLoading[0]);
+            alert(data_response.Response)
+            ChartConfigLoading[1](!ChartConfigLoading[0]);
         }
     }
 
-    const verify_and_get_data = async (fetch_data_function, callbackSetSignIn, backend_host, url, data, NodeConfigLoading) => 
+    const verify_and_get_data = async (fetch_data_function, callbackSetSignIn, backend_host, url, dataRoomSetting, ChartConfigLoading) => 
     {
 
         const token = {access_token: null, refresh_token: null}
@@ -150,7 +172,7 @@ export default function NodeChange({configurationNodeAll, callbackSetSignIn, nod
         {
             // const response = await fetch(url)
             // const data = await response.json()
-            fetch_data_function(url, token["access_token"], data, NodeConfigLoading)
+            fetch_data_function(url, token["access_token"], dataRoomSetting, ChartConfigLoading)
         }
         else
         {
@@ -165,7 +187,7 @@ export default function NodeChange({configurationNodeAll, callbackSetSignIn, nod
             }
             if(verifyRefreshToken_response === true)
             {
-                fetch_data_function(url, token["access_token"], data, NodeConfigLoading);
+                fetch_data_function(url, token["access_token"], dataRoomSetting, ChartConfigLoading);
             }
             else
             {
@@ -174,58 +196,58 @@ export default function NodeChange({configurationNodeAll, callbackSetSignIn, nod
         }
 
     }
-    const [dataCreateNode, setDataCreateNode] = useState({
-                                                        "node_id": 100, 
-                                                        "x_axis": null,
-                                                        "y_axis": null,
-                                                        "function": null,
-                                                        "mac": null,
-                                                        });
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleOpen = ()=> {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleConfirm = () => {
+        console.log(dataNodeSetting)
+        verify_and_get_data(settingNode, callbackSetSignIn, host, api, dataNodeSetting, ChartConfigLoading)
+        setOpen(false);
+    }
+
+
     const [activeStep, setActiveStep] = React.useState(0);
     const name_lookup = {
-        "node_id": "Node id", 
-        "x_axis": "Position X",
-        "y_axis": "Position Y",
-        "function": "Function",
-        "mac": "Mac address",
+        node_id: "Node id",
+        x_axis: "Position X",
+        y_axis: "Position Y",
+        function: "Funtion",
     }
     const handleNext = () => {
         let flag = 1;
         if(activeStep === 0 )
         {
-            for(const prop in dataCreateNode)
+            for(const prop in dataNodeSetting)
             {
-                if(dataCreateNode[prop] === null)
+                if(dataNodeSetting[prop] === null)
                 {   
                     alert(`You have to fill in ${name_lookup[prop]}!`);
                     flag = 0;
                     break;
                 }
-                if(prop === "mac")
-                {
-                    for(let i=0; i<configurationNodeAll.length; ++i)
-                    {
-                        if((configurationNodeAll[i].node_id).toString() === dataCreateNode[prop].toString())
-                        {
-                            alert("Mac address've already existed!");
-                            flag = 0;
-                            break;
-                        }
-                    }
-                }
+                
                 if(prop === "x_axis")
                 {
-                    if(parseInt(dataCreateNode[prop]) < 0 || parseInt(dataCreateNode[prop]) > roomSize.x)
+                    if(parseInt(dataNodeSetting[prop]) < 0 || parseInt(dataNodeSetting[prop]) > roomSize.x)
                     {
-                        alert(`Position x must be in range! Room size is (${roomSize.x}, ${roomSize.y})`);
+                        alert(`Position x must be in range. Room size is (${roomSize.x}, ${roomSize.y})`);
                         flag = 0;
                         break;
                     }
-                }if(prop === "y_axis")
+                }
+                if(prop === "y_axis")
                 {
-                    if(parseInt(dataCreateNode[prop]) < 0 || parseInt(dataCreateNode[prop]) > roomSize.y)
+                    if(parseInt(dataNodeSetting[prop]) < 0 || parseInt(dataNodeSetting[prop]) > roomSize.y)
                     {
-                        alert(`Position y must be in range! Room size is (${roomSize.x}, ${roomSize.y})`);
+                        alert(`Position y must be in range. Room size is (${roomSize.x}, ${roomSize.y})`);
                         flag = 0;
                         break;
                     }
@@ -238,14 +260,9 @@ export default function NodeChange({configurationNodeAll, callbackSetSignIn, nod
         }
         else if(activeStep === steps.length - 1)
         {
-            verify_and_get_data(createNewNode, callbackSetSignIn, host, api, {...dataCreateNode, room_id: roomIdForNodeConfig}, nodeConfigLoading);
+            verify_and_get_data(settingNode, callbackSetSignIn, host, api, dataNodeSetting, ChartConfigLoading);
             setActiveStep(0);
-            setDataCreateNode({
-                "node_id": null, 
-                "x_axis": null,
-                "y_axis": null,
-                "function": null,
-                });
+            handleClose();
         }
     };
 
@@ -253,25 +270,52 @@ export default function NodeChange({configurationNodeAll, callbackSetSignIn, nod
         setActiveStep(activeStep - 1);
     };
 
-
     return (
-        <React.Fragment>
-        <CssBaseline />
-        <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-            <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-            <Typography component="h1" variant="h3" align="center">
-                New Node
-            </Typography>
-            <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
-                {steps.map((label) => (
-                <Step key={label}>
-                    <StepLabel>{label}</StepLabel>
-                </Step>
-                ))}
-            </Stepper>
+        <div>
+        <Button
+                startIcon={<PermDataSettingIcon />}
+                sx={{
+                    backgroundColor: "#ed6c02",
+                    fontSize: "10px",
+                    fontWeight: "bold",
+                    padding: "5px 12px",
+                    }}
+                variant="contained"
+
+                onClick={()=>{
+                    setOpen(true);
+                }}
+        >
+            Setting
+        </Button>
+        <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogTitle id="alert-dialog-title">
+                <Box
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="space-between"
+                >
+                    <h2>Setting room record!</h2>
+                    <Button onClick={handleClose}><CloseIcon/></Button>
+                </Box>
+            </DialogTitle>
+            <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+                <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+                    {steps.map((label) => (
+                    <Step key={label}>
+                        <StepLabel>{label}</StepLabel>
+                    </Step>
+                    ))}
+                </Stepper>
                 <React.Fragment>
 
-                {getStepContent(activeStep, setDataCreateNode, dataCreateNode)}
+                {getStepContent(activeStep, setDataNodeSetting, dataNodeSetting)}
 
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                     {activeStep !== 0 && (
@@ -289,8 +333,10 @@ export default function NodeChange({configurationNodeAll, callbackSetSignIn, nod
                     </Button>
                 </Box>
                 </React.Fragment>
-            </Paper>
-        </Container>
-        </React.Fragment>
+            </DialogContentText>
+            </DialogContent>
+            
+        </Dialog>
+        </div>
     );
 }

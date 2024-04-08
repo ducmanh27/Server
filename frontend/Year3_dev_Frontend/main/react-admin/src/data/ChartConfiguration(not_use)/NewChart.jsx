@@ -2,20 +2,15 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import Checkbox from '@mui/material/Checkbox';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-export default function NewNode({setDataCreateNode, dataCreateNode}) {
+export default function NewChart({setDataCreateChart, dataCreateChart}) {
   return (
     <React.Fragment>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h4" gutterBottom justifyContent="center">
             Detail
         </Typography>
         <Grid container spacing={3}>
@@ -24,13 +19,13 @@ export default function NewNode({setDataCreateNode, dataCreateNode}) {
                 required
                 id="x_axis"
                 name="x_axis"
-                label="Position X"
+                label="Chart name"
                 fullWidth
                 autoComplete="x_axis"
                 variant="standard"
-                value={dataCreateNode.x_axis}
-                onInput={(e)=>{e.target.value = e.target.value.replace(/[^0-9]/g, '')}}
-                onChange={(e)=>setDataCreateNode({...dataCreateNode, x_axis: e.target.value})}
+                // value={dataCreateChart.x_axis}
+                // onInput={(e)=>{e.target.value = e.target.value.replace(/[^0-9]/g, '')}}
+                // onChange={(e)=>setDataCreateChart({...dataCreateChart, x_axis: e.target.value})}
             />
             </Grid>
             <Grid item xs={12}>
@@ -42,9 +37,9 @@ export default function NewNode({setDataCreateNode, dataCreateNode}) {
                 fullWidth
                 autoComplete="y_axis"
                 variant="standard"
-                value={dataCreateNode.y_axis}
-                onInput={(e)=>{e.target.value = e.target.value.replace(/[^0-9]/g, '')}}
-                onChange={(e)=>setDataCreateNode({...dataCreateNode, y_axis: e.target.value})}
+                // value={dataCreateChart.y_axis}
+                // onInput={(e)=>{e.target.value = e.target.value.replace(/[^0-9]/g, '')}}
+                // onChange={(e)=>setDataCreateChart({...dataCreateChart, y_axis: e.target.value})}
             />
             </Grid>
             <Grid item xs={12} sm={12}>
@@ -53,8 +48,8 @@ export default function NewNode({setDataCreateNode, dataCreateNode}) {
                     <Select
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard"
-                        value={dataCreateNode.function}
-                        onChange={(e)=>setDataCreateNode({...dataCreateNode, function: e.target.value})}
+                        value={dataCreateChart.function}
+                        // onChange={(e)=>setDataCreateChart({...dataCreateChart, function: e.target.value})}
                         label="Function"
                     >
                         <MenuItem value={"sensor"}>Sensor</MenuItem>
@@ -73,9 +68,9 @@ export default function NewNode({setDataCreateNode, dataCreateNode}) {
                 fullWidth
                 autoComplete="mac"
                 variant="standard"
-                value={dataCreateNode.mac}
+                value={dataCreateChart.mac}
                 // onInput={(e)=>{e.target.value = e.target.value.replace(/[^0-9]/g, '')}}
-                onChange={(e)=>setDataCreateNode({...dataCreateNode, mac: e.target.value})}
+                onChange={(e)=>setDataCreateChart({...dataCreateChart, mac: e.target.value})}
             />
             </Grid>
         </Grid>
