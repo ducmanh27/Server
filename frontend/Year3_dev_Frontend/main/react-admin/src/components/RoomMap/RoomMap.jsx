@@ -364,6 +364,7 @@ const RoomMap = ({room_id, callbackSetSignIn}) =>
                         alt="profile-room"
                         src={dict_plan[room_id]}
                         style={{ 
+                            rotate: '180deg',
                             width: `${imageWidth}px`,
                             cursor: "pointer", borderRadius: "0%" 
                         }}
