@@ -12,14 +12,14 @@ import Paper from '@mui/material/Paper';
 import RoomConfig from './room/RoomConfig';
 import NodeConfig from './node/NodeConfig';
 
-
-
 export default function Configuration() {
     const [config, setConfig] = useState(0);
     const [roomIdForNodeConfig, setRoomIdForNodeConfig] = useState(0);
     const [roomSize, setRoomSize] = useState({x: 0, y: 0});
-    const dict = {0: <RoomConfig setConfig={setConfig} setRoomIdForNodeConfig={setRoomIdForNodeConfig} setRoomSize={setRoomSize}/>, 
-                1: <NodeConfig roomIdForNodeConfig={roomIdForNodeConfig} setConfig={setConfig} roomSize={roomSize}/>};
+    const dict = {
+        0: <RoomConfig setConfig={setConfig} setRoomIdForNodeConfig={setRoomIdForNodeConfig} setRoomSize={setRoomSize}/>, 
+        1: <NodeConfig roomIdForNodeConfig={roomIdForNodeConfig} setConfig={setConfig} roomSize={roomSize}/>
+    };
     return (
         <Container maxWidth="lg"
             sx={{

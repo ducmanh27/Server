@@ -1,13 +1,10 @@
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import HistoryToggleOffOutlinedIcon from '@mui/icons-material/HistoryToggleOffOutlined';
-import { LineChartApex } from "../../components/ApexChart/LineChartApex";
-import { BarChartApex } from "../../components/ApexChart/BarChartApex";
 import { useState, useContext } from "react";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import Energy from "../../components/AqiRef/Energy";
 
 import Control  from "../../components/Actuator/GaugeChart/Control";
 import { UserContext } from "../../App";
@@ -16,7 +13,7 @@ import MultipleYAxis from "../../components/ApexChart/MixChartApex";
 import { DatePicker } from "@mui/x-date-pickers";
 import Chart from "../../data/Chart";
 import {host} from "../../App";
-import InformationTag from "../../components/InformationTag";
+import InformationTag from "../../components/InformationTag2";
 import { useLocation } from "react-router-dom"; 
 import RoomMap from "../../components/RoomMap/RoomMap";
 import FilterNode from "../../components/RoomMap/FilterNode";
@@ -24,7 +21,7 @@ import FilterParameter from "../../components/RoomMap/FilterParameter";
 import AQI from "../../components/AQI";
 import SetTimer from "../../components/Actuator/SetTimer";
 import ActuatorStatus from "../../components/Actuator/ActuatorStatus";
-import AqiRef from "../../components/AqiRef/AqiRef";
+import AqiRef from "../../components/AqiRef/AqiRef2";
 import Actuator from "../../components/Actuator/Actuator";
 
 const Dashboard = () => {
@@ -151,6 +148,7 @@ const Dashboard = () => {
                             backgroundColor: "white"}}
                         width="100%"
                         height="100%"
+                        alignContent="center"
                     >   
                         <InformationTag 
                             url={apiInformationTag} 
@@ -183,6 +181,20 @@ const Dashboard = () => {
                         <RoomMap 
                             room_id={room_id} callbackSetSignIn={callbackSetSignIn}
                         />
+                    </Box>
+                </Grid>
+                <Grid xs={12} sm={12} md={12} lg={12} p='10px'>
+                <Box 
+                        sx={{boxShadow: 1,
+                            borderRadius: '5px', 
+                            backgroundColor: "white"}}
+                        width="100%" height="100%"
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="center"
+                        justify="center"
+                    >
+                        <Energy />
                     </Box>
                 </Grid>
 
@@ -254,3 +266,4 @@ const Dashboard = () => {
 }
 
 export default Dashboard;
+

@@ -14,6 +14,7 @@ import { useState } from 'react';
                 { x: 5, y: 7 },
                 ]}
  */
+
 const VictoryLineChart = ({data_x, data_y, option_data, parameter_type}) => 
 {
 
@@ -87,17 +88,17 @@ const VictoryLineChart = ({data_x, data_y, option_data, parameter_type}) =>
             // prevent it from overlapping the axis
             padding={{ 
                 top: 10, 
-                bottom: 30, 
+                bottom: 20, 
                 left: 30, 
                 right: 20, 
             }}
-            height={150}
+            height={75}
             domain={{ y: [Math.min(...data_y), Math.max(...data_y)] }}
             domainPadding={{x: 20, y: 10 }}
             containerComponent={
                 <VictoryZoomContainer
-                    //  minZoom={{y: Math.min(...data_y) - 1}} // Minimum zoom level
-                    //  maxZoom={{y: Math.max(...data_y) + 1}} // Maximum zoom level
+                    // minZoom={{y: Math.min(...data_y) - 1}} // Minimum zoom level
+                    // maxZoom={{y: Math.max(...data_y) + 1}} // Maximum zoom level
                 />
             }
         >
