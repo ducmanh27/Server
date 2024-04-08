@@ -14,6 +14,7 @@ import { useState } from 'react';
                 { x: 5, y: 7 },
                 ]}
  */
+
 const VictoryLineChart = ({data_x, data_y, option_data, parameter_type}) => 
 {
 
