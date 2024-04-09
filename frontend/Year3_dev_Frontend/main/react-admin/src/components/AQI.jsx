@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from "react";
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { host } from "../App";
 
 const AQI = ({room_id, callbackSetSignIn}) =>
@@ -268,199 +268,35 @@ const AQI = ({room_id, callbackSetSignIn}) =>
     }, []);
 
     return (
-        <Box>
-
-                                
-
-                                <table style={{ 
-                                    textAlign: 'left', 
-                                    padding: '0px', 
-                                    paddingTop: '3px', 
-                                    paddingBottom: '8px', 
-                                    margin: '0px', 
-                                    borderSpacing: '0px', 
-                                    border: '0px solid black', 
-                                    width: '100%',
-                                    paddingLeft: "20px",
-                                    // alignItems: "center"
-                                    }} >
-                                <tr>
-                                    <td style={{ 
-                                        paddingRight: '5px',
-                                        width: "30%",
-                                    }}
-                                    >
-                                        <div className='aqivalue' id='aqiwgtvalue' style={{ 
-                                            fontSize: '80px', 
-                                            backgroundColor: `${aqi["color"]}`, 
-                                            color: '#000000', 
-                                            }} 
-                                            
-                                            >
-                                            {aqi["hourly"]}
-                                        </div>
-                                    </td>
-
-                                    <td 
-                                        style={{ 
-                                            width: '70%',
-
-                                        }} 
-                                        // nowrap="true"
-                                    >
-                                        <div  
-                                            style={{ fontSize: '30px', textShadow: '1px 1px 0 #000000', 
-                                            color: `${aqi["color"]}`, 
-                                            // maxWidth: "50px", 
-                                            // overflowWrap: "break-word" 
-                                        }}
-                                        >
-                                            {aqi["level"]}
-                                        </div>
-                                    <div style={{ fontSize: '16px', fontWeight: 'light' }}>
-                                        <span id='aqiwgtutime'>
-                                            {
-                                                aqi["time"] != 0 ?
-                                                <span id='aqiwgtutime' style={{ fontSize: '12px', fontWeight: 'light'}}>
-                                                Updated on {
-                                                            (()=>{
-                                                                const new_time = aqi["time"] - 60*7*60;
-                                                                const utcDate = new Date(new_time * 1000); // Convert seconds to milliseconds
-                                                                const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'};
-                                                                const formattedDateTime = utcDate.toLocaleDateString('en-US', options);
-
-                                                                return formattedDateTime;
-                                                                })()   //run this function
-                                                        }
-                                                </span>
-                                                :
-                                                <span id='aqiwgtutime' style={{ fontSize: '12px', fontWeight: 'light'}}>
-                                                    No data available!
-                                                </span>
-                                            }
-                                        </span>
-                                        {/* <script>
-                                        try {
-                                            checkWidgetUpdateTime(1701738000, ' on Tuesday, Dec 5th 2023, 10:00 am', 'aqiwgtutime');
-                                        } catch (e) {}
-                                        </script> */}
-                                    </div>
-                                    <div style={{ fontSize: '12px' }}></div>
-                                    {/* <div style={{ fontSize: '12px', paddingTop: '5px' }} id='aqiwgtxtrainfo'>
-                                        Temp.:{' '}
-                                        <span>
-                                        <b>{data["t"]}</b>
-                                        &deg;C
-                                        </span>
-                                        </div> */}
-                                </td>
-                                </tr>
-                                </table>
-                                </Box>
-        
-        
-        
-        
-        
-        
-        
-        
-        // <>
-        
-
-        // <div class="AQI"
-        // style={{"margin-top": "2rem",}}
-        // >
-        //     {/* <div style={{"margin-bottom": "2rem",}}>
-        //     <label for="set-aqi">Set AQI:</label>
-        //         <input type="range" id="set-aqi" min="0" max="500" value="10"
-        //             onChange={evt => {
-        //                 setDial(evt.target.value);}}
-        //         />
-        //     </div> */}
-        //     <div class="gauge">
-            
-            
-        //         <div role="meter" aria-valuemin="0" aria-valuemax="500" aria-labelledby="meter-label">
-        //             <div class="dial">
-        //                 <Button onClick={() => {
-        //                     window.open( "https://www.airnow.gov/aqi/aqi-calculator/", "_blank")
-        //                         }}>
-        //                 <span
-        //                 style={{
-        //                     "text-align": "center",
-        //                     "fontSize": "30px",
-        //                     "fontWeight": "600",
-        //                 }}>AQI</span>
-        //                 </Button>
-        //                 <span class="aqi-num"
-        //                 style={{
-        //                     "text-align": "center",
-        //                     "fontSize": "25px",
-        //                 }}></span>
-        //                 <div class="arrow"></div>
-        //             </div>
-        //         </div>
-        //         <div
-        //         class="level"
-        //         style={{
-        //             "background-color": "black",
-        //             "text-align": "center",
-        //             "fontSize": "18px",
-        //             "fontWeight": "600",
-        //         }}
-        //         >
-        //             <label class="label" id="meter-label"
-
-        //             >{aqi["level"]}</label>
-        //             <br/>
-        //             {
-        //                 aqi["time"] != 0 ?
-        //                 <span id='aqiwgtutime' style={{ fontSize: '12px', fontWeight: 'light'}}>
-        //                 Updated on {
-        //                             (()=>{
-        //                                 const new_time = aqi["time"];
-        //                                 const utcDate = new Date(new_time * 1000); // Convert seconds to milliseconds
-        //                                 const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'};
-        //                                 const formattedDateTime = utcDate.toLocaleDateString('en-US', options);
-
-        //                                 return formattedDateTime;
-        //                                 })()   //run this function
-        //                         }
-        //                 </span>
-        //                 :
-        //                 <span id='aqiwgtutime' style={{ fontSize: '12px', fontWeight: 'light'}}>
-        //                     No data available!
-        //                 </span>
-        //             }
-        //         </div>
-                    
-                    
-
-        //         <div class="aqi-legend">
-        //             <div class="aqi-bar" style={{"background-color": "#00e400"}}>
-        //             <span class="range">0</span>
-        //             </div>
-        //             <div class="aqi-bar" style={{"background-color": "#ffff00"}}>
-        //             <span class="range">50</span>
-        //             </div>
-        //             <div class="aqi-bar" style={{"background-color": "#ff7e00"}}>
-        //                 <span class="range">100</span>
-        //             </div>
-        //             <div class="aqi-bar" style={{"background-color": "red"}}>
-        //             <span class="range">150</span>
-        //             </div>
-        //             <div class="aqi-bar" style={{"background-color": "#8f3f97"}}>
-        //             <span class="range">200</span>
-        //             </div>
-        //             <div class="aqi-bar" style={{"background-color": "#7e0023"}}>
-        //                 <span class="range">300</span>
-        //             </div>
-        //             </div>
-
-        //     </div>
-        // </div>
-        // </>
+        <Grid container display="flex" flexDirection="column" justifyItems='center' textAlign='center'>
+            <Grid container item justifyContent='center' alignContent='center'>
+            <div style={{
+                width: '100px', // Adjust as needed
+                height: '100px', // Adjust as needed
+                border: '10px solid', // Border makes the circle hollow
+                borderColor: `${aqi['color']}`,
+                borderRadius: '50%', // Makes the div a circle
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+                position: 'relative',
+            }}>
+                <span style={{
+                    position: 'relative',
+                    color: 'black',
+                    fontSize: '28px',
+                    fontWeight: 'bold'
+                }}>
+                    {aqi['hourly']}
+                </span>
+            </div>
+            </Grid>
+            <Grid item marginY={0.6} />
+            <Grid item>
+                <Typography variant="h5">{aqi['level']}</Typography>
+            </Grid>
+        </Grid>
     );
 }
 

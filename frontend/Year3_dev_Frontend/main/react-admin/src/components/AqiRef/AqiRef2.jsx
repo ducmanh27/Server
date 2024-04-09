@@ -2,19 +2,14 @@ import { React, useEffect, useState } from "react";
 import { Grid, Paper, Tooltip, Typography, useTheme } from "@mui/material";
 import { host } from "../../App";
 import ThermostatIcon from '@mui/icons-material/Thermostat';
-import Co2Icon from '@mui/icons-material/Co2';
 import InvertColorsIcon from '@mui/icons-material/InvertColors';
 import FilterDramaIcon from '@mui/icons-material/FilterDrama';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import BoyIcon from '@mui/icons-material/Boy';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import LensBlurIcon from '@mui/icons-material/LensBlur';
-import { dateCalendarClasses } from "@mui/x-date-pickers";
-
+import SpeedIcon from '@mui/icons-material/Speed';
 
 export default function AqiRef({callbackSetSignIn, time_delay})
 {
     const url = `http://${host}/api/aqi_ref`;
+    const theme = useTheme();
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -38,8 +33,6 @@ export default function AqiRef({callbackSetSignIn, time_delay})
         {"key": 6, "min": 301, "max": 500},
     ];
     
-
-
     const fetch_data_function = async (api, access_token) =>
     {
 
@@ -239,21 +232,34 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                         Hanoi AQI: Hanoi Real-time Air Quality Index (AQI)
                     </Typography>
                 </Grid>
-                <Grid container spacing={1} margin={1}>
+                <Grid container spacing={1} marginY={0.5} marginX={1}>
                     <Grid item xs={6}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                         <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
                             <Grid container display="flex" flexDirection="column" justifyItems='center' textAlign='center'>
                                 <Grid container item justifyContent='center' alignContent='center'>
                                     <Tooltip style={{
-                                        fontSize: '20px'   
+                                        fontSize: theme.typography.pxToRem(24),
+                                        backgroundColor: theme.palette.common.white,
+                                        border: '1px solid #dadde9',
+                                        maxWidth: 220,
                                     }}
-                                        title={`PM2.5: ${data["pm25"]}\nPM10: ${data["pm10"]}\nO3: ${data["o3"]}\nNO2: ${data["no2"]}\nSO2: ${data["so2"]}\nCO: ${data["co"]}\n`}>
+                                        title={
+                                            <Grid>
+                                                <Typography color="inherit">{`PM2.5: ${data['pm25']}`}</Typography>
+                                                <Typography color="inherit">{`PM10: ${data['pm10']}`}</Typography>
+                                                <Typography color="inherit">{`O3: ${data['o3']}`}</Typography>
+                                                <Typography color="inherit">{`NO2: ${data['no2']}`}</Typography>
+                                                <Typography color="inherit">{`SO2: ${data['so2']}`}</Typography>
+                                                <Typography color="inherit">{`CO: ${data['co']}`}</Typography>
+                                            </Grid>
+                                        }
+                                    >
                                     <div style={{
                                         width: '100px', // Adjust as needed
                                         height: '100px', // Adjust as needed
                                         border: '10px solid', // Border makes the circle hollow
-                                        borderColor: 'darkgreen',
+                                        borderColor: `${data['rating']['color']}`,
                                         borderRadius: '50%', // Makes the div a circle
                                         display: 'flex',
                                         justifyContent: 'center',
@@ -264,14 +270,17 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                                         <span style={{
                                             position: 'relative',
                                             color: 'black',
+                                            fontSize: '28px',
+                                            fontWeight: 'bold'
                                         }}>
-                                            AQI
+                                            {data['aqi']}
                                         </span>
                                     </div>
                                     </Tooltip>
                                 </Grid>
+                                <Grid item marginY={0.5} />
                                 <Grid item>
-                                    <Typography variant='h5'>Good air</Typography>
+                                    <Typography variant='h5'>{data['rating']['rate']}</Typography>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -282,11 +291,17 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                         <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' alignItems='center' textAlign='center'>
                                 <Grid item>
-                                    <ThermostatIcon style={{fontSize: '4.6rem'}}/>
+                                    <ThermostatIcon style={{fontSize: '5.1rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Temperature</Typography>
-                                    <Typography textAlign='center' variant='h5'>{data["t"]}</Typography>
+                                    <Typography textAlign='center' variant='h5'>
+                                        {((temp) => {
+                                        if (data['t'] == 'No data') temp = data['t'];
+                                        else temp = `${data['t']} °C`
+                                        return temp;
+                                    })()}
+                                    </Typography>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -297,11 +312,15 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                         <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' textAlign='center'>
                                 <Grid item>
-                                    <Co2Icon style={{fontSize: '3rem'}}/>
+                                    <SpeedIcon style={{fontSize: '3rem'}}/>
                                 </Grid>
                                 <Grid item>
-                                    <Typography textAlign='center' variant='h5'>CO2</Typography>
-                                    <Typography textAlign='center' variant='h5'>{data["p"]}</Typography>
+                                    <Typography textAlign='center' variant='h5'>Pressure</Typography>
+                                    <Typography textAlign='center' variant='h5'>{((p) => {
+                                        if (data['p'] == 'No data') p = data['p'];
+                                        else p = `${data['p']} hPa`
+                                        return p;
+                                    })()}</Typography>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -316,7 +335,11 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Humidity</Typography>
-                                    <Typography textAlign='center' variant='h5'>{data["h"]}</Typography>
+                                    <Typography textAlign='center' variant='h5'>{((h) => {
+                                        if (data['h'] == 'No data') h = data['h'];
+                                        else h = `${data['h']} %`
+                                        return h;
+                                    })()}</Typography>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -331,14 +354,18 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Wind</Typography>
-                                    <Typography textAlign='center' variant='h5'>{data["w"]}</Typography>
+                                    <Typography textAlign='center' variant='h5'>{((w) => {
+                                        if (data['w'] == 'No data') w = data['w'];
+                                        else w = `${data['w']} m/s`
+                                        return w;
+                                    })()}</Typography>
                                 </Grid>
                             </Grid>
                         </Paper>
                         </div>
                     </Grid>
                 </Grid>
-                <Grid xs={12} textAlign='center' spacing={1}>
+                <Grid xs={12} textAlign='center' margin={1}>
                     <Typography textAlign='center' variant='h5'>updated on {
                                             (()=>{
                                                 const new_time = data["time"] - 7*60*60;
@@ -349,6 +376,10 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                                                 return formattedDateTime;
                                             })()   //run this function
                                         }
+                    </Typography>
+                    <Typography textAlign='center'>
+                        <Typography variant="h5" component='span'>from </Typography>
+                        <Typography variant='h5' component='a' color='darkgray' href="https://aqicn.org/city/vietnam/hanoi/">https://aqicn.org/city/vietnam/hanoi/</Typography>
                     </Typography>
                 </Grid>
             </Grid>

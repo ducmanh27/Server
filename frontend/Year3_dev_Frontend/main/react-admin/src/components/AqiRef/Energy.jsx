@@ -4,8 +4,7 @@ import { host } from "../../App";
 
 export default function Energy()
 {
-    return(
-     
+    return (
                 <Grid container textAlign='center'>
                 <Grid xs={12} sm={12} md={12} textAlign="center" columnSpacing={2}>
                     <Typography variant='h3' fontWeight="bold">
