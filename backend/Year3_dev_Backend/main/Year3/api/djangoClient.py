@@ -14,7 +14,7 @@ backend_topic_dictionary = {"get_sensor_data": "farm/monitor/sensor",
                         "room_sync_gateway_backend": "farm/sync_room",
                         "set_timer": "farm/set_timer",
                         "node_sync_backend_gateway": "farm/sync_node",
-                        "set_actuator": "farm/control",}
+                        "set_actuator": "farm/control_test",}
 
 client = Client(mqtt_topic,[backend_topic_dictionary["set_timer"], backend_topic_dictionary["node_sync_backend_gateway"]])
 mqtt_broker = broker     
@@ -256,7 +256,7 @@ def send_actuator_command_to_gateway(client: Client, data: dict):
             print(f"RRRRRRRRRRRRRRRReceived `{temp}` from topic `{topic}`")
             msg = json.loads(temp)
             if msg["operator"] == "server_control_ack":
-                if msg["status"] == 1:
+                if msg["error"] == 0:
                     new_data["info"]["result"] = 1
                     break
     return new_data

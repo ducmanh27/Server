@@ -37,10 +37,10 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
     const backend_host = host;
     const api_informationtag = url;
     
-
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(true);
     const [infoData, getInfoData] = useState(null);
     const [nodeData, getNodeData] = useState(null);
+    const [aqiInfo, setAQIInfo] = useState([]);
 
     const iconMap = {
         temp: (
@@ -68,21 +68,17 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
             <img height="70px" width="70px"  src={motion_icon} />
         ),
       };
-    const dict_of_enviroment_para_names = {
-                    "temp": {"name":" Temparature", "icon":iconMap["temp"], "unit":"°C"}, 
-                    "hum": {"name":"Humidity", "icon":iconMap["hum"], "unit":"%"}, 
-                    "co2": {"name":"Co2", "icon":iconMap["co2"], "unit":"ppm"}, 
-                    "tvoc": {"name":"TVOC","icon":iconMap["tvoc"], "unit":"µg/m3"},
-                    "dust": {"name": "Dust", "icon":iconMap["dust"], "unit": "µm"},
-                    "sound": {"name": "Sound", "icon":iconMap["sound"], "unit": "dB"},
-                    "light": {"name": "Light", "icon":iconMap["light"], "unit": "lux"},
-                    "motion": {"name": "Motion Detection", "icon":iconMap["motion"], "unit": ""},
-                }
-
-
-
-
-    
+    const dict_of_enviroment_para_names = 
+    {
+        "temp": {"name":" Temparature", "icon":iconMap["temp"], "unit":"°C"}, 
+        "hum": {"name":"Humidity", "icon":iconMap["hum"], "unit":"%"}, 
+        "co2": {"name":"Co2", "icon":iconMap["co2"], "unit":"ppm"}, 
+        "tvoc": {"name":"TVOC","icon":iconMap["tvoc"], "unit":"µg/m3"},
+        "dust": {"name": "Dust", "icon":iconMap["dust"], "unit": "µm"},
+        "sound": {"name": "Sound", "icon":iconMap["sound"], "unit": "dB"},
+        "light": {"name": "Light", "icon":iconMap["light"], "unit": "lux"},
+        "motion": {"name": "Motion Detection", "icon":iconMap["motion"], "unit": ""},
+    };
 
     const get_information_data = async (url, access_token) => 
     {
@@ -140,7 +136,7 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                             newInfoData[each_key] = {
                                 "title": dict_of_enviroment_para_names[each_key]["name"], 
                                 "icon": dict_of_enviroment_para_names[each_key]["icon"], 
-                                "value": "No Data",    //last element of array data
+                                "value": "No data",    //last element of array data
                                 "unit": "",
                             }; 
                         }
@@ -163,7 +159,7 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                             newInfoData[each_key] = {
                                 "title": dict_of_enviroment_para_names[each_key]["name"], 
                                 "icon": dict_of_enviroment_para_names[each_key]["icon"], 
-                                "value": "No Data",    //last element of array data
+                                "value": "No data",    //last element of array data
                                 "unit": "",
                             }; 
                         }
@@ -333,36 +329,11 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                         Room info
                     </Typography>
                 </Grid>
-                <Grid container spacing={1} marginX={1}>
+                <Grid container spacing={1} marginY={0.5} marginX={1}>
                     <Grid item xs={4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                         <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
-                            <Grid container display="flex" flexDirection="column" justifyItems='center' textAlign='center'>
-                                <Grid container item justifyContent='center' alignContent='center'>
-                                <div style={{
-                                    width: '100px', // Adjust as needed
-                                    height: '100px', // Adjust as needed
-                                    border: '10px solid', // Border makes the circle hollow
-                                    borderColor: 'darkgreen',
-                                    borderRadius: '50%', // Makes the div a circle
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    textAlign: 'center',
-                                    position: 'relative',
-                                }}>
-                                    <span style={{
-                                        position: 'relative',
-                                        color: 'black',
-                                    }}>
-                                        AQI
-                                    </span>
-                                </div>
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant='h5'>Good air</Typography>
-                                </Grid>
-                            </Grid>
+                            <AQI room_id={room_id} callbackSetSignIn={callbackSetSignIn} />
                         </Paper>
                         </div>
                     </Grid>
@@ -371,11 +342,16 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                         <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' alignItems='center' textAlign='center'>
                                 <Grid item>
-                                    <ThermostatIcon style={{fontSize: '4.6rem'}}/>
+                                    <ThermostatIcon style={{fontSize: '5.1rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Temperature</Typography>
-                                    <Typography textAlign='center' variant='h5'>{infoData["temp"]["value"]}</Typography>
+                                    <Typography textAlign='center' variant='h5'>
+                                    {((temp) => {
+                                        if (infoData["temp"]["value"] == 'No data') temp = infoData["temp"]["value"];
+                                        else temp = `${infoData["temp"]["value"]} ${dict_of_enviroment_para_names['temp']['unit']}`
+                                        return temp;
+                                    })()}</Typography>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -386,11 +362,15 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                         <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' textAlign='center'>
                                 <Grid item>
-                                    <Co2Icon style={{fontSize: '4.6rem'}}/>
+                                    <Co2Icon style={{fontSize: '5.1rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>CO2</Typography>
-                                    <Typography textAlign='center' variant='h5'>{infoData["co2"]["value"]}</Typography>
+                                    <Typography textAlign='center' variant='h5'>{((temp) => {
+                                        if (infoData["co2"]["value"] == 'No data') temp = infoData["co2"]["value"];
+                                        else temp = `${infoData["co2"]["value"]} ${dict_of_enviroment_para_names['co2']['unit']}`
+                                        return temp;
+                                    })()}</Typography>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -405,7 +385,11 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Humidity</Typography>
-                                    <Typography textAlign='center' variant='h5'>{infoData["hum"]["value"]}</Typography>
+                                    <Typography textAlign='center' variant='h5'>{((temp) => {
+                                        if (infoData["hum"]["value"] == 'No data') temp = infoData["hum"]["value"];
+                                        else temp = `${infoData["hum"]["value"]} ${dict_of_enviroment_para_names['hum']['unit']}`
+                                        return temp;
+                                    })()}</Typography>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -420,7 +404,11 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>TVOC</Typography>
-                                    <Typography textAlign='center' variant='h5'>{infoData["tvoc"]["value"]}</Typography>
+                                    <Typography textAlign='center' variant='h5'>{((temp) => {
+                                        if (infoData["tvoc"]["value"] == 'No data') temp = infoData["tvoc"]["value"];
+                                        else temp = `${infoData["tvoc"]["value"]} ${dict_of_enviroment_para_names['tvoc']['unit']}`
+                                        return temp;
+                                    })()}</Typography>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -435,7 +423,11 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Dust</Typography>
-                                    <Typography textAlign='center' variant='h5'>{infoData["dust"]["value"]}</Typography>
+                                    <Typography textAlign='center' variant='h5'>{((temp) => {
+                                        if (infoData["dust"]["value"] == 'No data') temp = infoData["dust"]["value"];
+                                        else temp = `${infoData["dust"]["value"]} ${dict_of_enviroment_para_names['dust']['unit']}`
+                                        return temp;
+                                    })()}</Typography>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -450,7 +442,11 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Light</Typography>
-                                    <Typography textAlign='center' variant='h5'>{infoData["dust"]["value"]}</Typography>
+                                    <Typography textAlign='center' variant='h5'>{((temp) => {
+                                        if (infoData["light"]["value"] == 'No data') temp = infoData["light"]["value"];
+                                        else temp = `${infoData["light"]["value"]} ${dict_of_enviroment_para_names['light']['unit']}`
+                                        return temp;
+                                    })()}</Typography>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -465,7 +461,11 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Sound</Typography>
-                                    <Typography textAlign='center' variant='h5'>{infoData["sound"]["value"]}</Typography>
+                                    <Typography textAlign='center' variant='h5'>{((temp) => {
+                                        if (infoData["sound"]["value"] == 'No data') temp = infoData["sound"]["value"];
+                                        else temp = `${infoData["sound"]["value"]} ${dict_of_enviroment_para_names['sound']['unit']}`
+                                        return temp;
+                                    })()}</Typography>
                                 </Grid>
                             </Grid>
                         </Paper>

@@ -1,14 +1,6 @@
-import React, {useState, useEffect} from "react"
-import MultipleYAxis from "../components/ApexChart/MixChartApex"
-import { LineChartApex } from "../components/ApexChart/LineChartApex"
+import React, {useState} from "react"
 import { Box } from "@mui/material"
 import Grid from "@mui/material/Grid"
-import {host} from "../App"
-import * as V from 'victory';
-import VictoryBarChart from "../components/VictoryChart/VictoryBarChart"
-import VictoryLineChart from "../components/VictoryChart/VictoryLineChart"
-import Header from "../components/Header"
-import VictoryBarChartV2 from "../components/VictoryChart/VictoryBarChartVert2"
 import {Button} from "@mui/material";
 
 const SmallFilter = ({setNumberOfData, setDataChart, setIsLoading}) => 
