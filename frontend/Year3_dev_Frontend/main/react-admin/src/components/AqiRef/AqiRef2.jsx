@@ -227,13 +227,13 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                 <h1>Loading...</h1>
                 :
                 <Grid container textAlign='center'>
-                <Grid xs={12} sm={12} md={12} textAlign="center" columnSpacing={2}>
-                    <Typography variant='h4' fontWeight="bold">
+                <Grid xs={12} sm={12} md={12} textAlign="center">
+                    <Typography fontSize='21px' fontWeight="bold">
                         Hanoi AQI: Hanoi Real-time Air Quality Index (AQI)
                     </Typography>
                 </Grid>
-                <Grid container spacing={1} marginY={0.5} marginX={1}>
-                    <Grid item xs={6}>
+                <Grid container spacing={1} marginY={0.5} px='10px'>
+                    <Grid item xs={2.4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                         <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
                             <Grid container display="flex" flexDirection="column" justifyItems='center' textAlign='center'>
@@ -286,7 +286,7 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                         </Paper>
                         </div>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={2.4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                         <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' alignItems='center' textAlign='center'>
@@ -307,12 +307,12 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                         </Paper>
                         </div>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={2.4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                         <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' textAlign='center'>
                                 <Grid item>
-                                    <SpeedIcon style={{fontSize: '3rem'}}/>
+                                    <SpeedIcon style={{fontSize: '5.1rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Pressure</Typography>
@@ -326,12 +326,12 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                         </Paper>
                         </div>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={2.4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                         <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' textAlign='center'>
                                 <Grid item>
-                                    <InvertColorsIcon style={{fontSize: '3rem'}}/>
+                                    <InvertColorsIcon style={{fontSize: '5.1rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Humidity</Typography>
@@ -345,12 +345,12 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                         </Paper>
                         </div>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={2.4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                         <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' textAlign='center'>
                                 <Grid item>
-                                    <FilterDramaIcon style={{fontSize: '3rem'}}/>
+                                    <FilterDramaIcon style={{fontSize: '5.1rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Wind</Typography>
@@ -366,7 +366,7 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                     </Grid>
                 </Grid>
                 <Grid xs={12} textAlign='center' margin={1}>
-                    <Typography textAlign='center' variant='h5'>updated on {
+                    <Typography textAlign='center' variant='h5' component='span'>updated on {
                                             (()=>{
                                                 const new_time = data["time"] - 7*60*60;
                                                 const utcDate = new Date(new_time * 1000); // Convert seconds to milliseconds
@@ -375,12 +375,9 @@ export default function AqiRef({callbackSetSignIn, time_delay})
 
                                                 return formattedDateTime;
                                             })()   //run this function
-                                        }
+                                        } from {}
                     </Typography>
-                    <Typography textAlign='center'>
-                        <Typography variant="h5" component='span'>from </Typography>
-                        <Typography variant='h5' component='a' color='darkgray' href="https://aqicn.org/city/vietnam/hanoi/">https://aqicn.org/city/vietnam/hanoi/</Typography>
-                    </Typography>
+                    <Typography variant='h5' component='a' color='darkgray' href="https://aqicn.org/city/vietnam/hanoi/">https://aqicn.org/city/vietnam/hanoi/</Typography>
                 </Grid>
             </Grid>
             }
