@@ -4,8 +4,7 @@ import calendar
 import json
 import psycopg2
 import time
-
-broker = "192.168.1.199"
+broker = "192.168.144.198"
 mqtt_topic = "farm/control"
 
 backend_topic_dictionary = {"get_sensor_data": "farm/monitor/sensor",

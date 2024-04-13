@@ -27,6 +27,7 @@ paho-mqtt==1.6.1
 pandas==1.5.2
 Pillow==10.0.0
 psycopg2==2.9.3
+psycopg2-binary==2.9.9
 pyasn1==0.5.0
 pyasn1-modules==0.3.0
 pycparser==2.21
@@ -42,7 +43,6 @@ six==1.16.0
 sqlparse==0.4.3
 timedelta==2020.12.3
 Twisted==22.10.0
-twisted-iocpsupport==1.0.4
 txaio==23.1.1
 typing_extensions==4.7.1
 tzdata==2022.4
