@@ -1,1 +1,0 @@
-#sudo -u postgres psql //connect to postgres on ubuntu
