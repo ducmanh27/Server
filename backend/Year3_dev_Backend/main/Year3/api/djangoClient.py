@@ -14,7 +14,7 @@ backend_topic_dictionary = {"get_sensor_data": "farm/monitor/sensor",
                         "room_sync_gateway_backend": "farm/sync_room",
                         "set_timer": "farm/set_timer",
                         "node_sync_backend_gateway": "farm/sync_node",
-                        "set_actuator": "farm/control_test",}
+                        "set_actuator": "farm/control",}
 
 client = Client(mqtt_topic,[backend_topic_dictionary["set_timer"], backend_topic_dictionary["node_sync_backend_gateway"]])
 mqtt_broker = broker     
@@ -272,7 +272,7 @@ def send_actuator_command_to_gateway(client: Client, data: dict):
 #                     key can be "co2" or "temp" or "speed"
 def send_setpoint_to_mqtt(client: Client, data: dict):
     mqtt_topic = f"farm/control"
-    date = datetime.datetime.utcnow()
+    date = datetime.datetime.now()
     print(date)
     utc_time = calendar.timegm(date.utctimetuple())
     print(utc_time)

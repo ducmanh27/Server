@@ -103,6 +103,7 @@ def insert_to_DB(topic,
         else:
             print("! Error data ")
     elif topic == backend_topic_dictionary["get_actuator_data"]:
+        print("Now in here")
         query = f'''INSERT INTO api_rawactuatormonitor (room_id, node_id, device_type, speed, temp, time) 
                   VALUES (%s, %s, %s, %s, %s, %s)'''
                   
