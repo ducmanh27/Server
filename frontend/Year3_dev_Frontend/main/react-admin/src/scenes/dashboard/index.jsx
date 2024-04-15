@@ -136,8 +136,22 @@ const Dashboard = () => {
                         />
                     </Box>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                <Box 
+                <Grid item xs={12} sm={12} md={12} lg={6}>
+                    <Box 
+                        sx={{boxShadow: 1,
+                            borderRadius: '5px', 
+                            backgroundColor: "white"}}
+                        width="100%" height="100%"
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="center"
+                        justify="center"
+                    >
+                        <EnergyChart />
+                    </Box>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={6}>
+                    <Box 
                         sx={{boxShadow: 1,
                             borderRadius: '5px', 
                             backgroundColor: "white"}}
@@ -155,12 +169,10 @@ const Dashboard = () => {
 
             {/* COntainer of data option and charts */}
             {/* <Container maxWidth="xl"> */}
-            <div>
-                <Actuator 
-                    room_id={room_id} 
-                    callbackSetSignIn={callbackSetSignIn}
-                />
-            </div>
+            <Actuator 
+                room_id={room_id} 
+                callbackSetSignIn={callbackSetSignIn}
+            />
 
             <Box 
             sx={{

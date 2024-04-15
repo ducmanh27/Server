@@ -98,9 +98,6 @@ const Energy = () =>
                         </div>
                     </Grid>
                 </Grid>
-                {/* <Grid xs={12} textAlign='center' spacing={1} margin={1}>
-                    <EnergyChart />
-                </Grid> */}
                 <Grid xs={12} textAlign='center' spacing={1} marginY={1}>
                     <Typography textAlign='center' variant='h5'>updated on xxx</Typography>
                 </Grid>

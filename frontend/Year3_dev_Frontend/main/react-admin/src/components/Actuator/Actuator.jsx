@@ -193,7 +193,6 @@ export default function Actuator({room_id, callbackSetSignIn})
         isLoading ?
         <h1>Loading ...</h1>
         :
-
             <>
             {
                 actuatorInfoOfRoom.length !== 0 ?
@@ -208,13 +207,10 @@ export default function Actuator({room_id, callbackSetSignIn})
                                         display: "flex", 
                                         height: "100%", 
                                         // backgroundColor: "red"
-                                        marginTop: '20px',
                                     }}
                                 justify="space-between" 
                             >
-                                
                                 <Grid
-                                    p="10px"
                                     xs={12}
                                     sm={12}
                                     md={12}
@@ -234,7 +230,7 @@ export default function Actuator({room_id, callbackSetSignIn})
                                         alignItems="center"
                                         justifyContent="center"
                                     >
-                                        <h1>Actuator node id: {e["node_id"]}</h1>
+                                        Actuator node id: {e["node_id"]}
                                     </Box>
                                 </Grid>
 
@@ -351,7 +347,6 @@ export default function Actuator({room_id, callbackSetSignIn})
                             display: "flex", 
                             height: "100%", 
                             // backgroundColor: "red"
-                            marginTop: '20px',
                         }}
                     justify="space-between" 
                 >

@@ -5,31 +5,37 @@ import {Button, useMediaQuery} from "@mui/material";
 import { host } from "../App";
 import { useState, useEffect, useRef } from "react";
 
-export default function Node({node})
+export default function Node({node, imageWidth, imageHeight})
 {
     const description = node["function"];
+    console.log(node);
     const [popUp, setPopUp] = useState(false);
+    const { node_left, node_above } = node;
+
+    const absoluteLeft = (node_left / 100) * imageWidth;
+    const absoluteTop = (node_above / 100) * imageHeight;
     return (
         <Button
-            style={{position: "absolute", 
-                    left: `${(node["node_left"] <= 50 ? node["node_left"] + 7 : node["node_left"] - 7)}%`,
-                    top: `${(node["node_above"] <= 50 ? node["node_above"] : node["node_above"] - 7)}%`,  
-                    transform: `translate(-${node["node_left"]}%, -${node["node_above"]}%)`,     //!< translate(left, top)
-                    borderRadius: "50%", 
-                    width: "50px", height: "60px", backgroundColor: node["function"] === "sensor" ? "red" : "orange", 
-                    zIndex: 1, //!< this makes sure the button stays above the image 
-                    fontSize: "30px",
-                    border: "1px solid",
+            style={{
+                position: 'absolute',
+                left: absoluteLeft,
+                top: absoluteTop,
+                borderRadius: '50%',
+                width: '50px',
+                height: '60px',
+                backgroundColor: node.function === 'sensor' ? 'red' : 'orange',
+                zIndex: 1,
+                fontSize: '30px',
+                border: '1px solid',
+            }}
+            onMouseOver={(e)=>
+                {
+                    setPopUp(true);
                 }}
-                onMouseOver={(e)=>
-                    {
-                        setPopUp(true);
-                    }}
-                onMouseOut={(e)=>
-                    {
-                        setPopUp(false);
-                    }}
-                
+            onMouseOut={(e)=>
+                {
+                    setPopUp(false);
+                }}
         >
             {
             popUp && (

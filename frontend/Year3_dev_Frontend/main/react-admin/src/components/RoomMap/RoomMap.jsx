@@ -1,5 +1,5 @@
 import Header from "../Header";
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import plan from "../../assets/plan.svg";
 import plan_409 from "../../assets/409.svg";
 import plan_410 from "../../assets/410.svg";
@@ -37,15 +37,12 @@ const RoomMap = ({room_id, callbackSetSignIn}) =>
     const api_to_fetch = `http://${backend_host}/api/room/information_tag?room_id=${room_id}`;
     const api_to_fetch_heatmap_data = `http://${backend_host}/api/room/kriging?room_id=${room_id}`;
 
-
     const dict_plan = {
         1: plan_409,
         2: plan_410,
         3: plan_409,
         4: plan_411,
     }
-
-
 
     const fetch_data_function = async (api, access_token, size_object, loadImage) =>
     {
@@ -238,7 +235,7 @@ const RoomMap = ({room_id, callbackSetSignIn}) =>
         let boxWidth;
         let boxHeigth;
         let currentImageWidth;
-        let currentImageHeigth;
+        let currentImageHeight;
 
         const handleResize = () => {
           const windowWidth = window.innerWidth;
@@ -254,7 +251,7 @@ const RoomMap = ({room_id, callbackSetSignIn}) =>
     
           setImageWidth(width);
           currentImageWidth = width;
-          currentImageHeigth = width;
+          currentImageHeight = width;
         };
     
         handleResize(); // Initial resize check
@@ -312,40 +309,25 @@ const RoomMap = ({room_id, callbackSetSignIn}) =>
                 points.push(point);
             }
         }
-    
         let data = {
             max: 40,
             data: points,
-        };
-
-    
+        };    
         heatmapInstance.setData(data);
         };
-    
 
         verify_and_get_data(fetch_data_function, callbackSetSignIn, backend_host, api_to_fetch, loadImage,
-            {boxWidth: boxWidth, boxHeigth: boxHeigth, currentImageWidth: currentImageWidth, currentImageHeigth: currentImageHeigth})
-
-        
-
-
+            {boxWidth: boxWidth, boxHeigth: boxHeigth, currentImageWidth: currentImageWidth, currentImageHeight: currentImageHeight})
         // Clean up the event listener on component unmount
         return () => {
           window.removeEventListener("resize", handleResize);
         };
-
-
-
-
       },[]);
 
-    
     return (
         <>
         {
-            isLoading ? 
-            <h1>Loading...</h1>
-            :
+            isLoading ? <h1>Loading...</h1> :
             <Box
             sx={{ 
                 width: "100%", height: "100%", 
@@ -359,27 +341,28 @@ const RoomMap = ({room_id, callbackSetSignIn}) =>
                 <Box
                     id="heatmap-container"
                     ref={boxRef}
+                    sx={{ maxWidth: '100%'}}
+                    justifyContent='center'
                 >
                     <img
                         alt="profile-room"
                         src={dict_plan[room_id]}
                         style={{ 
                             rotate: '180deg',
-                            width: `${imageWidth}px`,
+                            maxWidth: `${imageWidth}px`,
+                            height: 'auto',
                             cursor: "pointer", borderRadius: "0%" 
                         }}
                         id="heatmap-image"
                     />
-                </Box>
-                
-                {
+                    {
                     nodePosition.map((node) => {
                         return (
-                                <Node node={node}/>
+                                <Node node={node} imageWidth={imageWidth * 3/4 } imageHeight={imageWidth}/>
                         );
                     })
                 }
-                
+                </Box>
             </Box>
         }
         </>
