@@ -4,7 +4,7 @@ import Header from "../../components/Header";
 import { useState, useContext } from "react";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Energy from "../../components/AqiRef/Energy";
+import Energy from "../../components/AqiRef/Energy2";
 import { UserContext } from "../../App";
 import Chart from "../../data/Chart";
 import {host} from "../../App";
@@ -90,7 +90,7 @@ const Dashboard = () => {
                             alignItems="center"
                             justify="center"
                         >
-                            <Energy />  
+                            <Energy room_id={room_id} callbackSetSignIn={callbackSetSignIn} time_delay={15000} backend_host={backend_host} />  
                         </Box>
                     </Grid>
                 </Grid>
