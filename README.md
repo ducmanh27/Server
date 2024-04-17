@@ -4,9 +4,12 @@
 - **Ubuntu 22.04**
   - Install mosquitto and mosquitto-client:
     ```
-    sudo apt install mosquitto mosquitto-client
+    sudo apt-get update
+    sudo apt-get upgrade
+    sudo apt install -y mosquitto 
+    sudo apt install -y mosquitto-client
     ```
-  - Add the following lines to the file `/etc/mosquitto/mosquitto.conf`:
+  - Add  the following lines to the file `/etc/mosquitto/mosquitto.conf`:
     ```
     allow_anonymous true  # Allow subscription/publishing without authentication
     listener 1883 0.0.0.0  # Use local machine's IP as the broker on port 1883
@@ -31,6 +34,9 @@
 
 ## Deploying on Local Network with Machine IP:
 - Navigate to `./server/backend/Year3/dev_Backend/main`
+  ```
+  cd ./server/backend/Year3/dev_Backend/main
+  ```
 - **Install Virtual Environment:**
   ```
   python -m venv venv

@@ -2,8 +2,8 @@ import datetime
 import requests
 import time
 room_id = 1
-baseURL = 'http://192.168.1.199:8000/api'
-urlEnergyDataAPI = f'{baseURL}/energydata/1'
+baseURL = 'http://192.168.144.199:8001/api'
+urlEnergyDataAPI = f'{baseURL}/energydata/realtime/monitor?room_id=1'
 urlGatewaySync = f'{baseURL}/gateway'
 urlActuatorStatus = f'{baseURL}/actuator_status'
 urlInformationTag = f'{baseURL}/room/information_tag?room_id={room_id}'

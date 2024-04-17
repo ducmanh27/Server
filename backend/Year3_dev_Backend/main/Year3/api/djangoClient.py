@@ -4,7 +4,7 @@ import calendar
 import json
 import psycopg2
 import time
-broker = "192.168.144.198"
+import os
 mqtt_topic = "farm/control"
 
 backend_topic_dictionary = {"get_sensor_data": "farm/monitor/sensor",
@@ -16,9 +16,9 @@ backend_topic_dictionary = {"get_sensor_data": "farm/monitor/sensor",
                         "set_actuator": "farm/control_test",}
 
 client = Client(mqtt_topic,[backend_topic_dictionary["set_timer"], backend_topic_dictionary["node_sync_backend_gateway"]])
-mqtt_broker = broker     
-mqtt_port = 1883
-client.connect(mqtt_broker, int(mqtt_port), 60)
+mqtt_broker = os.environ.get('BROKER_ADDRESS')
+mqtt_port = os.environ.get('BROKER_PORT')
+client.connect(mqtt_broker,int(mqtt_port))
 client.loop_start()
 print("Done setting up client...")
 

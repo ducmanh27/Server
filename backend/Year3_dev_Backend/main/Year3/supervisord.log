@@ -1,0 +1,25 @@
+2024-04-15 11:15:47,233 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2024-04-15 11:15:47,237 INFO supervisord started with pid 1
+2024-04-15 11:15:48,250 INFO spawned: 'openweatherAPI' with pid 9
+2024-04-15 11:15:48,252 INFO spawned: 'getDataFromGateway' with pid 10
+2024-04-15 11:15:48,255 INFO spawned: 'runserver' with pid 11
+2024-04-15 11:15:48,257 INFO exited: openweatherAPI (exit status 127; not expected)
+2024-04-15 11:15:48,258 INFO exited: getDataFromGateway (exit status 127; not expected)
+2024-04-15 11:15:49,324 INFO spawned: 'openweatherAPI' with pid 13
+2024-04-15 11:15:49,326 INFO spawned: 'getDataFromGateway' with pid 14
+2024-04-15 11:15:49,326 INFO success: runserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2024-04-15 11:15:49,327 INFO exited: openweatherAPI (exit status 127; not expected)
+2024-04-15 11:15:49,329 INFO exited: getDataFromGateway (exit status 127; not expected)
+2024-04-15 11:15:51,466 INFO spawned: 'openweatherAPI' with pid 31
+2024-04-15 11:15:51,469 INFO spawned: 'getDataFromGateway' with pid 32
+2024-04-15 11:15:51,475 INFO exited: openweatherAPI (exit status 127; not expected)
+2024-04-15 11:15:51,476 INFO exited: getDataFromGateway (exit status 127; not expected)
+2024-04-15 11:15:54,480 INFO spawned: 'openweatherAPI' with pid 33
+2024-04-15 11:15:54,482 INFO spawned: 'getDataFromGateway' with pid 34
+2024-04-15 11:15:54,485 INFO exited: openweatherAPI (exit status 127; not expected)
+2024-04-15 11:15:54,486 INFO exited: getDataFromGateway (exit status 127; not expected)
+2024-04-15 11:15:54,486 INFO gave up: openweatherAPI entered FATAL state, too many start retries too quickly
+2024-04-15 11:15:54,487 INFO gave up: getDataFromGateway entered FATAL state, too many start retries too quickly
+2024-04-15 11:22:54,146 WARN received SIGTERM indicating exit request
+2024-04-15 11:22:54,150 INFO waiting for runserver to die
+2024-04-15 11:22:54,303 INFO stopped: runserver (exit status 0)

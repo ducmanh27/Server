@@ -29,12 +29,12 @@ TEMPLATE_DIR = os.path.join(BASE_DIR,"templates")
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-lvmv%!as*-*mh#s69am))4x#&f0vkqy(-i0wd4*(t=qnh!oj%9'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if (DEBUG_MODE == True) else False
+DEBUG = os.environ.get("DEBUG")
 
-ALLOWED_HOSTS = ['27.71.227.1', 'localhost', '.vercel.app']
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(",")
 #'10.14.50.95', '127.0.0.1', '*'
 
 # Application definition
@@ -149,17 +149,26 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'smartfarm',
+#         'USER': 'year3',
+#         'PASSWORD': 'year3',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smartfarm',
-        'USER': 'year3',
-        'PASSWORD': 'year3',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': os.environ.get('ENGINE'),
+        'NAME': os.environ.get('NAME'),
+        'USER': os.environ.get('USER'),
+        'PASSWORD': os.environ.get('PASSWORD'),
+        'HOST': os.environ.get('HOST'),
+        'PORT': os.environ.get('PORT'),
     }
 }
-
 # DATABASES["default"] = dj_database_url.parse("postgres://smart_construction_user:mpuVa358yCcb8mkRKK5Nmpbb1md2OsLX@dpg-ckkkvhu6fcos73bjbsbg-a.singapore-postgres.render.com/smart_construction")
 
 # postgres://smart_construction_user:mpuVa358yCcb8mkRKK5Nmpbb1md2OsLX@dpg-ckkkvhu6fcos73bjbsbg-a.singapore-postgres.render.com/smart_construction

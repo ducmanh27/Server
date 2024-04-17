@@ -4,11 +4,11 @@ import random
 import time 
 import calendar
 import datetime
-
+import os
 
 class SetPoint():
-    mqtt_broker = "broker.hivemq.com"
-    mqtt_port = 1883
+    mqtt_broker = os.environ.get('BROKER_ADDRESS')
+    mqtt_port = int(os.environ.get('BROKER_PORT'))
     topic = "Year3"
 
     client_id = f'python-mqtt-{random.randint(0,1000)}'

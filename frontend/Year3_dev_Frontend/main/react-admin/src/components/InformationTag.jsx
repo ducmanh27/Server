@@ -61,19 +61,17 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
             <img height="70px" width="70px"  src={motion_icon} />
         ),
       };
-    const dict_of_enviroment_para_names = {
-                    "temp": {"name":" Temparature", "icon":iconMap["temp"], "unit":"°C"}, 
-                    "hum": {"name":"Humidity", "icon":iconMap["hum"], "unit":"%"}, 
-                    "co2": {"name":"Co2", "icon":iconMap["co2"], "unit":"ppm"}, 
-                    "tvoc": {"name":"TVOC","icon":iconMap["tvoc"], "unit":"µg/m3"},
-                    "dust": {"name": "Dust", "icon":iconMap["dust"], "unit": "µm"},
-                    "sound": {"name": "Sound", "icon":iconMap["sound"], "unit": "dB"},
-                    "light": {"name": "Light", "icon":iconMap["light"], "unit": "lux"},
-                    "motion": {"name": "Motion Detection", "icon":iconMap["motion"], "unit": ""},
-                }
-
-
-    
+    const dict_of_enviroment_para_names = 
+    {
+        "temp": {"name":" Temparature", "icon":iconMap["temp"], "unit":"°C"}, 
+        "hum": {"name":"Humidity", "icon":iconMap["hum"], "unit":"%"}, 
+        "co2": {"name":"Co2", "icon":iconMap["co2"], "unit":"ppm"}, 
+        "tvoc": {"name":"TVOC","icon":iconMap["tvoc"], "unit":"µg/m3"},
+        "dust": {"name": "Dust", "icon":iconMap["dust"], "unit": "µm"},
+        "sound": {"name": "Sound", "icon":iconMap["sound"], "unit": "dB"},
+        "light": {"name": "Light", "icon":iconMap["light"], "unit": "lux"},
+        "motion": {"name": "Motion Detection", "icon":iconMap["motion"], "unit": ""},
+    }
 
     const get_information_data = async (url, access_token) => 
     {
@@ -91,15 +89,7 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
         const response = await fetch(url, option_fetch)
         const data = await response.json()
         if(data)
-        {
-            // if(response.status === 200)
-            // {
-            //     getCo2(data.co2)
-            //     getHum(data.hum)
-            //     getTemp(data.temp)
-            //     getTime(data.time)
-            // }
-            
+        {   
             let newInfoData = {
                     "temp": null, 
                     "hum": null, 

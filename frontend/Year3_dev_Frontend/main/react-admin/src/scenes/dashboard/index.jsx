@@ -4,7 +4,7 @@ import Header from "../../components/Header";
 import { useState, useContext } from "react";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Energy from "../../components/AqiRef/Energy";
+import Energy from "../../components/AqiRef/Energy2";
 import { UserContext } from "../../App";
 import Chart from "../../data/Chart";
 import {host} from "../../App";
@@ -90,7 +90,7 @@ const Dashboard = () => {
                             alignItems="center"
                             justify="center"
                         >
-                            <Energy />  
+                            <Energy room_id={room_id} callbackSetSignIn={callbackSetSignIn} time_delay={15000} backend_host={backend_host} />  
                         </Box>
                     </Grid>
                 </Grid>
@@ -136,8 +136,22 @@ const Dashboard = () => {
                         />
                     </Box>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                <Box 
+                <Grid item xs={12} sm={12} md={12} lg={6}>
+                    <Box 
+                        sx={{boxShadow: 1,
+                            borderRadius: '5px', 
+                            backgroundColor: "white"}}
+                        width="100%" height="100%"
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="center"
+                        justify="center"
+                    >
+                        <EnergyChart />
+                    </Box>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={6}>
+                    <Box 
                         sx={{boxShadow: 1,
                             borderRadius: '5px', 
                             backgroundColor: "white"}}
@@ -155,12 +169,10 @@ const Dashboard = () => {
 
             {/* COntainer of data option and charts */}
             {/* <Container maxWidth="xl"> */}
-            <div>
-                <Actuator 
-                    room_id={room_id} 
-                    callbackSetSignIn={callbackSetSignIn}
-                />
-            </div>
+            <Actuator 
+                room_id={room_id} 
+                callbackSetSignIn={callbackSetSignIn}
+            />
 
             <Box 
             sx={{
@@ -219,4 +231,3 @@ const Dashboard = () => {
 }
 
 export default Dashboard;
-

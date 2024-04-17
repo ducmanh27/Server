@@ -1118,14 +1118,6 @@ def getWeatherdata(request, *args, **kwargs):
 #              "voltage":[225.8],
 #              "current":[0.92],
 #              "active_power":[],
-#              "red":[],
-#              "light":[],
-#              "co2":[],
-#              "blue":[],
-#              "motion":[],
-#              "time":[],
-#              "temp":[],
-#              "dust":[]}
 from .models import EnergyData
 from .serializers import EnergyDataSerializer
 class EnergyDataAPIView(generics.RetrieveAPIView):
@@ -1134,25 +1126,20 @@ class EnergyDataAPIView(generics.RetrieveAPIView):
     serializer_class = EnergyDataSerializer
     # lookup_field = 'pk'
 
-    def get_object(self):
+    def get_object(self, request):
+        room_id = request.GET.get("room_id")
         queryset = self.filter_queryset(self.get_queryset())
-        
-        room_id = self.kwargs.get("pk")
-
-        obj = models.EnergyData.objects.filter(room_id = room_id).order_by('-time')[:5]
-        print(obj)
-        # May raise a permission denied
-        self.check_object_permissions(self.request, obj)
-        # print(f"object first: {obj.first}")
-        return obj.first()
+        obj = models.EnergyData.objects.filter(room_id = room_id).order_by('-time').first()
+        return obj
     def retrieve(self, request, *args, **kwargs):
 
-        instance = self.get_object()
+        instance = self.get_object(request)
         serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+        print(serializer.data)
+        data_array = [value for key, value in serializer.data.items() if key != 'id' and key != 'room_id']
+        return Response(data_array)
     
     def get(self, request, *args, **kwargs):
-        
         return self.retrieve(request, *args, **kwargs)
 
 

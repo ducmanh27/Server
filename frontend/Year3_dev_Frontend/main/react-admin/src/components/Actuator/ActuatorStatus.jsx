@@ -44,6 +44,7 @@ const ActuatorStatus = ({room_id, setActuatorStatus, callbackSetSignIn,
         {
             if(data_response["Response"]["speed"] > 0 || data_response["Response"]["temp"] > 0)
             {
+                console.log(data_response);
                 setStatus(1);
                 let newActuatorStatus = actuatorStatus;
                 newActuatorStatus[node_id] = 1;
@@ -247,10 +248,7 @@ const ActuatorStatus = ({room_id, setActuatorStatus, callbackSetSignIn,
                 callbackSetSignIn(false);
             }
         }
-
     }
-
-
 
     setInterval(async () => verify_and_get_data(get_status, callbackSetSignIn, host, url), 10000);
 
