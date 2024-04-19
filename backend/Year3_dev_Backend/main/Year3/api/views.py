@@ -66,7 +66,7 @@ def getSensorSecondlyData(request , *args, **kwargs):
         #Notice that: the timestamp in database is the utc timestamp + 7hour
         #Our local time stamp is faster than than the utc timestamp 7 hour
         ctime = int((datetime.datetime.now()).timestamp()) + (7*60*60) #!< convert to our local timestamp
-        print(ctime)
+        print(f"current time: {ctime}")
         filter_time = 0 
         if filter == 1:
             filter_time = ctime - ctime%(24*60*60)
@@ -1120,7 +1120,7 @@ def getWeatherdata(request, *args, **kwargs):
 #              "active_power":[],
 from .models import EnergyData
 from .serializers import EnergyDataSerializer
-class EnergyDataAPIView(generics.RetrieveAPIView):
+class EnergyDataAPIView(generics.RetrieveAPIView,generics.ListAPIView):
 
     queryset = EnergyData.objects.all()
     serializer_class = EnergyDataSerializer
@@ -1141,8 +1141,63 @@ class EnergyDataAPIView(generics.RetrieveAPIView):
     
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
+class EnergyDataChartAPIView(generics.ListAPIView):
 
+    queryset = EnergyData.objects.all()
+    serializer_class = EnergyDataSerializer
+    year = 2024
+    offset_energy = 17.02
+    # lookup_field = 'pk'
+    def end_of_month_unixtimestamp(self, year, month):
+        if month == 12:
+            next_month = 1
+            next_year = year + 1
+        else:
+            next_month = month + 1
+            next_year = year
+        first_day_of_next_month = datetime.datetime(next_year, next_month, 1)
+        end_of_month = first_day_of_next_month - datetime.timedelta(seconds=1)
+        return int(end_of_month.timestamp() - 7 * 60 * 60)
+    def filter_queryset(self, queryset):
+        first_object = queryset.first()
+        dataFirstObj = self.get_serializer(queryset.first(), many=False)
+        month_start = datetime.datetime.fromtimestamp(dataFirstObj.data['time']).month
+        last_object = queryset.last()
+        dataLastObj = self.get_serializer(queryset.last(), many=False)
 
+        month_end = datetime.datetime.fromtimestamp(dataLastObj.data['time']).month
+        data_return = []
+        for month in range(month_start, month_end+1):
+            obj = queryset.filter(time__lte=self.end_of_month_unixtimestamp(self.year, month)).order_by('-time').first()
+            data_return.append(obj)
+            
+        return data_return
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        print(serializer.data)
+        month_year_list = []
+        active_power_list = []
+        time_activeEnergy_List = []
+        for item in serializer.data:  
+            month_year_list.append(f"{datetime.datetime.fromtimestamp(item['time']).month}_{datetime.datetime.fromtimestamp(item['time']).year}")
+            active_power_list.append(item['active_energy'])
+
+        active_power_list[0] -= self.offset_energy
+        energy_consumption_in_month = [active_power_list[0]]
+        for i in range(1, len(active_power_list)):
+            print(len(active_power_list))
+            if i == 1:
+                adjusted_value = active_power_list[i] - active_power_list[i - 1]
+            else:
+                adjusted_value = active_power_list[i] - (active_power_list[i - 1] - active_power_list[i - 2])
+            energy_consumption_in_month.append(adjusted_value)
+        time_activeEnergy_List.append(month_year_list)
+        time_activeEnergy_List.append(energy_consumption_in_month)
+        print(time_activeEnergy_List)
+        return Response(time_activeEnergy_List)
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 '''
     {
         "operator": "keep_alive",

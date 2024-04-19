@@ -6,13 +6,13 @@ import psycopg2
 import json
 import time
 from datetime import datetime
-
+import os
 # Information Database PostgreSQL
 db_config = {
     'dbname': 'smartfarm',
     'user': 'year3',
     'password': 'year3',
-    'host': 'localhost',
+    'host': 'my-postgres',
     'port': 5432
 }
 
@@ -30,7 +30,7 @@ while True:
         params = {
             'lat': 21.006706,
             'lon': 105.840057,
-            'appid': 'f9d3af5d7ee1344c87f970db508d88d2',
+            'appid': 'ab975d3ed888ef5c4d272b60277b1112',
             'units': 'metric',
             'exclude': 'hourly,daily'
         }

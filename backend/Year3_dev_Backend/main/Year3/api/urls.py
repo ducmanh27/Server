@@ -26,6 +26,7 @@ urlpatterns = [
     path('weatherdata', views.getWeatherdata),  #!< api for Weatherdata component
     path('signup', views.signUp),
     path('energydata/realtime/monitor',views.EnergyDataAPIView.as_view()),
+    path('energydata/monitor',views.EnergyDataChartAPIView.as_view()),
     # path('alive',views.EnergyDataAPIView.as_view()),
     path('gateway', views.GatewayListCreateAPIView.as_view()),
     #______________________________________________________

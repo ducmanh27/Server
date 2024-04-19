@@ -31,7 +31,7 @@ def insert_to_DB(topic,
                         # __database='smartfarm', 
                         # __user='year3', 
                         # __password='year3', 
-                        __host='localhost', 
+                        __host='my-postgres', 
                         __port='5432') -> None:
     
     conn = psycopg2.connect(
@@ -269,7 +269,7 @@ def run(topic):
                                     'smartfarm',
                                     'year3',
                                     'year3',
-                                    'localhost', 
+                                    'my-postgres', 
                                     '5432')
                     else:
                         continue
@@ -301,7 +301,7 @@ def run(topic):
                                 'smartfarm',
                                 'year3',
                                 'year3',
-                                'localhost', 
+                                'my-postgres', 
                                 '5432')
             except:
                 print("!!!!!!Error in getDataFromGateway.py while insert data to database")
@@ -326,7 +326,7 @@ def getDataForAqiRef():
                     database = "smartfarm",
                     user = "year3",
                     password = "year3",
-                    host = 'localhost',
+                    host = 'my-postgres',
                     port = "5432",
                     )
 
