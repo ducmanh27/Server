@@ -7,7 +7,17 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
     const [dataType, setDataType] = useState(0) // 0 is energyData, 1 is powerData
     const [maxYAxis, setMaxYAxis] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [energyData, setEnergyData] = useState(null);
+    const [energyData, setEnergyData] = useState({'time': [], 'active_energy': []});
+    const [powerData, setPowerData] = useState({
+        'hour': [
+            "1 am", "2 am", "3 am", "4 am", "5 am", "6 am", "7 am", "8 am", "9 am", "10 am", "11 am", "12 am",
+            "1 pm", "2 pm", "3 pm", "4 pm", "5 pm", "6 pm", "7 pm", "8 pm", "9 pm", "10 pm", "11 pm", "12 pm",
+        ],
+        'active_power': [
+            458, 512, 367, 782, 644, 734, 896, 921, 875, 699, 543, 456,
+            789, 643, 765, 943, 732, 512, 684, 876, 921, 764, 598, 421
+        ]
+    })
     const months = [
         'Jan', 'Feb','Mar', 'Apr', 'May', 'Jun',
         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
@@ -36,9 +46,6 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
         if(response.status === 200)
         {
             const data = await response.json();
-            // sua lai du lieu tu ban tin
-            // [ 1_2024,   2_2024,   3_2024], 
-            // [ 270.99,    686.03,    400.78 ]
             const time = data[0].map((item) => {
                 const [month, year] = item.split('_');
                 return `${months[month - 1]} ${year}`;
@@ -55,7 +62,7 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
         setIsLoading(false)
     }
 
-    const verify_and_get_data = async (fetch_data_function, callbackSetSignIn, backend_host) => 
+    const verify_and_get_data = async (fetch_data_function, callbackSetSignIn, backend_host, url) => 
     {
         const token = {access_token: null, refresh_token: null}
         // const backend_host = host;

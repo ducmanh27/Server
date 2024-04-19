@@ -13,7 +13,7 @@ import { useLocation } from "react-router-dom";
 import RoomMap from "../../components/RoomMap/RoomMap2";
 import AqiRef from "../../components/AqiRef/AqiRef2";
 import Actuator from "../../components/Actuator/Actuator";
-import EnergyChart from "../../components/EnergyChart/EnergyChart";
+import EnergyChart from "../../components/EnergyChart/EnergyChart2";
 
 const Dashboard = () => {
     const backend_host = host;
@@ -29,7 +29,6 @@ const Dashboard = () => {
     // const apiHistoryChart = `http://${backend_host}/api/v1.1/monitor/data/history?room_id=${room_id}&node_id=${nodeIdFilter}&time_start=${unixTimestampStart}&time_end=${unixTimestampEnd}&option=${optionChartData}`;
     // const [apiHistoryChartState, setApiHistoryChartState] = useState(apiHistoryChart);
     const apiInformationTag = `http://${backend_host}/api/room/information_tag?room_id=${room_id}`;
-    const [actuatorStatus, setActuatorStatus] = useState(0);
     const [actuatorInfoOfRoom, setActuatorInfoOfRoom] = useState([]);
     
     return (

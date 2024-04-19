@@ -55,7 +55,6 @@ const VictoryLineChart = ({data_x, data_y, option_data, parameter_type}) =>
         value_y.push(i*5);
         label_y.push(i*5);
     }
-    console.log(data);
     
     let strokeColor;
     switch (parameter_type) {
