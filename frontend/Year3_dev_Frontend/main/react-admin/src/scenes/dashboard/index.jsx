@@ -13,7 +13,7 @@ import { useLocation } from "react-router-dom";
 import RoomMap from "../../components/RoomMap/RoomMap2";
 import AqiRef from "../../components/AqiRef/AqiRef2";
 import Actuator from "../../components/Actuator/Actuator";
-import EnergyChart from "../../components/EnergyChart/EnergyChart2";
+import EnergyChart from "../../components/EnergyChart/EnergyChart";
 
 const Dashboard = () => {
     const backend_host = host;
