@@ -6,7 +6,11 @@ import { host } from "../../App";
 import { createContext } from "react";
 import Slider from '@mui/material/Slider';
 import Header from "../Header";
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const ActuatorStatus = ({room_id, setActuatorStatus, callbackSetSignIn,
     node_id, actuatorStatus}) => 
@@ -16,7 +20,23 @@ const ActuatorStatus = ({room_id, setActuatorStatus, callbackSetSignIn,
     const url = `http://${host}/api/actuator_status?room_id=${room_id}&node_id=${node_id}`;
     const url_set_command = `http://${host}/api/actuator_command`;
     const [isLoading, setIsLoading] = useState(true);
-    const [flip, setFlip] = useState(true);
+    const [open, setOpen] = useState(false);
+    const [accessToken, getAccessToken] = useState(null);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleTurnOn = () => {
+        setOpen(false);
+        send_actuator_command(url_set_command, accessToken, 1);
+        alert("Turn on actuator!");
+    };
+
+    const handleTurnOff = () => {
+        setOpen(false);
+        send_actuator_command(url_set_command, accessToken, 0);
+        alert("Turn off actuator!");
+    };
 
     const get_status = async (url, access_token) => 
     {
@@ -210,8 +230,7 @@ const ActuatorStatus = ({room_id, setActuatorStatus, callbackSetSignIn,
 
         if(verifyAccessToken_response === true)
         {
-            // const response = await fetch(url)
-            // const data = await response.json()
+            getAccessToken(token.access_token);
             if(url === url_set_command)
             {
                 fetch_data_function(url, token["access_token"], command);
@@ -234,13 +253,14 @@ const ActuatorStatus = ({room_id, setActuatorStatus, callbackSetSignIn,
             }
             if(verifyRefreshToken_response === true)
             {
+                getAccessToken(token.refresh_token);
                 if(url === url_set_command)
                 {
-                    fetch_data_function(url, token["access_token"], command);
+                    fetch_data_function(url, token["refresh_token"], command);
                 }
                 else
                 {
-                    fetch_data_function(url, token["access_token"])
+                    fetch_data_function(url, token["refresh_token"])
                 }
             }
             else
@@ -250,22 +270,19 @@ const ActuatorStatus = ({room_id, setActuatorStatus, callbackSetSignIn,
         }
     }
 
-    setInterval(async () => verify_and_get_data(get_status, callbackSetSignIn, host, url), 10000);
-
-    // useEffect(()=>{
-    //     if(status === null)
-    //     {
-    //         verify_and_get_data(get_status, callbackSetSignIn, host, url);
-    //     }
-    //     else
-    //     {
-    //         const timer = setTimeout(()=>{
-    //             verify_and_get_data(get_status, callbackSetSignIn, host, url);
-    //         }, 2000);
-    //         return () => clearTimeout(timer);
-    //     }
-    // });
-
+    useEffect(()=>{
+        if(status === null)
+        {
+            verify_and_get_data(get_status, callbackSetSignIn, host, url);
+        }
+        else
+        {
+            const timer = setTimeout(()=>{
+                verify_and_get_data(get_status, callbackSetSignIn, host, url);
+            }, 10000);
+            return () => clearTimeout(timer);
+        }
+    },[status]);
 
     return (
         <>
@@ -297,6 +314,7 @@ const ActuatorStatus = ({room_id, setActuatorStatus, callbackSetSignIn,
                     <Box m="5px" />
                     {
                     status === 0 ?
+                    <>
                     <Button
                         sx={{
                             backgroundColor: "black",
@@ -308,16 +326,35 @@ const ActuatorStatus = ({room_id, setActuatorStatus, callbackSetSignIn,
 
                             
                         variant="contained"
-                        onClick={
-                            () => { 
-                                verify_and_get_data(send_actuator_command, callbackSetSignIn, host, url_set_command, 1);
-                            }
-                        }
+                        onClick={() => handleClickOpen()}
                     >
                         {/* <DownloadOutlinedIcon sx={{ mr: "10px" }} /> */}
                         Turn On
                     </Button>
+                    <Dialog
+                        open={open}
+                        onClose={() => setOpen(false)}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                        maxWidth='xs'
+                        fullWidth
+                    >
+                        <DialogTitle id="alert-dialog-title" variant="h3" fontWeight='bold'>
+                        {"Confirm turn on"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description" variant="h4">
+                                Are you sure to turn on?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button style={{fontSize: '16px'}} onClick={() => setOpen(false)}>Disagree</Button>
+                            <Button style={{fontSize: '16px'}} onClick={() => handleTurnOn()} autoFocus>Agree</Button>
+                        </DialogActions>
+                    </Dialog>
+                    </>
                     :
+                    <>
                     <Button
                         sx={{
                             backgroundColor: "black",
@@ -326,14 +363,33 @@ const ActuatorStatus = ({room_id, setActuatorStatus, callbackSetSignIn,
                             padding: "8px 18px",
                             }}
                         variant="contained"
-                        onClick={() => { 
-                            verify_and_get_data(send_actuator_command, callbackSetSignIn, host, url_set_command, 0);
-                        }
-                        }
+                        onClick={() => handleClickOpen()}
                     >
                         {/* <DownloadOutlinedIcon sx={{ mr: "10px" }} /> */}
-                        Turn off
+                        Turn Off
                     </Button>
+                    <Dialog
+                        open={open}
+                        onClose={() => setOpen(false)}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                        maxWidth='xs'
+                        fullWidth
+                    >
+                        <DialogTitle id="alert-dialog-title" variant="h3" fontWeight='bold'>
+                        {"Confirm turn on"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description" variant="h4">
+                                Are you sure to turn off?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button style={{fontSize: '16px'}} onClick={() => setOpen(false)}>Disagree</Button>
+                            <Button style={{fontSize: '16px'}} onClick={() => handleTurnOff()} autoFocus>Agree</Button>
+                        </DialogActions>
+                    </Dialog>
+                    </>
                     }
                 </Box>
 
