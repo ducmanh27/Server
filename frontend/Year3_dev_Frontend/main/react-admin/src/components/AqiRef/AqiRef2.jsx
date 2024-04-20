@@ -368,7 +368,7 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                 <Grid xs={12} textAlign='center' margin={1}>
                     <Typography textAlign='center' variant='h5' component='span'>updated on {
                                             (()=>{
-                                                const new_time = data["time"] - 7*60*60;
+                                                const new_time = data["time"];
                                                 const utcDate = new Date(new_time * 1000); // Convert seconds to milliseconds
                                                 const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'};
                                                 const formattedDateTime = utcDate.toLocaleDateString('en-US', options);

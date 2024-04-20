@@ -13,7 +13,6 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
     const url_energy = `http://${backend_host}/api/energydata/monitor?room_id=${room_id}`
-    
 
     const get_energy_data = async (url, access_token) => 
     {

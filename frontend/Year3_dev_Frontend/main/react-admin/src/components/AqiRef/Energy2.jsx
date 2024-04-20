@@ -7,13 +7,13 @@ const Energy = ({room_id, callbackSetSignIn, time_delay, backend_host}) =>{
     const url = `http://${backend_host}/api/energydata/realtime/monitor?room_id=${room_id}`;
     const [isLoading, setIsLoading] = useState(true);
     const [energyData, setEnergyData] = useState(null);
-    const [timeRequestAPI, setTimeRequestAPI] = useState(0);
+    const colors = ['white', 'red', 'blue', 'green', 'orange', 'magenta', 'aqua', 'black'];
 
     const define_energy_data = {
         'node_id': {'name': 'null', 'unit': null},
         'voltage': {'name': 'Voltage', 'unit': 'V'},
         'current': {'name': 'current', 'unit': 'A'},
-        'active_power': {'name': 'Active Power', 'unit': 'kW'},
+        'active_power': {'name': 'Active Power', 'unit': 'W'},
         'power_factor': {'name': 'Power factor', 'unit': null},
         'frequency': {'name': 'Frequency', 'unit': 'Hz'},
         'active_energy': {'name': 'Active energy', 'unit': 'kWh'},
@@ -35,19 +35,8 @@ const Energy = ({room_id, callbackSetSignIn, time_delay, backend_host}) =>{
             "body": null,
         }
 
-        const requestAgain = false;
         const response = await fetch(url, option_fetch);
         const data = await response.json(); // data la cai j?
-        //  data = [
-        //     8,
-        //     225.9,
-        //     1.71,
-        //     353.3,
-        //     0.91,
-        //     50.1,
-        //     154.53,
-        //     1713155295
-        // ];
         if (data) {
             let newEnergyData = {
                 'voltage': null,
@@ -66,7 +55,6 @@ const Energy = ({room_id, callbackSetSignIn, time_delay, backend_host}) =>{
                     case 1: 
                         if (fetch_data > 240 || fetch_data < 200) {
                             fetch_data = 'NULL';
-                            requestAgain = true;
                         }
                         break;
                     case 2:
@@ -74,47 +62,36 @@ const Energy = ({room_id, callbackSetSignIn, time_delay, backend_host}) =>{
                     case 6:
                         if (fetch_data < 0) {
                             fetch_data = 'NULL';
-                            requestAgain = true;
                         }
                         break;
                     case 4:
                         if (fetch_data < 0 || fetch_data > 1) {
                             fetch_data = 'NULL';
-                            requestAgain = true;
                         }
                         break;
                     case 5:
                         if (fetch_data < 0 || fetch_data > 100) {
                             fetch_data = 'NULL';
-                            requestAgain = true;
                         }
                     case 7:
                         if (fetch_data < 0) {
                             fetch_data = 'NULL';
-                            requestAgain = true;
                         }
                         else fetch_data = parseInt(fetch_data);
                         break;
                 }
                 newEnergyData[each_key] = fetch_data;
-                if (requestAgain && timeRequestAPI < 5) {
-                    setTimeRequestAPI(timeRequestAPI+1);
-                    return;
-                }
             })
             setIsLoading(false);
-            if (!requestAgain) {
-                setEnergyData(newEnergyData);
-                return true; // successful, no problem with data
-            }
+            setEnergyData(newEnergyData);
         }
         else {
             console.log("Some error happened, try to reload page!");
         }
-        return false; // failed, data is invalid or cant get data
+        setIsLoading(false);
     }
 
-    const verify_and_get_data = async (fetch_data_function, callbackSetSignIn, backend_host) => 
+    const verify_and_get_data = async (fetch_data_function, callbackSetSignIn, backend_host, url) => 
     {
         const token = {access_token: null, refresh_token: null}
         // const backend_host = host;
@@ -197,14 +174,9 @@ const Energy = ({room_id, callbackSetSignIn, time_delay, backend_host}) =>{
 
         const verifyAccessToken_response = await verifyAccessToken();
 
-        let get_data_successful = false; // 1 is successful, 0 is failed
         if(verifyAccessToken_response === true)
         {
-            // get data maximum 5 times
-            do {
-                get_data_successful = await fetch_data_function(url, token["access_token"])
-            } while ((timeRequestAPI < 5) && (get_data_successful))
-            setTimeRequestAPI(0);
+            fetch_data_function(url, token["access_token"])
         }
         else
         {
@@ -219,11 +191,7 @@ const Energy = ({room_id, callbackSetSignIn, time_delay, backend_host}) =>{
             }
             if(verifyRefreshToken_response === true)
             {
-                do {
-                    get_data_successful = await fetch_data_function(url, token["access_token"])
-                } while ((timeRequestAPI < 5) && (get_data_successful))
-                if (timeRequestAPI == 5) console.log('DATA IS INVALID')
-                setTimeRequestAPI(0);
+                fetch_data_function(url, token["access_token"])
             }
             else
             {
@@ -265,16 +233,17 @@ const Energy = ({room_id, callbackSetSignIn, time_delay, backend_host}) =>{
                 </Grid>
                 <Grid item container spacing={1} px='10px' marginY={0.5} justifyContent='center'>
                     {energy_data_property_array.map((value, index) => {
+                        if (index !== 0 && index !==7)
                         return (
                             <Grid item xs={4}>
                             <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                            <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
+                            <Paper style={{ flex: 1, backgroundColor: `${colors[index]}`, padding: '10px' }}>
                                 <Grid container display="flex" flexDirection="column" justifyItems='center' textAlign='center'>
                                     <Grid container item justifyContent='center' alignContent='center'>
-                                        <Typography variant='h4'>{define_energy_data[value]['name']}</Typography>
+                                        <Typography color={colors[0]} fontWeight='bold' variant='h4'>{define_energy_data[value]['name']}</Typography>
                                     </Grid>
                                     <Grid item>
-                                        <Typography variant='h5'>
+                                        <Typography variant='h5' color={colors[0]}>
                                             {((temp) => {
                                                 if (energyData[value] == 'NULL' || index == 4) temp = energyData[value];
                                                 else temp = `${energyData[value]} ${define_energy_data[value]['unit']}`
@@ -292,7 +261,7 @@ const Energy = ({room_id, callbackSetSignIn, time_delay, backend_host}) =>{
                 <Grid xs={12} textAlign='center' spacing={1} marginY={1}>
                     <Typography textAlign='center' variant='h5'>updated on {
                                             (()=>{
-                                                const new_time = energyData["time"] - 7*60*60;
+                                                const new_time = energyData["time"];
                                                 const utcDate = new Date(new_time * 1000); // Convert seconds to milliseconds
                                                 const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'};
                                                 const formattedDateTime = utcDate.toLocaleDateString('en-US', options);

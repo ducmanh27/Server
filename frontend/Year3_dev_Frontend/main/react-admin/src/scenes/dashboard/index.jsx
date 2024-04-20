@@ -4,13 +4,13 @@ import Header from "../../components/Header";
 import { useState, useContext } from "react";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Energy from "../../components/AqiRef/Energy2";
+import Energy from "../../components/AqiRef/Energy";
 import { UserContext } from "../../App";
 import Chart from "../../data/Chart";
 import {host} from "../../App";
 import InformationTag from "../../components/InformationTag2";
 import { useLocation } from "react-router-dom"; 
-import RoomMap from "../../components/RoomMap/RoomMap";
+import RoomMap from "../../components/RoomMap/RoomMap2";
 import AqiRef from "../../components/AqiRef/AqiRef2";
 import Actuator from "../../components/Actuator/Actuator";
 import EnergyChart from "../../components/EnergyChart/EnergyChart";
@@ -132,7 +132,7 @@ const Dashboard = () => {
                     >
                         <Header title="Map view" fontSize="20px"/>
                         <RoomMap 
-                            room_id={room_id} callbackSetSignIn={callbackSetSignIn}
+                            room_id={room_id} callbackSetSignIn={callbackSetSignIn} backend_host={host}
                         />
                     </Box>
                 </Grid>
@@ -231,3 +231,4 @@ const Dashboard = () => {
 }
 
 export default Dashboard;
+

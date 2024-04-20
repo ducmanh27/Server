@@ -8,11 +8,12 @@ ENV PYTHONUNBUFFERED 1
 
 COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
 
-COPY . /user/src/app/
+COPY . /usr/src/app/
+
 
 ENTRYPOINT [ "/usr/src/app/entrypoint.sh" ]
 RUN apk add --no-cache postgresql-libs  \
-    python3 python3-dev gcc g++ postgresql-dev libpq-dev\
+    supervisor python3 python3-dev gcc g++ postgresql-dev libpq-dev\
     gfortran musl-dev
     
 RUN pip install --upgrade pip
@@ -21,3 +22,6 @@ RUN pip install --upgrade setuptools
 COPY ./requirements.txt /usr/src/app/requirements.txt
 RUN pip3 install --upgrade pip setuptools &&\
     pip install -r requirements.txt
+
+COPY ./supervisor.conf /etc/supervisor/conf.d/supervisor.conf
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisor.conf"]

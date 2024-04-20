@@ -88,6 +88,7 @@ const RoomMap = ({room_id, callbackSetSignIn}) =>
         if(response && response.status === 200)
         {   
             data_response = await response.json();
+            console.log(data_response);
             const {boxWidth, boxHeigth, currentImageWidth, currentImageHeigth} = size_object;
             const {x_length, y_length} = data_response["room_size"];
             let node_array_to_iterate = []
@@ -356,12 +357,12 @@ const RoomMap = ({room_id, callbackSetSignIn}) =>
                         id="heatmap-image"
                     />
                     {
-                    nodePosition.map((node) => {
-                        return (
-                                <Node node={node} imageWidth={imageWidth * 3/4 } imageHeight={imageWidth}/>
-                        );
-                    })
-                }
+                        nodePosition.map((node) => {
+                            return (
+                                    <Node node={node} imageWidth={imageWidth * 3/4 } imageHeight={imageWidth}/>
+                            );
+                        })
+                    }
                 </Box>
             </Box>
         }

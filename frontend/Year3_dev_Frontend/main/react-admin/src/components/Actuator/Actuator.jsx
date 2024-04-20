@@ -230,7 +230,7 @@ export default function Actuator({room_id, callbackSetSignIn})
                                         alignItems="center"
                                         justifyContent="center"
                                     >
-                                        Actuator node id: {e["node_id"]}
+                                        <h1>Actuator node id: {e["node_id"]}</h1>
                                     </Box>
                                 </Grid>
 
@@ -323,11 +323,9 @@ export default function Actuator({room_id, callbackSetSignIn})
                                         justify="center">
 
                                             <Header title="Actuator Status:" fontSize="20px"/>
-                                            <Box m="10px" />
                                             <ActuatorStatus room_id={room_id} setActuatorStatus={setActuatorStatus} callbackSetSignIn={callbackSetSignIn}
                                                 node_id={e["node_id"]}
                                                 actuatorStatus={actuatorStatus}    
-                                            
                                             />
                                         </Box>
                                     </Box>

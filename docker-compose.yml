@@ -14,7 +14,7 @@ services:
     container_name: smartfarm
     build:
       context: ./backend/Year3_dev_Backend/main/Year3
-    command: python manage.py runserver 0.0.0.0:8000
+    # command: python3 manage.py runserver 0.0.0.0:8000
     volumes: 
       - ./backend/Year3_dev_Backend/main/Year3:/usr/src/app/
     ports:

@@ -486,7 +486,7 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                 <Grid xs={12} textAlign='center' spacing={1} margin={1}>
                     <Typography textAlign='center' variant='h5'>updated on {
                                             (()=>{
-                                                const new_time = infoData["time"] - 7*60*60;
+                                                const new_time = infoData["time"];
                                                 const utcDate = new Date(new_time * 1000); // Convert seconds to milliseconds
                                                 const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'};
                                                 const formattedDateTime = utcDate.toLocaleDateString('en-US', options);
