@@ -19,7 +19,7 @@ services:
     volumes: 
       - ./backend/Year3_dev_Backend/main/Year3:/usr/src/app/
     ports:
-      - 8001:8000
+      - 8000:8000
     depends_on:
       - my-postgres
     environment:
