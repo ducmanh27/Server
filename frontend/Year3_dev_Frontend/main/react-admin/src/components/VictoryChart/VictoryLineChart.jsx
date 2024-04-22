@@ -14,10 +14,8 @@ import { useState } from 'react';
                 { x: 5, y: 7 },
                 ]}
  */
-
 const VictoryLineChart = ({data_x, data_y, option_data, parameter_type}) => 
 {
-
     let data = [];
     let label_x;
     // bo phan optiondata di
@@ -55,7 +53,6 @@ const VictoryLineChart = ({data_x, data_y, option_data, parameter_type}) =>
         value_y.push(i*5);
         label_y.push(i*5);
     }
-    console.log(data);
     
     let strokeColor;
     switch (parameter_type) {
@@ -84,47 +81,42 @@ const VictoryLineChart = ({data_x, data_y, option_data, parameter_type}) =>
     return (
         <VictoryChart
             theme={VictoryTheme.material}
-            // domainPadding will add space to each side of VictoryLine to
-            // prevent it from overlapping the axis
-            padding={{ 
-                top: 10, 
-                bottom: 20, 
-                left: 30, 
-                right: 20, 
-            }}
-            height={75}
-            domain={{ y: [Math.min(...data_y), Math.max(...data_y)] }}
-            domainPadding={{x: 20, y: 10 }}
-            containerComponent={
-                <VictoryZoomContainer
-                    // minZoom={{y: Math.min(...data_y) - 1}} // Minimum zoom level
-                    // maxZoom={{y: Math.max(...data_y) + 1}} // Maximum zoom level
-                />
-            }
+            height={100}
+            padding={{left: 20, right: 20, bottom: 12}}
+            domain={Math.max(data_y) + 1}
+            // containerComponent={
+            //     <VictoryZoomContainer
+            //         // minZoom={{y: Math.min(...data_y) - 1}} // Minimum zoom level
+            //         // maxZoom={{y: Math.max(...data_y) + 1}} // Maximum zoom level
+            //     />
+            // }
         >
             <VictoryAxis  
-            fixLabelOverlap={true}  
-            // tickValues specifies both the number of ticks and where
-            // they are placed on the axis
-            dependentAxis={false}       //x-axis
-            tickLength={0}
-            style={{
-                data: { width: 10 },
-                labels: { padding: 20 },
-                axis: { stroke: "black" },
-                ticks: { stroke: "black", size: 0},
-                tickLabels: {fontSize: 4, padding: 10} //size of label of x-axis value and position of them
-            }}
+                fixLabelOverlap={true}  
+                // tickValues specifies both the number of ticks and where
+                // they are placed on the axis
+                dependentAxis={false}       //x-axis
+                tickLength={0}
+                gridComponent={<></>}
+                style={{
+                    data: { width: 10 },
+                    labels: { padding: 20 },
+                    axis: { stroke: "black" },
+                    ticks: { stroke: "black", size: 0},
+                    tickLabels: {fontSize: 4, padding: 3} //size of label of x-axis value and position of them
+                }}
+                tickCount={4}
             />
             <VictoryAxis 
                 fixLabelOverlap={false}  
                 dependentAxis={true}   //y_axis
+                gridComponent={<></>}
                 style={{
                     axis: { stroke: "black" },
                     ticks: { stroke: "black", size: 0},
-                    tickLabels: { fontSize: 5, padding: 8}       //size of label of y-axis value, padding: position of them
+                    tickLabels: { fontSize: 4, padding: 3}       //size of label of y-axis value, padding: position of them
                 }}
-                tickCount={6}  //number of label on y-axis
+                tickCount={4}  //number of label on y-axis
             />
             <VictoryLine
                 style={{ 
@@ -135,6 +127,8 @@ const VictoryLineChart = ({data_x, data_y, option_data, parameter_type}) =>
                     } 
                 }}
                 data={data}
+                interpolation='natural'
+                alignment="start"
             />
         </VictoryChart>
     );

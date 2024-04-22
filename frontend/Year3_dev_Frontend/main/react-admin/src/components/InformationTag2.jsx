@@ -104,7 +104,6 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
             //     getTemp(data.temp)
             //     getTime(data.time)
             // }
-            
             let newInfoData = {
                     "temp": null, 
                     "hum": null, 
@@ -168,13 +167,10 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
 
             newInfoData["time"] = parseInt(data["time"]);
             getInfoData(newInfoData);
-            console.log(newInfoData);
             let newNodeData = {};
             newNodeData["sensor"] = data["node_info"]["sensor"];
             newNodeData["actuator"] = data["node_info"]["actuator"];
             setActuatorInfoOfRoom(newNodeData["actuator"]);
-            console.log("THIS IS FROM INFORMATION TAG");
-            console.log(newNodeData["actuator"]);
             getNodeData(newNodeData);
             setIsLoading(false);
         }
@@ -218,10 +214,11 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
             }
             const verify_access_token_API_response = await fetch(verify_access_token_API_endpoint, 
                                                                 verify_access_token_API_option,);
+            console.log(verify_access_token_API_response);
             if(verify_access_token_API_response.status !== 200)
             {
                 return false;
-            }
+            }   
             return true;
         }
 
@@ -265,7 +262,7 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
             }
         }
 
-        const  verifyAccessToken_response = await verifyAccessToken();
+        const verifyAccessToken_response = await verifyAccessToken();
 
         if(verifyAccessToken_response === true)
         {
@@ -293,7 +290,6 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                 callbackSetSignIn(false);
             }
         }
-
     }
 
     useEffect(() => {
@@ -490,7 +486,7 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                 <Grid xs={12} textAlign='center' spacing={1} margin={1}>
                     <Typography textAlign='center' variant='h5'>updated on {
                                             (()=>{
-                                                const new_time = infoData["time"] - 7*60*60;
+                                                const new_time = infoData["time"];
                                                 const utcDate = new Date(new_time * 1000); // Convert seconds to milliseconds
                                                 const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'};
                                                 const formattedDateTime = utcDate.toLocaleDateString('en-US', options);

@@ -23,7 +23,7 @@ const EnergyChart = () => {
             9012, 3456, 7890, 2345, 6789, 8901, 4567, 8901, 1234, 5678, 9012, 3456,
             9012, 3456, 7890, 2345, 6789, 8901, 4567, 8901, 1234, 5678, 9012, 3456,
             1324, 5678, 9012, 3456, 7890, 2345, 6789, 8901, 4567, 8901, 1234, 5678,
-        ]
+        ]   
     }
 
     const powerData = {
@@ -133,7 +133,7 @@ const EnergyChart = () => {
         <Grid style={{ width: '100%'}}>
         <VictoryChart
            theme={VictoryTheme.material}
-           height={50}
+           height={100}
            padding={{left: 20, right: 20, bottom: 12}}
            domain={maxYAxis}
        >

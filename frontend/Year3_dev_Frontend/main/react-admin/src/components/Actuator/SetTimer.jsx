@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { Backdrop, Box, Button } from "@mui/material";
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import { host } from "../../App";
-import Grid from "@mui/material";
-import TextField from "@mui/material/TextField";
 import Header from "../Header";
 
 const SetTimer = ({actuatorStatus,
@@ -13,14 +14,20 @@ const SetTimer = ({actuatorStatus,
     callbackSetSignIn,
     node_id,}) => 
 {
-    console.log("HERE");
-    console.log(actuatorStatus);
-    console.log(actuatorStatus[node_id]);
     const [startTimeInSetTimer, setStartTimeInSetTimer] = useState(null);
     const [endTimeInSetTimer, setEndTimeInSetTimer] = useState(null);
-    // const [temperature, setTemperature] = useState(0);
-
     const url = `http://${host}/api/actuator_command`;
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        verify_and_get_data(setActuatorCommandFunction, callbackSetSignIn, host, url);
+        alert("Timer accepted!");
+    };
 
 
     const setActuatorCommandFunction = async (url, access_token) => 
@@ -36,8 +43,8 @@ const SetTimer = ({actuatorStatus,
               "node_id": node_id, 
               "power": null, 
               "temp": null, 
-              "start_time": startTimeInSetTimer, 
-              "end_time": endTimeInSetTimer, 
+              "start_time": startTimeInSetTimer - 7*60*60, 
+              "end_time": endTimeInSetTimer - 7*60*60, 
             } 
           } 
         const fetch_option = {
@@ -180,9 +187,7 @@ const SetTimer = ({actuatorStatus,
 
     }
     
-
     return (
-
     <Box
         // display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" 
         width="100%"
@@ -193,7 +198,6 @@ const SetTimer = ({actuatorStatus,
         justifyContent="center"
     >    
         <Box
-            // display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" 
             width="100%"
             height="100%"
             display="flex"
@@ -204,24 +208,16 @@ const SetTimer = ({actuatorStatus,
 
             <Header title="Air-conditioning start timer:" fontSize="20px"/>
 
-            <Box
-            display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" 
-            // gap="30px"
-            // width="100%"
-            // height="100%"
-            // display="flex"
-            // flexDirection="column"
-            // alignItems="center"
-            // justifyContent="center"
-            >
+            <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" >
                 <MobileDateTimePicker onChange={(new_value)=>{
                                             setStartTimeInSetTimer(Date.parse(new_value)/1000 + 7*60*60);
                                         }
                                     }
                 />
-                    <Box m="25px" />
+                    <Box m="10px" />
                     {
                     actuatorStatus[node_id] === 0 ?
+                    <>
                     <Button
                         sx={{
                             backgroundColor: "black",
@@ -232,52 +228,42 @@ const SetTimer = ({actuatorStatus,
                         variant="contained"
                         onClick={()=>{
                             if(startTimeInSetTimer <= (new Date()).getTime()/1000 + 7*60*60 + 1*60)
-                            {
                                 alert("Start time is not valid! Only accept time 1 minute at least beyond current time!");
-                            }
-                            else
-                            {
-                                verify_and_get_data(setActuatorCommandFunction, callbackSetSignIn, host, url);
-                                alert("Start timer accepted!")
-                            }
+                            else handleClickOpen();
                         }}
                     >
                         Submit
                     </Button>
+                    <Dialog
+                        open={open}
+                        onClose={() => setOpen(false)}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                        maxWidth='xs'
+                        fullWidth
+                    >
+                        <DialogTitle id="alert-dialog-title" variant="h3" fontWeight='bold'>
+                        {"Confirm set timer"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description" variant="h4">
+                                Are you sure to set timer?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button style={{fontSize: '16px'}} onClick={() => setOpen(false)}>Disagree</Button>
+                            <Button style={{fontSize: '16px'}} onClick={handleClose} autoFocus>Agree</Button>
+                        </DialogActions>
+                    </Dialog>
+                    </>
                     :
                     <h3>Actuator is ON</h3>
                     }
             </Box>
             <Box m="10px"/>
-            {/* <Box>
-                <Box
-                    mb="5px"
-                    sx={{
-                        fontSize: "18px",
-                        fontWeight: 600,
-                        }}
-                > Temperature
-                </Box>
-                <TextField
-                    required
-                    id="temperature"
-                    name="temperature"
-                    label="Temperature"
-                    fullWidth
-                    autoComplete="temperature"
-                    variant="outlined"
-                    // value={dataCreateNode.x_axis}
-                    onInput={(e)=>{e.target.value = e.target.value.replace(/[^0-9]/g, '')}}
-                    onChange={(e)=>setTemperature(e.target.value)}
-                />
-            </Box> */}
-
-            <Box m="10px"/>
-            
         </Box>
 
-        <Box
-            // display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" 
+        <Box 
             width="100%"
             height="100%"
             display="flex"
@@ -296,11 +282,10 @@ const SetTimer = ({actuatorStatus,
                                         }
                                     }
                 />
-
                 <Box m="10px"/>
-                
                 {
                     actuatorStatus[node_id] === 1 ?
+                    <>
                     <Button
                         sx={{
                             backgroundColor: "black",
@@ -311,18 +296,34 @@ const SetTimer = ({actuatorStatus,
                         variant="contained"
                         onClick={()=>{
                             if(endTimeInSetTimer <= (new Date()).getTime()/1000 + 7*60*60 + 1*60)
-                            {
-                                alert("End time is not valid! Only accept time 1 minute at least beyond current time!");
-                            }
-                            else
-                            {
-                                verify_and_get_data(setActuatorCommandFunction, callbackSetSignIn, host, url);
-                                alert("End timer accepted!");
-                            }
+                                alert("End time is not valid! Only accept time 1 minute at least beyond  time!");
+                            else handleClickOpen();
                         }}
                     >
                         Submit
                     </Button>
+                    <Dialog
+                        open={open}
+                        onClose={() => setOpen(false)}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                        maxWidth='xs'
+                        fullWidth
+                    >
+                        <DialogTitle id="alert-dialog-title" variant="h3" fontWeight='bold'>
+                        {"Confirm set timer"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description" variant="h4">
+                                Are you sure to set timer?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button style={{fontSize: '16px'}} onClick={() => setOpen(false)}>Disagree</Button>
+                            <Button style={{fontSize: '16px'}} onClick={handleClose} autoFocus>Agree</Button>
+                        </DialogActions>
+                    </Dialog>
+                    </>
                     :
                     <h3>Actuator is OFF</h3>
                 }

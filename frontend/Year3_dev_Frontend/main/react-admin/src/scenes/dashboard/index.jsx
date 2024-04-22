@@ -4,16 +4,16 @@ import Header from "../../components/Header";
 import { useState, useContext } from "react";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Energy from "../../components/AqiRef/Energy";
+import Energy from "../../components/AqiRef/Energy2";
 import { UserContext } from "../../App";
-import Chart from "../../data/Chart";
+import Chart from "../../data/Chart2";
 import {host} from "../../App";
 import InformationTag from "../../components/InformationTag2";
 import { useLocation } from "react-router-dom"; 
-import RoomMap from "../../components/RoomMap/RoomMap";
+import RoomMap from "../../components/RoomMap/RoomMap2";
 import AqiRef from "../../components/AqiRef/AqiRef2";
 import Actuator from "../../components/Actuator/Actuator";
-import EnergyChart from "../../components/EnergyChart/EnergyChart";
+import EnergyChart from "../../components/EnergyChart/EnergyChart2";
 
 const Dashboard = () => {
     const backend_host = host;
@@ -29,7 +29,6 @@ const Dashboard = () => {
     // const apiHistoryChart = `http://${backend_host}/api/v1.1/monitor/data/history?room_id=${room_id}&node_id=${nodeIdFilter}&time_start=${unixTimestampStart}&time_end=${unixTimestampEnd}&option=${optionChartData}`;
     // const [apiHistoryChartState, setApiHistoryChartState] = useState(apiHistoryChart);
     const apiInformationTag = `http://${backend_host}/api/room/information_tag?room_id=${room_id}`;
-    const [actuatorStatus, setActuatorStatus] = useState(0);
     const [actuatorInfoOfRoom, setActuatorInfoOfRoom] = useState([]);
     
     return (
@@ -90,7 +89,7 @@ const Dashboard = () => {
                             alignItems="center"
                             justify="center"
                         >
-                            <Energy />  
+                            <Energy room_id={room_id} callbackSetSignIn={callbackSetSignIn} time_delay={15000} backend_host={backend_host} />  
                         </Box>
                     </Grid>
                 </Grid>
@@ -132,12 +131,12 @@ const Dashboard = () => {
                     >
                         <Header title="Map view" fontSize="20px"/>
                         <RoomMap 
-                            room_id={room_id} callbackSetSignIn={callbackSetSignIn}
+                            room_id={room_id} callbackSetSignIn={callbackSetSignIn} backend_host={host}
                         />
                     </Box>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                <Box 
+                <Grid item xs={12} sm={12} md={12} lg={6}>
+                    <Box 
                         sx={{boxShadow: 1,
                             borderRadius: '5px', 
                             backgroundColor: "white"}}
@@ -150,41 +149,17 @@ const Dashboard = () => {
                         <EnergyChart />
                     </Box>
                 </Grid>
-
-            </Grid>
-
-            {/* COntainer of data option and charts */}
-            {/* <Container maxWidth="xl"> */}
-            <div>
-                <Actuator 
-                    room_id={room_id} 
-                    callbackSetSignIn={callbackSetSignIn}
-                />
-            </div>
-
-            <Box 
-            sx={{
-                p: "20px",
-                marginTop: '10px',
-                boxShadow: 1,
-                borderRadius: '5px', 
-                backgroundColor: "white"}}
-                >
-
-                <Box
-                p="2px"
-                m="10px"
-                >
-                {/* Container of Chart */}
-                <Grid
-                   container={true}
-                   spacing={0}
-                   style={{display: "flex", height: "100%",}} 
-                   mt="20px"
-                   mb="30px"
-                >
-                    
-                    <>
+                <Grid item xs={12} sm={12} md={12} lg={6}>
+                    <Box 
+                        sx={{boxShadow: 1,
+                            borderRadius: '5px', 
+                            backgroundColor: "white"}}
+                        width="100%" height="100%"
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="center"
+                        justify="center"
+                    >
                         {   // bo phan optionChartData
                             optionChartData === "now" ?
                             <Chart 
@@ -203,15 +178,17 @@ const Dashboard = () => {
                                     apiInformationTag={apiInformationTag}
                             />
                         }
-                    </>
+                    </Box>
                 </Grid>
 
-                </Box>
-            {/* </Box> */}
-            {/* </Container> */}
-                                    
-            </Box>
-                
+            </Grid>
+
+            {/* COntainer of data option and charts */}
+            {/* <Container maxWidth="xl"> */}
+            <Actuator 
+                room_id={room_id} 
+                callbackSetSignIn={callbackSetSignIn}
+            />  
         </Container>    
     </Box>
     </>

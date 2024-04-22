@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import { Box } from "@mui/material"
+import { Stack, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid"
 import {host} from "../App"
 import VictoryLineChart from "../components/VictoryChart/VictoryLineChart"
@@ -205,155 +205,42 @@ const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformatio
 
     return (
         <>
-        {/* Container of filterNode */}
-        <Grid
-            container justifyContent="space-evenly"
-        >
-            <Grid
-                item={true} xs={12} sm={12} lg={3}
-                display="flex"
-                direction="column"
-                alignItems="center"
-                justify="center"
-            >
-                    <Box
-                        display="flex" 
-                        flexDirection="column"
-                        justifyContent="center" 
-                    >
-                        <Box>
-                            <Header title={"Filtered by sensor id: "} fontSize={"20px"} />
-                        </Box>
-                        <Box
-                            display="flex" 
-                            flexDirection="row"
-                            // justifyContent="center" 
-                            alignItems="center"
-                            ml="40px"
-                            mt="6px"
-                        >
-                            <FilterNode setNodeIdFilter={setNodeIdFilter}
-                                        apiInformationTag={apiInformationTag} 
-                                        callbackSetSignIn={callbackSetSignIn}
-                                        backend_host={backend_host}
-                                        setIsLoadingChart={setIsLoading}
-                            />
-                            
-                        </Box>
-                    </Box>
-
-            </Grid>
-
-            <Grid
-                paddingLeft="10px" item={true} xs={12} sm={12} lg={3}
-                display="flex"
-                direction="column"
-                alignItems="center"
-                justify="center"
-            >
-                {/* Container of filterParameter */}
-                
-                    <Box
-                        display="flex" 
-                        flexDirection="column"
-                        justifyContent="center" 
-                    >
-                        <Box>
-                            <Header title={"Filtered by enviroment parameter: "} fontSize={"20px"} />
-                        </Box>
-                        <Box
-                            display="flex" 
-                            flexDirection="row"
-                            // justifyContent="center" 
-                            alignItems="center"
-                            ml="40px"
-                            mt="6px"
-                        >
-                            <FilterParameter  
-                                setParaFilter={setParaFilter}
-                            />
-                            <Box m={1} />
-                        </Box>
-                    </Box>
-
-            </Grid>
-
-        </Grid>
-        <Box m="20px"/>        
-        <SmallFilter  setNumberOfData={setNumberOfData} setDataChart={setDataChart} setIsLoading={setIsLoading}/>
-        {
-            isLoading ? 
-            <>
-                <Grid xs={12} sm={12} md={12} lg={12} item style={{width: "100%"}}>
-                    <Box height="400px" mt="0px">   
-                        <h1>Loading chart...</h1>
-                    </Box>
+        <Grid container textAlign='center' justifyContent='center'>
+            <Grid container display='flex' flexDirection='column' justifyContent='center' xs={12} marginY={1}>
+                <Grid item>
+                    <Typography component='span' textAlign='center' fontSize='20px' color='black'>
+                        Environment parameter chart
+                    </Typography>
                 </Grid>
-            </>
-            :
-            <>
-            {
-            (
-                ()=>
+                <Grid item marginX={4}>
+                    <Stack justifyContent='space-between' alignItems='center' direction='row'>
+                        <Stack spacing={1} direction='row'>
+                            <FilterNode setNodeIdFilter={setNodeIdFilter}
+                                    apiInformationTag={apiInformationTag} 
+                                    callbackSetSignIn={callbackSetSignIn}
+                                    backend_host={backend_host}
+                                    setIsLoadingChart={setIsLoading}
+                            />
+                            <FilterParameter setParaFilter={setParaFilter}/>
+                        </Stack>
+                        <Stack direction='row' justifyContent='flex-end' alignItems='center' pr={2} spacing={1}>
+                            <SmallFilter setNumberOfData={setNumberOfData} setDataChart={setDataChart} setIsLoading={setIsLoading}/>
+                        </Stack>
+                    </Stack>
+                </Grid>
+            </Grid>
+            <Grid style={{ width: '100%'}}>
                 {
-                    if(paraFilter===0)
-                    {
-                        return(
-                            <>
-
-                            {/* <Grid xs={12} sm={12} md={12} lg={12} item style={{width: "100%"}}></Grid>
-                            <Box m={2} /> */}
-
-                            <Grid xs={12} sm={12} md={12} lg={12} item style={{width: "100%"}}>
-                                <Header title={para_name[1]} fontSize="20px" />
-                                <Box
-                                    item
-                                    style={{
-                                        width: "100%", 
-                                        border: "2px solid",
-                                        }}
-                                // backgroundColor={colors.primary[400]}
-                                >
-                                    <VictoryLineChart 
-                                        data_x={dataChart["time"] + 7*60*60}
-                                        data_y={dataChart[para_filter_dict[1]]} 
-                                        option_data={optionData}
-                                        parameter_type={paraFilter}
-                                    />
-                                </Box>
-                            </Grid>
-                            <Box m={2} />
-                            </>
-                        );
-                    }
-                    else
-                    {
-                        return(
-                        <>
-                        <Grid xs={12} sm={12} md={12} lg={12} item style={{width: "100%"}}>
-                            <Header title={para_name[paraFilter]} fontSize="20px" />
-                            <Box
-                                item
-                                style={{
-                                    width: "100%", 
-                                    border: "2px solid",
-                                }}
-                            >
-                                <VictoryLineChart data_x={dataChart["time"]}
-                                    data_y={dataChart[para_filter_dict[paraFilter]]}
-                                    option_data={optionData}
-                                    parameter_type={paraFilter}
-                                />
-                            </Box>
-                        </Grid>
-                        </>
-                        );
-                    }
+                    isLoading ? <h1>Loading chart...</h1> :
+                    <VictoryLineChart 
+                        data_x={dataChart["time"]}
+                        data_y={dataChart[para_filter_dict[paraFilter]]}
+                        option_data={optionData}
+                        parameter_type={paraFilter}
+                    />
                 }
-            )()
-            }
-            </>
-        }
+            </Grid>
+        </Grid>
         </>
     );
 }

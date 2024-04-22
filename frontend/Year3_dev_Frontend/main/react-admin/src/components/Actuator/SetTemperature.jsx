@@ -1,19 +1,42 @@
 import { useState, useEffect } from "react";
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
+import { Box, Button, ButtonGroup } from "@mui/material";
 import { host } from "../../App";
-import Grid from "@mui/material";
-import TextField from "@mui/material/TextField";
+import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
+import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import Header from "../Header";
 
 export default function SetTemperature({actuatorStatus, node_id, callbackSetSignIn, room_id}) 
 {
-    const [temperatureInSetTemperature, setTemperatureInSetTemperature] = useState(null);
+    const [temperatureInSetTemperature, setTemperatureInSetTemperature] = useState(16);
 
     const url = `http://${host}/api/actuator_command`;
 
+    const handleIncreTemp = () => {
+        if (temperatureInSetTemperature === 35) setTemperatureInSetTemperature(35);
+        else setTemperatureInSetTemperature(temperatureInSetTemperature + 1);
+    }
+    const handleDecreTemp = () => {
+        if (temperatureInSetTemperature === 16) setTemperatureInSetTemperature(16);
+        else setTemperatureInSetTemperature(temperatureInSetTemperature - 1);
+    }
+
+    // confirm setting
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        verify_and_get_data(setActuatorCommandFunction, callbackSetSignIn, host, url);
+        alert("Temperature accepted!");
+    };
 
     const setActuatorCommandFunction = async (url, access_token) => 
     {
@@ -172,7 +195,6 @@ export default function SetTemperature({actuatorStatus, node_id, callbackSetSign
 
     }
     
-
     return (
         <Box
             // display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" 
@@ -184,27 +206,19 @@ export default function SetTemperature({actuatorStatus, node_id, callbackSetSign
             justifyContent="center"
         >
             <Header title="Set temperature:" fontSize="20px"/>
-
             <Box m="10px"/>
             <Box>
-                <TextField
-                    required
-                    id="temperature"
-                    name="temperature"
-                    label="Temperature"
-                    fullWidth
-                    autoComplete="temperature"
-                    variant="outlined"
-                    // value={dataCreateNode.x_axis}
-                    onInput={(e)=>{e.target.value = e.target.value.replace(/[^0-9]/g, '')}}
-                    onChange={(e)=>setTemperatureInSetTemperature(e.target.value)}
-                />
+                <ButtonGroup variant='outlined'>
+                    <Button style={{fontSize: '30px'}} onClick={handleDecreTemp}><ArrowCircleDownIcon style={{fontSize: '2.5rem'}} /></Button>
+                    <Button style={{fontSize: '30px', fontWeight: 'bolder'}}>{`${temperatureInSetTemperature} °C`}</Button>
+                    <Button style={{fontSize: '30px'}} onClick={handleIncreTemp}><ArrowCircleUpIcon style={{fontSize: '2.5rem'}} /></Button>
+                </ButtonGroup>
             </Box>
-
-            <Box m="10px"/>
             <Box>
+                <Box m="15px"/>
                 {
                     actuatorStatus[node_id] === 1 ?
+                    <>
                     <Button
                         sx={{
                             backgroundColor: "black",
@@ -213,20 +227,32 @@ export default function SetTemperature({actuatorStatus, node_id, callbackSetSign
                             padding: "8px 18px",
                             }}
                         variant="contained"
-                        onClick={()=>{
-                            if(temperatureInSetTemperature >= 40)
-                            {
-                                alert("Temperature must be less than 40!");
-                            }
-                            else
-                            {
-                                verify_and_get_data(setActuatorCommandFunction, callbackSetSignIn, host, url);
-                                alert("Temperature accepted!");
-                            }
-                        }}
+                        onClick={handleClickOpen}
                     >
                         Submit
                     </Button>
+                    <Dialog
+                        open={open}
+                        onClose={() => setOpen(false)}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                        maxWidth='xs'
+                        fullWidth
+                    >
+                        <DialogTitle id="alert-dialog-title" variant="h3" fontWeight='bold'>
+                        {"Confirm set temperature"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description" variant="h4">
+                                {`Are you sure to set temperature at ${temperatureInSetTemperature}°C ?`}
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button style={{fontSize: '16px'}} onClick={() => setOpen(false)}>Disagree</Button>
+                            <Button style={{fontSize: '16px'}} onClick={handleClose} autoFocus>Agree</Button>
+                        </DialogActions>
+                    </Dialog>
+                    </>
                     :
                     <h3>Actuator is OFF</h3>
                 }

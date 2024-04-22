@@ -193,7 +193,6 @@ export default function Actuator({room_id, callbackSetSignIn})
         isLoading ?
         <h1>Loading ...</h1>
         :
-
             <>
             {
                 actuatorInfoOfRoom.length !== 0 ?
@@ -208,13 +207,10 @@ export default function Actuator({room_id, callbackSetSignIn})
                                         display: "flex", 
                                         height: "100%", 
                                         // backgroundColor: "red"
-                                        marginTop: '20px',
                                     }}
                                 justify="space-between" 
                             >
-                                
                                 <Grid
-                                    p="10px"
                                     xs={12}
                                     sm={12}
                                     md={12}
@@ -327,11 +323,9 @@ export default function Actuator({room_id, callbackSetSignIn})
                                         justify="center">
 
                                             <Header title="Actuator Status:" fontSize="20px"/>
-                                            <Box m="10px" />
                                             <ActuatorStatus room_id={room_id} setActuatorStatus={setActuatorStatus} callbackSetSignIn={callbackSetSignIn}
                                                 node_id={e["node_id"]}
                                                 actuatorStatus={actuatorStatus}    
-                                            
                                             />
                                         </Box>
                                     </Box>
@@ -351,7 +345,6 @@ export default function Actuator({room_id, callbackSetSignIn})
                             display: "flex", 
                             height: "100%", 
                             // backgroundColor: "red"
-                            marginTop: '20px',
                         }}
                     justify="space-between" 
                 >
