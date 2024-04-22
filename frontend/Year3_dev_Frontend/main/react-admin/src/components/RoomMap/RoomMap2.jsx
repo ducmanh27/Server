@@ -246,9 +246,7 @@ const RoomMap = ({room_id, callbackSetSignIn, backend_host}) =>
         <>
         {
             isLoading ? <h1>Loading...</h1> :
-            <Grid container justifyContent='center' justifyItems='center'>
-                <Grid item xs={12} p={1} />
-                <Grid container item xs={12} justifyContent='center'>
+            <Grid container item xs={12} p={1} justifyContent='center'>
                     <HeatmapComponent
                         nodeData={nodeData}
                         nodeList={nodeList}
@@ -256,7 +254,6 @@ const RoomMap = ({room_id, callbackSetSignIn, backend_host}) =>
                         pic_src={dict_plan[room_id]}
                     />
                 </Grid>
-            </Grid>
         }
         </>
     );

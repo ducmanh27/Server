@@ -60,7 +60,7 @@ const VictoryLineChart = ({data_x, data_y, option_data, parameter_type}) =>
             strokeColor = "orange";
             break;
         case 2:         // hum
-            strokeColor = "aqua";
+            strokeColor = "deepskyblue";
             break;
         case 3:         // co2
             strokeColor = "darkgreen";
@@ -114,7 +114,7 @@ const VictoryLineChart = ({data_x, data_y, option_data, parameter_type}) =>
                 style={{
                     axis: { stroke: "black" },
                     ticks: { stroke: "black", size: 0},
-                    tickLabels: { fontSize: 4, padding: 3}       //size of label of y-axis value, padding: position of them
+                    tickLabels: { fontSize: 6, padding: 3}       //size of label of y-axis value, padding: position of them
                 }}
                 tickCount={4}  //number of label on y-axis
             />
@@ -122,7 +122,7 @@ const VictoryLineChart = ({data_x, data_y, option_data, parameter_type}) =>
                 style={{ 
                     data: {
                         stroke: strokeColor,
-                        strokeWidth: 1,
+                        strokeWidth: 2,
                         strokeLinecap: "round"
                     } 
                 }}

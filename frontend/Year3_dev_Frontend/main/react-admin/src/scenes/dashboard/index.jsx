@@ -123,7 +123,7 @@ const Dashboard = () => {
                         sx={{boxShadow: 1,
                             borderRadius: '5px', 
                             backgroundColor: "white"}}
-                        minWidth={477}
+                        minHeight={477}
                         width="100%" height="100%"
                         display="flex"
                         flexDirection="column"
