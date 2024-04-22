@@ -1,13 +1,14 @@
 version: '3.8'
 services: 
   nginx:
+    container_name: webserver
     build: 
       context: ./frontend/Year3_dev_Frontend/main/react-admin/nginx
     ports:
       - 3000:80
     volumes:
       - ./frontend/Year3_dev_Frontend/main/react-admin/build:/usr/share/nginx/html
-      - ./frontend/Year3_dev_Frontend/main/react-admin/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./frontend/Year3_dev_Frontend/main/react-admin/nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks: 
       - mynetwork
   backend:
@@ -39,6 +40,7 @@ services:
     
   my-postgres:
     image: postgres
+    container_name: database
     volumes: 
       - psql-db:/usr/src/databse
     environment:

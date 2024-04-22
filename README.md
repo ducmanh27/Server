@@ -50,6 +50,9 @@
   pip install -r requirements.txt
   ```
 
+
+
+
 - Navigate to `./server/backend/Year3/dev_Backend/main/Year3`
 - **Apply Migrations to Database:**
   ```
