@@ -4,16 +4,16 @@ import Header from "../../components/Header";
 import { useState, useContext } from "react";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Energy from "../../components/AqiRef/Energy";
+import Energy from "../../components/AqiRef/Energy2";
 import { UserContext } from "../../App";
-import Chart from "../../data/Chart";
+import Chart from "../../data/Chart2";
 import {host} from "../../App";
 import InformationTag from "../../components/InformationTag2";
 import { useLocation } from "react-router-dom"; 
 import RoomMap from "../../components/RoomMap/RoomMap2";
 import AqiRef from "../../components/AqiRef/AqiRef2";
 import Actuator from "../../components/Actuator/Actuator";
-import EnergyChart from "../../components/EnergyChart/EnergyChart";
+import EnergyChart from "../../components/EnergyChart/EnergyChart2";
 
 const Dashboard = () => {
     const backend_host = host;
@@ -160,42 +160,6 @@ const Dashboard = () => {
                         alignItems="center"
                         justify="center"
                     >
-                        <EnergyChart />
-                    </Box>
-                </Grid>
-
-            </Grid>
-
-            {/* COntainer of data option and charts */}
-            {/* <Container maxWidth="xl"> */}
-            <Actuator 
-                room_id={room_id} 
-                callbackSetSignIn={callbackSetSignIn}
-            />
-
-            <Box 
-            sx={{
-                p: "20px",
-                marginTop: '10px',
-                boxShadow: 1,
-                borderRadius: '5px', 
-                backgroundColor: "white"}}
-                >
-
-                <Box
-                p="2px"
-                m="10px"
-                >
-                {/* Container of Chart */}
-                <Grid
-                   container={true}
-                   spacing={0}
-                   style={{display: "flex", height: "100%",}} 
-                   mt="20px"
-                   mb="30px"
-                >
-                    
-                    <>
                         {   // bo phan optionChartData
                             optionChartData === "now" ?
                             <Chart 
@@ -214,15 +178,17 @@ const Dashboard = () => {
                                     apiInformationTag={apiInformationTag}
                             />
                         }
-                    </>
+                    </Box>
                 </Grid>
 
-                </Box>
-            {/* </Box> */}
-            {/* </Container> */}
-                                    
-            </Box>
-                
+            </Grid>
+
+            {/* COntainer of data option and charts */}
+            {/* <Container maxWidth="xl"> */}
+            <Actuator 
+                room_id={room_id} 
+                callbackSetSignIn={callbackSetSignIn}
+            />  
         </Container>    
     </Box>
     </>

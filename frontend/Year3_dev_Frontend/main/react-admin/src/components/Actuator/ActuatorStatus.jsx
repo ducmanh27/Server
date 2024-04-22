@@ -22,6 +22,7 @@ const ActuatorStatus = ({room_id, setActuatorStatus, callbackSetSignIn,
     const [isLoading, setIsLoading] = useState(true);
     const [open, setOpen] = useState(false);
     const [accessToken, getAccessToken] = useState(null);
+    const [check, setCheck] = useState([1]);
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -97,7 +98,7 @@ const ActuatorStatus = ({room_id, setActuatorStatus, callbackSetSignIn,
             setStatus(0);
             setIsLoading(false);
         }
-
+        setCheck([1])
     }
 
     const send_actuator_command = async (url, access_token, command) => 
@@ -282,7 +283,7 @@ const ActuatorStatus = ({room_id, setActuatorStatus, callbackSetSignIn,
             }, 10000);
             return () => clearTimeout(timer);
         }
-    },[status]);
+    },[status, check]);
 
     return (
         <>

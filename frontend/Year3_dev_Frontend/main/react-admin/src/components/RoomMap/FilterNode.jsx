@@ -3,7 +3,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Button, IconButton, Stack, Typography, useTheme } from "@mui/material";
 import FormControlLabel from '@mui/material';
 import FormGroup from '@mui/material';
 import { tokens } from '../../theme';
@@ -17,7 +17,8 @@ export default function FilterNode({setNodeIdFilter, apiInformationTag, callback
 	const node_id_dict = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6};
 	const handleChange = (event) => {
 		setSensorNodeIdState(event.target.value);
-		console.log(event.target.value);
+		setNodeIdFilter(sensorNodeIdState);
+		setIsLoadingChart(true);
 	};
 	const [sensorNodeInfo, setSensorNodeInfo] = useState([])
 
@@ -180,74 +181,44 @@ export default function FilterNode({setNodeIdFilter, apiInformationTag, callback
 	}
 
 	useEffect(()=>{
-			verify_and_get_data(get_sensor_node_info, callbackSetSignIn, backend_host, apiInformationTag);
+		verify_and_get_data(get_sensor_node_info, callbackSetSignIn, backend_host, apiInformationTag);
 	},[])
 
   return (
 	<>
 	{
 		isLoading ? 
-		<Box>
-			<h1>Loading ...</h1>
-		</Box>
+		<h1>Loading ...</h1>
 		:
-		<Box
-			container="true"
-			display="flex"
-			flexDirection="row"
-			alignItems="center"
-		>
-			<Box sx={{ minWidth: 100 }}>
-				<FormControl fullWidth>
-					<InputLabel id="demo-simple-select-label">Sensor id</InputLabel>
-					<Select
-						labelId="demo-simple-select-label"
-						id="demo-simple-select"
-						value={sensorNodeIdState}
-						label="Sensor Node"
-						onChange={handleChange}
-					>
-						{
-							sensorNodeInfo.map((i)=>{
-								if(i === 0)
-								{
-									return (
-										<MenuItem value={0}>None</MenuItem>
-									);
-								}
-								else
-								{
-									return (
-										<MenuItem value={i}>
-											{i}
-										</MenuItem>
-									);		
-								}
-							})
-						}
-					</Select>
-				</FormControl>
-			</Box>
-			<Box m={1} />
-			
-			<Button
-                sx={{
-                    backgroundColor: "black",
-                    fontSize: "14px",
-                    fontWeight: "bold",
-                    padding: "8px 18px",
-                    }}
-                variant="contained"
-
-				onClick={()=>{
-					setNodeIdFilter(sensorNodeIdState);
-					// setApi(`http://${backend_host}/api/get/daily_data/${id}`)
-					setIsLoadingChart(true);
-				}}
+		<FormControl fullWidth style={{maxWidth: '100px'}} size='small'>
+			<InputLabel id="demo-simple-select-label">Sensor id</InputLabel>
+			<Select
+				labelId="demo-simple-select-label"
+				id="demo-simple-select"
+				value={sensorNodeIdState}
+				label="Sensor Node"
+				onChange={handleChange}
 			>
-				Submit
-			</Button>
-		</Box>
+				{
+					sensorNodeInfo.map((i)=>{
+						if(i === 0)
+						{
+							return (
+								<MenuItem value={0}>None</MenuItem>
+							);
+						}
+						else
+						{
+							return (
+								<MenuItem value={i}>
+									{i}
+								</MenuItem>
+							);		
+						}
+					})
+				}
+			</Select>
+		</FormControl>
 	}
 	</>
   );

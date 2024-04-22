@@ -40,23 +40,32 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
 
         const response = await fetch(url, option_fetch);
         let newEnergyData = {
-            'time': null,
-            'active_energy': null
+            'time': [],
+            'active_energy': []
         };
         if(response.status === 200)
         {
             const data = await response.json();
-            const time = data[0].map((item) => {
-                const [month, year] = item.split('_');
-                return `${months[month - 1]} ${year}`;
-            });
-            newEnergyData['time'] = time;
-            newEnergyData['active_energy'] = data[1];
+            const startYear = data[0][0].split('_')[1];
+            const endYear = data[0][data[0].length - 1].split('_')[1];
+            let count = 0;
+            
+            for (let year = startYear; year <= endYear; year++) {
+                for (let month = 0; month < 12; month++) {
+                    let check_month = `${month+1}_${year}`
+                    if (check_month === data[0][count]) {
+                        newEnergyData.active_energy.push(data[1][count]);
+                        count++;
+                    }
+                    else newEnergyData.active_energy.push(0);
+                    newEnergyData.time.push(`${months[month]} ${year}`)
+                }
+            }
         }
         else
         {
-            newEnergyData['time'] = [0];
-            newEnergyData['active_energy'] = [0];
+            newEnergyData['time'].push(0);
+            newEnergyData['active_energy'].push(0);
         }
         setEnergyData(newEnergyData);
         setIsLoading(false)
@@ -292,90 +301,90 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                 </Grid>
                 <Grid style={{ width: '100%'}}>
                 <VictoryChart
-                theme={VictoryTheme.material}
-                height={100}
-                padding={{left: 20, right: 20, bottom: 12}}
-                domain={maxYAxis}
-            >
-                <VictoryAxis  
-                    fixLabelOverlap={true}  
-                    // tickValues specifies both the number of ticks and where
-                    // they are placed on the axis
-                    dependentAxis={false}       //x-axis
-                    tickLength={0}
-                    gridComponent={<></>}
-                    style={{
-                        data: { width: 10 },
-                        labels: { padding: 20 },
-                        axis: { stroke: "black" },
-                        ticks: { stroke: "black", size: 0},
-                        tickLabels: {fontSize: 4, padding: 3} //size of label of x-axis value and position of them
-                    }}
-                    tickCount={2}
-                />
-                <VictoryAxis
-                    fixLabelOverlap={false}  
-                    dependentAxis={true}   //y_axis
-                    gridComponent={<></>}
-                    style={{
-                        axis: { stroke: "black" },
-                        ticks: { stroke: "black", size: 0},
-                        tickLabels: { fontSize: 4, padding: 3}       //size of label of y-axis value, padding: position of them
-                    }}
-                    tickCount={4}  //number of label on y-axis
-                />
-                {dataType 
-                ?
-                <VictoryLine
-                    labelComponent=
-                    {<VictoryTooltip 
-                        style={{fontSize: '2.7px', lineHeight: 1}}
-                        cornerRadius={1}
-                        pointerLength={0}
-                        flyoutStyle={{
-                            strokeWidth: 0.1,
+                    theme={VictoryTheme.material}
+                    height={100}
+                    padding={{left: 20, right: 20, bottom: 12}}
+                    domain={maxYAxis}
+                >
+                    <VictoryAxis  
+                        fixLabelOverlap={true}  
+                        // tickValues specifies both the number of ticks and where
+                        // they are placed on the axis
+                        dependentAxis={false}       //x-axis
+                        tickLength={0}
+                        gridComponent={<></>}
+                        style={{
+                            data: { width: 10 },
+                            labels: { padding: 20 },
+                            axis: { stroke: "black" },
+                            ticks: { stroke: "black", size: 0},
+                            tickLabels: {fontSize: 4, padding: 3} //size of label of x-axis value and position of them
                         }}
-                        flyoutComponent={
-                            <Flyout 
-                                height={10}
-                                width={30}
-                            />
-                        }
-                    />}
-                    alignment="start"
-                    style={{ data: { stroke: "#c43a31"} }}
-                    data={chartData}
-                    interpolation='natural'
-                    events={[{
-                    target: "data",
-                    eventHandlers: {
-                        onMouseOver: () => {
-                        return [
-                            {
-                            target: "data",
-                            mutation: () => ({style: {stroke: "red"}})
-                            }, {
-                            target: "labels",
-                            mutation: () => ({ active: true })
+                        tickCount={2}
+                    />
+                    <VictoryAxis
+                        fixLabelOverlap={false}  
+                        dependentAxis={true}   //y_axis
+                        gridComponent={<></>}
+                        style={{
+                            axis: { stroke: "black" },
+                            ticks: { stroke: "black", size: 0},
+                            tickLabels: { fontSize: 4, padding: 3}       //size of label of y-axis value, padding: position of them
+                        }}
+                        tickCount={4}  //number of label on y-axis
+                    />
+                    {dataType 
+                    ?
+                    <VictoryLine
+                        labelComponent=
+                        {<VictoryTooltip 
+                            style={{fontSize: '2.7px', lineHeight: 1}}
+                            cornerRadius={1}
+                            pointerLength={0}
+                            flyoutStyle={{
+                                strokeWidth: 0.1,
+                            }}
+                            flyoutComponent={
+                                <Flyout 
+                                    height={10}
+                                    width={30}
+                                />
                             }
-                        ];
-                        },
-                        onMouseOut: () => {
-                        return [
-                            {
-                            target: "data",
-                            mutation: () => {}
-                            }, {
-                            target: "labels",
-                            mutation: () => ({ active: false })
+                        />}
+                        alignment="start"
+                        style={{ data: { stroke: "#c43a31"} }}
+                        data={chartData}
+                        interpolation='natural'
+                        events={[{
+                        target: "data",
+                        eventHandlers: {
+                            onMouseOver: () => {
+                            return [
+                                {
+                                target: "data",
+                                mutation: () => ({style: {stroke: "red"}})
+                                }, {
+                                target: "labels",
+                                mutation: () => ({ active: true })
+                                }
+                            ];
+                            },
+                            onMouseOut: () => {
+                            return [
+                                {
+                                target: "data",
+                                mutation: () => {}
+                                }, {
+                                target: "labels",
+                                mutation: () => ({ active: false })
+                                }
+                            ];
                             }
-                        ];
                         }
-                    }
-                    }]}
-                />
-                :
-                <VictoryBar
+                        }]}
+                    />
+                    :
+                    <VictoryBar
                         labelComponent=
                         {<VictoryTooltip 
                             style={{fontSize: '2.7px', lineHeight: 1}}
@@ -394,7 +403,7 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                         alignment="start"
                         style={{ data: { fill: "#c43a31"} }}
                         data={chartData}
-                        barWidth={250 / chartData.length}
+                        barWidth={500 / chartData.length}
                         events={[{
                         target: "data",
                         eventHandlers: {
@@ -423,7 +432,7 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                         }
                         }]}
                     />
-                }
+                    }
                 </VictoryChart>
                 </Grid>
             </Grid>

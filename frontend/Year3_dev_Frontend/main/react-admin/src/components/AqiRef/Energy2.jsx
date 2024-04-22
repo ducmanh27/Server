@@ -7,12 +7,12 @@ const Energy = ({room_id, callbackSetSignIn, time_delay, backend_host}) =>{
     const url = `http://${backend_host}/api/energydata/realtime/monitor?room_id=${room_id}`;
     const [isLoading, setIsLoading] = useState(true);
     const [energyData, setEnergyData] = useState(null);
-    const colors = ['white', 'red', 'blue', 'green', 'orange', 'magenta', 'aqua', 'black'];
+    const colors = ['white', 'red', 'blue', 'green', 'orange', 'magenta', 'deepskyblue', 'black'];
 
     const define_energy_data = {
         'node_id': {'name': 'null', 'unit': null},
         'voltage': {'name': 'Voltage', 'unit': 'V'},
-        'current': {'name': 'current', 'unit': 'A'},
+        'current': {'name': 'Current', 'unit': 'A'},
         'active_power': {'name': 'Active Power', 'unit': 'W'},
         'power_factor': {'name': 'Power factor', 'unit': null},
         'frequency': {'name': 'Frequency', 'unit': 'Hz'},
@@ -243,7 +243,7 @@ const Energy = ({room_id, callbackSetSignIn, time_delay, backend_host}) =>{
                                         <Typography color={colors[0]} fontWeight='bold' variant='h4'>{define_energy_data[value]['name']}</Typography>
                                     </Grid>
                                     <Grid item>
-                                        <Typography variant='h5' color={colors[0]}>
+                                        <Typography variant='h5' fontWeight='bold' color={colors[0]}>
                                             {((temp) => {
                                                 if (energyData[value] == 'NULL' || index == 4) temp = energyData[value];
                                                 else temp = `${energyData[value]} ${define_energy_data[value]['unit']}`
