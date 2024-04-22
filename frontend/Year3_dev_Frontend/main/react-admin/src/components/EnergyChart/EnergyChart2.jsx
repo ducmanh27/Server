@@ -39,13 +39,13 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
         }
 
         const response = await fetch(url, option_fetch);
+        const data = await response.json();
         let newEnergyData = {
             'time': [],
             'active_energy': []
         };
         if(response.status === 200)
         {
-            const data = await response.json;
             // const data = [
             //     ['3_2024', '4_2024'],
             //     [1000, 2440]
