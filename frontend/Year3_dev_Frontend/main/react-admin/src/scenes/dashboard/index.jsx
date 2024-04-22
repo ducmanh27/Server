@@ -59,7 +59,7 @@ const Dashboard = () => {
                 spacing={2}
                 p='10px'
             >
-                <Grid item xs={12} sm={12} md={12} lg={4.5} 
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={4.5}
                     container display='flex' flexDirection='column' justifyContent='center'
                     spacing={2}
                 >
@@ -94,7 +94,7 @@ const Dashboard = () => {
                     </Grid>
                 </Grid>
                 {/* Container of everything except image of room, this is set to the most left */}
-                <Grid item xs={12} sm={12} md={12} lg={4.5} container>
+                <Grid item xs={12} sm={12} md={12} lg={6} xl={4.5} container>
                     <Box 
                         sx={{boxShadow: 1,
                             borderRadius: '5px', 
@@ -114,7 +114,7 @@ const Dashboard = () => {
                 </Grid>
 
                 {/* Container of image */}
-                <Grid item xs={12} sm={12} md={12} lg={3}
+                <Grid item xs={12} sm={12} md={12} lg={6} xl={3}
                     direction="column"
                     alignItems="center"
                     justify="center"
@@ -123,6 +123,7 @@ const Dashboard = () => {
                         sx={{boxShadow: 1,
                             borderRadius: '5px', 
                             backgroundColor: "white"}}
+                        minWidth={477}
                         width="100%" height="100%"
                         display="flex"
                         flexDirection="column"
@@ -135,7 +136,7 @@ const Dashboard = () => {
                         />
                     </Box>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={6}>
+                <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
                     <Box 
                         sx={{boxShadow: 1,
                             borderRadius: '5px', 
@@ -146,7 +147,7 @@ const Dashboard = () => {
                         alignItems="center"
                         justify="center"
                     >
-                        <EnergyChart />
+                        <EnergyChart room_id={room_id} callbackSetSignIn={callbackSetSignIn} time_delay={15000} backend_host={backend_host}/>
                     </Box>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12} lg={6}>

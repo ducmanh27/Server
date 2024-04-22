@@ -43,8 +43,8 @@ const SetTimer = ({actuatorStatus,
               "node_id": node_id, 
               "power": null, 
               "temp": null, 
-              "start_time": startTimeInSetTimer - 7*60*60, 
-              "end_time": endTimeInSetTimer - 7*60*60, 
+              "start_time": startTimeInSetTimer, 
+              "end_time": endTimeInSetTimer, 
             } 
           } 
         const fetch_option = {

@@ -11,7 +11,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { set } from "date-fns";
 
 const ActuatorStatus = ({room_id, setActuatorStatus, callbackSetSignIn,
     node_id, actuatorStatus}) => 
@@ -99,7 +98,7 @@ const ActuatorStatus = ({room_id, setActuatorStatus, callbackSetSignIn,
             setStatus(0);
             setIsLoading(false);
         }
-        setCheck(!check);
+        setCheck([1])
     }
 
     const send_actuator_command = async (url, access_token, command) => 
@@ -229,6 +228,7 @@ const ActuatorStatus = ({room_id, setActuatorStatus, callbackSetSignIn,
         }
 
         const  verifyAccessToken_response = await verifyAccessToken();
+
         if(verifyAccessToken_response === true)
         {
             getAccessToken(token.access_token);

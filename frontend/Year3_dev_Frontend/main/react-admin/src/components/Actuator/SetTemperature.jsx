@@ -17,7 +17,7 @@ export default function SetTemperature({actuatorStatus, node_id, callbackSetSign
     const url = `http://${host}/api/actuator_command`;
 
     const handleIncreTemp = () => {
-        if (temperatureInSetTemperature === 35) setTemperatureInSetTemperature(35);
+        if (temperatureInSetTemperature === 30) setTemperatureInSetTemperature(30);
         else setTemperatureInSetTemperature(temperatureInSetTemperature + 1);
     }
     const handleDecreTemp = () => {

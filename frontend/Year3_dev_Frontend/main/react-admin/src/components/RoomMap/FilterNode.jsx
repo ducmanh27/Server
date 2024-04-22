@@ -190,7 +190,7 @@ export default function FilterNode({setNodeIdFilter, apiInformationTag, callback
 		isLoading ? 
 		<h1>Loading ...</h1>
 		:
-		<FormControl fullWidth style={{maxWidth: '100px'}} size='small'>
+		<FormControl style={{width: '100%'}} size='small'>
 			<InputLabel id="demo-simple-select-label">Sensor id</InputLabel>
 			<Select
 				labelId="demo-simple-select-label"

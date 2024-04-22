@@ -39,13 +39,17 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
         }
 
         const response = await fetch(url, option_fetch);
+        const data = await response.json();
         let newEnergyData = {
             'time': [],
             'active_energy': []
         };
         if(response.status === 200)
         {
-            const data = await response.json();
+            // const data = [
+            //     ['3_2024', '4_2024'],
+            //     [1000, 2440]
+            // ]
             const startYear = data[0][0].split('_')[1];
             const endYear = data[0][data[0].length - 1].split('_')[1];
             let count = 0;
@@ -217,6 +221,7 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
     ]
 
     useEffect(() => {
+        getChartData(dataType);
         if(time_delay !== 0)
         {
             if(energyData === null)            //!< this is for the total component always render the first time and then the next time will be setTimeOut
@@ -235,17 +240,10 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
         {
             verify_and_get_data(get_energy_data, callbackSetSignIn, backend_host, url_energy); 
         }
-    },[energyData])
+    },[energyData, isLoading, dataType])
 
-    useEffect(() => {
-        getChartData(dataType);
-    },[dataType])
-    
     return (
-        <>
-        {
-            isLoading ? <h1>Loading...</h1> :
-            <Grid container textAlign='center' justifyContent='center'>
+        <Grid container textAlign='center' justifyContent='center'>
                 <Grid container display='flex' flexDirection='column' justifyContent='center' xs={12} marginY={1}>
                     <Grid item>
                         <Typography component='span' textAlign='center' fontSize='20px' color='black'>
@@ -300,6 +298,7 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                     </Grid>
                 </Grid>
                 <Grid style={{ width: '100%'}}>
+                {isLoading ? <h1>Loading chart...</h1> : 
                 <VictoryChart
                     theme={VictoryTheme.material}
                     height={100}
@@ -387,7 +386,7 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                     <VictoryBar
                         labelComponent=
                         {<VictoryTooltip 
-                            style={{fontSize: '2.7px', lineHeight: 1}}
+                            style={{fontSize: '5px', lineHeight: 1}}
                             cornerRadius={1}
                             pointerLength={0}
                             flyoutStyle={{
@@ -395,15 +394,15 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                             }}
                             flyoutComponent={
                                 <Flyout 
-                                    height={10}
-                                    width={30}
+                                    height={20}
+                                    width={50}
                                 />
                             }
-                        />}                
+                        />}
                         alignment="start"
                         style={{ data: { fill: "#c43a31"} }}
                         data={chartData}
-                        barWidth={500 / chartData.length}
+                        barWidth={300 / chartData.length}
                         events={[{
                         target: "data",
                         eventHandlers: {
@@ -433,11 +432,9 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                         }]}
                     />
                     }
-                </VictoryChart>
+                </VictoryChart>}
                 </Grid>
             </Grid>
-        }
-        </>
     )
 }
 

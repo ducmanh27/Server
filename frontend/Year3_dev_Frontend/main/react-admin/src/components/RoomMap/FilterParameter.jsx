@@ -13,22 +13,22 @@ const FilterParameter = ({setParaFilter}) =>
     const colors = tokens(theme.palette.mode);
 	const [paraState, setParaState] = useState(1)
 	const handleChange = (event) => {
+		setParaFilter(event.target.value);
 		setParaState(event.target.value);
-		setParaFilter(paraState);
 		// setNodeIdFilter(event.target.value);
 	};
     const para_filter_dict = [
-        {index: 0, value: "All"}, 
-        {index: 1, value: "Temperature"}, 
-        {index: 2, value: "Humidity"}, 
-        {index: 3, value: "CO2"}, 
-        {index: 4, value: "TVOC"},
-        {index: 5, value: "Light"},
-        {index: 6, value: "Dust"},
+        {index: 0, value: `All\xa0\xa0\xa0\xa0\xa0\xa0\xa0`}, 
+        {index: 1, value: `Temperature\xa0\xa0\xa0\xa0\xa0\xa0\xa0`}, 
+        {index: 2, value: `Humid\xa0\xa0\xa0\xa0\xa0\xa0\xa0`}, 
+        {index: 3, value: `CO2\xa0\xa0\xa0\xa0\xa0\xa0\xa0`}, 
+        {index: 4, value: `TVOC\xa0\xa0\xa0\xa0\xa0\xa0\xa0`},
+        {index: 5, value: `Light\xa0\xa0\xa0\xa0\xa0\xa0\xa0`},
+        {index: 6, value: `Dust\xa0\xa0\xa0\xa0\xa0\xa0\xa0`},
     ];
 
   return (
-	<FormControl fullWidth style={{maxWidth: '150px'}} size='small'>
+	<FormControl style={{width: '150%'}} size='small'>
 		<InputLabel id="demo-simple-select-label">Parameter</InputLabel>
 		<Select
 			labelId="demo-simple-select-label"

@@ -214,7 +214,7 @@ const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformatio
                 </Grid>
                 <Grid item marginX={4}>
                     <Stack justifyContent='space-between' alignItems='center' direction='row'>
-                        <Stack spacing={1} direction='row'>
+                        <Stack spacing={1} direction='row' justifyContent='flex-start'>
                             <FilterNode setNodeIdFilter={setNodeIdFilter}
                                     apiInformationTag={apiInformationTag} 
                                     callbackSetSignIn={callbackSetSignIn}
