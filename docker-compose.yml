@@ -2,12 +2,14 @@ version: '3.8'
 services: 
   nginx:
     container_name: webserver
+    container_name: webserver
     build: 
       context: ./frontend/Year3_dev_Frontend/main/react-admin/nginx
     ports:
       - 80:80
     volumes:
       - ./frontend/Year3_dev_Frontend/main/react-admin/build:/usr/share/nginx/html
+      - ./frontend/Year3_dev_Frontend/main/react-admin/nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./frontend/Year3_dev_Frontend/main/react-admin/nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks: 
       - mynetwork
