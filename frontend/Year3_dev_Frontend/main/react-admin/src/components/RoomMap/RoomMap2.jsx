@@ -8,7 +8,7 @@ import { host } from "../../App";
 import { React, useState, useEffect, useRef } from "react";
 import { styled } from "@mui/material";
 import h337 from "heatmap.js";
-import Node from "../Node2";
+
 import HeatmapComponent from "./HeatmapComponent";
 
 /**
@@ -21,8 +21,8 @@ const RoomMap = ({room_id, callbackSetSignIn, backend_host}) =>
     const [imageWidth, setImageWidth] = useState(0);
     const boxRef = useRef(null);
     const [nodeData, setNodeData] = useState([]);
-    const [nodeList, setNodeList] = useState(null);
-    const [nodeFunction, setNodeFunction] = useState(null);
+    const [nodeList, setNodeList] = useState([]);
+    const [nodeFunction, setNodeFunction] = useState([]);
     
     /**
      * @brief nodePosition is an array of all node in this room with informations,
@@ -79,13 +79,12 @@ const RoomMap = ({room_id, callbackSetSignIn, backend_host}) =>
         if(response && response.status === 200)
         {   
             // const data_response = await response.json();
-            console.log('YESYES');
             const data_response = [
                 [1, 2, 3, 4],                               // node_id
                 ['sensor', 'actuator', 'actuator', 'fan'],   // node_function
-                [50, 100, 210, 420],                        // x_axis
-                [200, 900, 700, 500],                       // y_axis
-                [25.1, 26.2, 27.3, 28.4]                    // temp
+                [50, 100, 210, 321],                        // x_axis
+                [200, 90, 70, 351],                       // y_axis
+                [25, 26, 27, 28]                    // temp
             ];
             console.log(data_response);
             let newNodePosition = [];
@@ -95,7 +94,8 @@ const RoomMap = ({room_id, callbackSetSignIn, backend_host}) =>
                 const newObj = {
                     x: data_response[2][i],
                     y: data_response[3][i],
-                    value: data_response[4][i]
+                    value: data_response[4][i],
+                    radius: 300,
                 };
                 newNodePosition.push(newObj);
             }
@@ -104,9 +104,6 @@ const RoomMap = ({room_id, callbackSetSignIn, backend_host}) =>
             //     ...
             // ]
             setNodeData(newNodePosition);
-            console.log(nodeData);
-            console.log(nodeList);
-            console.log(nodeFunction);
             setIsLoading(false);
         }
     }
@@ -222,56 +219,15 @@ const RoomMap = ({room_id, callbackSetSignIn, backend_host}) =>
         }
     }
 
-    // const HeatmapComponent = ({ pic_src, pic_height, pic_width }) => {
-    //     const HeatmapContainer = styled('div')({
-    //         position: 'relative',
-    //         width: `${pic_width}`,
-    //         height: `${pic_height}`,
-    //     });
-            
-    //     const HeatmapImg = styled('img')({
-    //         width: '100%',
-    //         height: '100%',
-    //         objectFit: 'cover',
-    //     });
-            
-    //     const HeatmapOverlay = styled('div')({
-    //         position: 'absolute',
-    //         top: 0,
-    //         left: 0,
-    //         width: '100%',
-    //         height: '100%',
-    //     });
-
-    //     useEffect(() => {
-    //         const heatmapInstance = h337.create({
-    //             container: boxRef.current,
-    //         });
-            
-    //         const data = {
-    //             max: 60,
-    //             data: nodeData,
-    //         };
-            
-    //         heatmapInstance.setData(data);
-    //     }, [nodeData]);
-        
-    //     return (
-    //         <HeatmapContainer>
-    //             <HeatmapImg src={pic_src} alt="Map view" />
-    //                 <Node nodeData={nodeData} nodeList={nodeList} nodeFunction={nodeFunction}/>
-    //             <HeatmapOverlay ref={boxRef} />
-    //         </HeatmapContainer>
-    //     );
-    // }
-
     const sensorData = [
-        { x: 200, y: 100, value: 16 },
-        { x: 400, y: 200, value: 32 },
-        { x: 300, y: 50, value: 24 },
-        { x: 400, y: 100, value: 23 },
+        { x: 0, y: 321, value: 30, radius: 300 },
+        { x: 321, y: 351, value: 22, radius: 300 },
+        { x: 321, y: 0, value: 44, radius: 300 },
+        { x: 0, y: 0, value: 25, radius: 300 },
     ];
-    
+    const list_data = [4, 1, 8, 3];
+    const function_data = ['sensor', 'actuator', 'actuator', 'fan'];
+
     useEffect(()=>{
         if(nodeData === null)            //!< this is for the total component always render the first time and then the next time will be setTimeOut
         {
@@ -290,14 +246,14 @@ const RoomMap = ({room_id, callbackSetSignIn, backend_host}) =>
         <>
         {
             isLoading ? <h1>Loading...</h1> :
-            <Grid container justifyContent='center'>
-                <HeatmapComponent
-                    sensorData={sensorData}
-                    // pic_src={dict_plan[room_id]}
-                    // pic_width={pic_resolution[room_id][0]}
-                    // pic_height={pic_resolution[room_id][1]}
-                />
-            </Grid>
+            <Grid container item xs={12} p={1} justifyContent='center'>
+                    <HeatmapComponent
+                        nodeData={nodeData}
+                        nodeList={nodeList}
+                        nodeFunction={nodeFunction}
+                        pic_src={dict_plan[room_id]}
+                    />
+                </Grid>
         }
         </>
     );

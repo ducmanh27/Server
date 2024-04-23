@@ -102,7 +102,7 @@ const Footer = (props) => {
                         justifyContent="center"
                     >
                         <Typography variant="h4" color="text.primary" gutterBottom>
-                        Smart Building
+                        Smart Farm
                         </Typography>
                     </Box>
 

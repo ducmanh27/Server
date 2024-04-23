@@ -13,70 +13,39 @@ const FilterParameter = ({setParaFilter}) =>
     const colors = tokens(theme.palette.mode);
 	const [paraState, setParaState] = useState(1)
 	const handleChange = (event) => {
+		setParaFilter(event.target.value);
 		setParaState(event.target.value);
-		console.log(event.target.value);
 		// setNodeIdFilter(event.target.value);
 	};
     const para_filter_dict = [
-        {index: 0, value: "none"}, 
-        {index: 1, value: "temperature"}, 
-        {index: 2, value: "humidity"}, 
-        {index: 3, value: "co2"}, 
-        {index: 4, value: "tvoc"},
-        {index: 5, value: "light"},
-        {index: 6, value: "dust"},
+        {index: 0, value: `All\xa0\xa0\xa0\xa0\xa0\xa0\xa0`}, 
+        {index: 1, value: `Temperature\xa0\xa0\xa0\xa0\xa0\xa0\xa0`}, 
+        {index: 2, value: `Humid\xa0\xa0\xa0\xa0\xa0\xa0\xa0`}, 
+        {index: 3, value: `CO2\xa0\xa0\xa0\xa0\xa0\xa0\xa0`}, 
+        {index: 4, value: `TVOC\xa0\xa0\xa0\xa0\xa0\xa0\xa0`},
+        {index: 5, value: `Light\xa0\xa0\xa0\xa0\xa0\xa0\xa0`},
+        {index: 6, value: `Dust\xa0\xa0\xa0\xa0\xa0\xa0\xa0`},
     ];
 
   return (
-		<Box
-			container="true"
-			display="flex"
-			flexDirection="row"
-			alignItems="center"
+	<FormControl style={{width: '150%'}} size='small'>
+		<InputLabel id="demo-simple-select-label">Parameter</InputLabel>
+		<Select
+			labelId="demo-simple-select-label"
+			id="demo-simple-select"
+			value={paraState}
+			label="Sensor Node"
+			onChange={handleChange}
 		>
-			<Box sx={{ minWidth: 100 }}
-				
-				>
-				<FormControl
-					fullWidth
-				>
-					<InputLabel id="demo-simple-select-label">Parameter</InputLabel>
-					<Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={paraState}
-                        label="Sensor Node"
-                        onChange={handleChange}
-					>
-						{
-							para_filter_dict.map((i)=>{
-                                return (
-                                    <MenuItem value={i.index}>{i.value}</MenuItem>
-                                );		
-							})
-						}
-					</Select>
-				</FormControl>
-			</Box>
-
-			<Box m={1} />
-			
-			<Button
-                sx={{
-					backgroundColor: "black",
-					fontSize: "14px",
-					fontWeight: "bold",
-					padding: "8px 18px",
-				}}
-                variant="contained"
-				onClick={()=>{
-					setParaFilter(paraState);
-					// setApi(`http://${backend_host}/api/get/daily_data/${id}`)
-				}}
-			>
-				Submit
-			</Button>
-		</Box>
+			{
+				para_filter_dict.map((i)=>{
+					return (
+						<MenuItem disabled={i.index === 0 ? true : false} value={i.index}>{i.value}</MenuItem>
+					);		
+				})
+			}
+		</Select>
+	</FormControl>
   );
 }
 

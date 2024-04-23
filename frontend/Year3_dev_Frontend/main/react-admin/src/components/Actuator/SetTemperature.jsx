@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Box, Button, ButtonGroup } from "@mui/material";
 import { host } from "../../App";
+import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
+import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -207,9 +209,9 @@ export default function SetTemperature({actuatorStatus, node_id, callbackSetSign
             <Box m="10px"/>
             <Box>
                 <ButtonGroup variant='outlined'>
-                    <Button style={{fontSize: '30px'}} onClick={handleDecreTemp}>{'\t<\t'}</Button>
-                    <Button style={{fontSize: '30px'}}>{`\t${temperatureInSetTemperature} °C\t`}</Button>
-                    <Button style={{fontSize: '30px'}} onClick={handleIncreTemp}>{'\t>\t'}</Button>
+                    <Button style={{fontSize: '30px'}} onClick={handleDecreTemp}><ArrowCircleDownIcon style={{fontSize: '2.5rem'}} /></Button>
+                    <Button style={{fontSize: '30px', fontWeight: 'bolder'}}>{`${temperatureInSetTemperature} °C`}</Button>
+                    <Button style={{fontSize: '30px'}} onClick={handleIncreTemp}><ArrowCircleUpIcon style={{fontSize: '2.5rem'}} /></Button>
                 </ButtonGroup>
             </Box>
             <Box>

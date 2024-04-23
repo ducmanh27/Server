@@ -7,7 +7,17 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
     const [dataType, setDataType] = useState(0) // 0 is energyData, 1 is powerData
     const [maxYAxis, setMaxYAxis] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [energyData, setEnergyData] = useState(null);
+    const [energyData, setEnergyData] = useState({'time': [], 'active_energy': []});
+    const [powerData, setPowerData] = useState({
+        'hour': [
+            "1 am", "2 am", "3 am", "4 am", "5 am", "6 am", "7 am", "8 am", "9 am", "10 am", "11 am", "12 am",
+            "1 pm", "2 pm", "3 pm", "4 pm", "5 pm", "6 pm", "7 pm", "8 pm", "9 pm", "10 pm", "11 pm", "12 pm",
+        ],
+        'active_power': [
+            458, 512, 367, 782, 644, 734, 896, 921, 875, 699, 543, 456,
+            789, 643, 765, 943, 732, 512, 684, 876, 921, 764, 598, 421
+        ]
+    })
     const months = [
         'Jan', 'Feb','Mar', 'Apr', 'May', 'Jun',
         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
@@ -29,33 +39,43 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
         }
 
         const response = await fetch(url, option_fetch);
+        const data = await response.json();
         let newEnergyData = {
-            'time': null,
-            'active_energy': null
+            'time': [],
+            'active_energy': []
         };
         if(response.status === 200)
         {
-            const data = await response.json();
-            // sua lai du lieu tu ban tin
-            // [ 1_2024,   2_2024,   3_2024], 
-            // [ 270.99,    686.03,    400.78 ]
-            const time = data[0].map((item) => {
-                const [month, year] = item.split('_');
-                return `${months[month - 1]} ${year}`;
-            });
-            newEnergyData['time'] = time;
-            newEnergyData['active_energy'] = data[1];
+            // const data = [
+            //     ['3_2024', '4_2024'],
+            //     [1000, 2440]
+            // ]
+            const startYear = data[0][0].split('_')[1];
+            const endYear = data[0][data[0].length - 1].split('_')[1];
+            let count = 0;
+            
+            for (let year = startYear; year <= endYear; year++) {
+                for (let month = 0; month < 12; month++) {
+                    let check_month = `${month+1}_${year}`
+                    if (check_month === data[0][count]) {
+                        newEnergyData.active_energy.push(data[1][count]);
+                        count++;
+                    }
+                    else newEnergyData.active_energy.push(0);
+                    newEnergyData.time.push(`${months[month]}\n${year}`)
+                }
+            }
         }
         else
         {
-            newEnergyData['time'] = [0];
-            newEnergyData['active_energy'] = [0];
+            newEnergyData['time'].push(0);
+            newEnergyData['active_energy'].push(0);
         }
         setEnergyData(newEnergyData);
         setIsLoading(false)
     }
 
-    const verify_and_get_data = async (fetch_data_function, callbackSetSignIn, backend_host) => 
+    const verify_and_get_data = async (fetch_data_function, callbackSetSignIn, backend_host, url) => 
     {
         const token = {access_token: null, refresh_token: null}
         // const backend_host = host;
@@ -201,6 +221,7 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
     ]
 
     useEffect(() => {
+        getChartData(dataType);
         if(time_delay !== 0)
         {
             if(energyData === null)            //!< this is for the total component always render the first time and then the next time will be setTimeOut
@@ -219,17 +240,10 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
         {
             verify_and_get_data(get_energy_data, callbackSetSignIn, backend_host, url_energy); 
         }
-    },[energyData])
+    },[energyData, isLoading, dataType])
 
-    useEffect(() => {
-        getChartData(dataType);
-    },[dataType])
-    
     return (
-        <>
-        {
-            isLoading ? <h1>Loading...</h1> :
-            <Grid container textAlign='center' justifyContent='center'>
+        <Grid container textAlign='center' justifyContent='center'>
                 <Grid container display='flex' flexDirection='column' justifyContent='center' xs={12} marginY={1}>
                     <Grid item>
                         <Typography component='span' textAlign='center' fontSize='20px' color='black'>
@@ -284,91 +298,43 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                     </Grid>
                 </Grid>
                 <Grid style={{ width: '100%'}}>
+                {isLoading ? <h1>Loading chart...</h1> : 
                 <VictoryChart
-                theme={VictoryTheme.material}
-                height={100}
-                padding={{left: 20, right: 20, bottom: 12}}
-                domain={maxYAxis}
-            >
-                <VictoryAxis  
-                    fixLabelOverlap={true}  
-                    // tickValues specifies both the number of ticks and where
-                    // they are placed on the axis
-                    dependentAxis={false}       //x-axis
-                    tickLength={0}
-                    gridComponent={<></>}
-                    style={{
-                        data: { width: 10 },
-                        labels: { padding: 20 },
-                        axis: { stroke: "black" },
-                        ticks: { stroke: "black", size: 0},
-                        tickLabels: {fontSize: 4, padding: 3} //size of label of x-axis value and position of them
-                    }}
-                    tickCount={2}
-                />
-                <VictoryAxis
-                    fixLabelOverlap={false}  
-                    dependentAxis={true}   //y_axis
-                    gridComponent={<></>}
-                    style={{
-                        axis: { stroke: "black" },
-                        ticks: { stroke: "black", size: 0},
-                        tickLabels: { fontSize: 4, padding: 3}       //size of label of y-axis value, padding: position of them
-                    }}
-                    tickCount={4}  //number of label on y-axis
-                />
-                {dataType 
-                ?
-                <VictoryLine
-                    labelComponent=
-                    {<VictoryTooltip 
-                        style={{fontSize: '2.7px', lineHeight: 1}}
-                        cornerRadius={1}
-                        pointerLength={0}
-                        flyoutStyle={{
-                            strokeWidth: 0.1,
+                    theme={VictoryTheme.material}
+                    height={100}
+                    padding={{left: 20, right: 20, bottom: 12}}
+                    domain={maxYAxis}
+                >
+                    <VictoryAxis  
+                        fixLabelOverlap={true}  
+                        // tickValues specifies both the number of ticks and where
+                        // they are placed on the axis
+                        dependentAxis={false}       //x-axis
+                        tickLength={0}
+                        gridComponent={<></>}
+                        style={{
+                            data: { width: 10 },
+                            labels: { padding: 20 },
+                            axis: { stroke: "black" },
+                            ticks: { stroke: "black", size: 0},
+                            tickLabels: {fontSize: 4, padding: 3} //size of label of x-axis value and position of them
                         }}
-                        flyoutComponent={
-                            <Flyout 
-                                height={10}
-                                width={30}
-                            />
-                        }
-                    />}
-                    alignment="start"
-                    style={{ data: { stroke: "#c43a31"} }}
-                    data={chartData}
-                    interpolation='natural'
-                    events={[{
-                    target: "data",
-                    eventHandlers: {
-                        onMouseOver: () => {
-                        return [
-                            {
-                            target: "data",
-                            mutation: () => ({style: {stroke: "red"}})
-                            }, {
-                            target: "labels",
-                            mutation: () => ({ active: true })
-                            }
-                        ];
-                        },
-                        onMouseOut: () => {
-                        return [
-                            {
-                            target: "data",
-                            mutation: () => {}
-                            }, {
-                            target: "labels",
-                            mutation: () => ({ active: false })
-                            }
-                        ];
-                        }
-                    }
-                    }]}
-                />
-                :
-                <VictoryBar
+                        tickCount={12}
+                    />
+                    <VictoryAxis
+                        fixLabelOverlap={false}  
+                        dependentAxis={true}   //y_axis
+                        gridComponent={<></>}
+                        style={{
+                            axis: { stroke: "black" },
+                            ticks: { stroke: "black", size: 0},
+                            tickLabels: { fontSize: 6, padding: 3}       //size of label of y-axis value, padding: position of them
+                        }}
+                        tickCount={4}  //number of label on y-axis
+                    />
+                    {dataType 
+                    ?
+                    <VictoryLine
                         labelComponent=
                         {<VictoryTooltip 
                             style={{fontSize: '2.7px', lineHeight: 1}}
@@ -383,11 +349,60 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                                     width={30}
                                 />
                             }
-                        />}                
+                        />}
+                        alignment="start"
+                        style={{ data: { stroke: "#c43a31"} }}
+                        data={chartData}
+                        interpolation='natural'
+                        events={[{
+                        target: "data",
+                        eventHandlers: {
+                            onMouseOver: () => {
+                            return [
+                                {
+                                target: "data",
+                                mutation: () => ({style: {stroke: "red"}})
+                                }, {
+                                target: "labels",
+                                mutation: () => ({ active: true })
+                                }
+                            ];
+                            },
+                            onMouseOut: () => {
+                            return [
+                                {
+                                target: "data",
+                                mutation: () => {}
+                                }, {
+                                target: "labels",
+                                mutation: () => ({ active: false })
+                                }
+                            ];
+                            }
+                        }
+                        }]}
+                    />
+                    :
+                    <VictoryBar
+                        labelComponent=
+                        {<VictoryTooltip 
+                            style={{fontSize: '5px', lineHeight: 1}}
+                            cornerRadius={1}
+                            pointerLength={0}
+                            flyoutStyle={{
+                                strokeWidth: 0.1,
+                            }}
+                            flyoutComponent={
+                                <Flyout 
+                                    height={20}
+                                    width={50}
+                                />
+                            }
+                        />}
                         alignment="start"
                         style={{ data: { fill: "#c43a31"} }}
                         data={chartData}
-                        barWidth={250 / chartData.length}
+                        barWidth={300 / chartData.length}
                         events={[{
                         target: "data",
                         eventHandlers: {
@@ -416,12 +431,10 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                         }
                         }]}
                     />
-                }
-                </VictoryChart>
+                    }
+                </VictoryChart>}
                 </Grid>
             </Grid>
-        }
-        </>
     )
 }
 
