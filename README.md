@@ -1,66 +1,39 @@
-# Installation Guide for Local Server on Ubuntu:
+### HOW TO RUN WEB APPLICATION
 
-## Setting up Mosquitto (MQTT Broker):
-- **Ubuntu 22.04**
-  - Install mosquitto and mosquitto-client:
-    ```
-    sudo apt-get update
-    sudo apt-get upgrade
-    sudo apt install -y mosquitto 
-    sudo apt install -y mosquitto-client
-    ```
-  - Add  the following lines to the file `/etc/mosquitto/mosquitto.conf`:
-    ```
-    allow_anonymous true  # Allow subscription/publishing without authentication
-    listener 1883 0.0.0.0  # Use local machine's IP as the broker on port 1883
+#### Run Application
+- Navigate to the directory .../server
+- Run the following commands:
+    ```bash
+    cd .\backend\Year3_dev_Backend\main\Year3\
+    chmod +x .\entrypoint.sh
+    sudo docker compose up -d --build
     ```
 
-## Setting up Python 3.10 and Dependencies:
-- **Python 3.10**
-
-## Setting up PostgreSQL 14:
-- **Initial Setup:**
-- Access PostgreSQL in your terminal:
-  ```
-  sudo -u postgres psql
-  ```
-- Execute the following commands:
-  ```
-  CREATE DATABASE smartfarm;
-  CREATE USER year3 WITH PASSWORD 'year3';
-  GRANT ALL PRIVILEGES ON DATABASE smartfarm TO year3;
-  ```
-- Note: If you prefer different database, username, or password, ensure to update them in your code or `.env` file.
-
-## Deploying on Local Network with Machine IP:
-- Navigate to `./server/backend/Year3/dev_Backend/main`
-  ```
-  cd ./server/backend/Year3/dev_Backend/main
-  ```
-- **Install Virtual Environment:**
-  ```
-  python -m venv venv
-  ```
-- **Activate Virtual Environment:**
-  ```
-  source venv/bin/activate
-  ```
-- **Install Dependency Packages:**
-  ```
-  pip install -r requirements.txt
-  ```
-
-
-
-
-- Navigate to `./server/backend/Year3/dev_Backend/main/Year3`
-- **Apply Migrations to Database:**
-  ```
-  python manage.py makemigrations api
-  python manage.py migrate
-  ```
-- **Run the Server on Specified IP (0.0.0.0) and Port (8000):**
-  ```
-  python manage.py runserver 0.0.0.0:8000
-  ```
-
+#### Backup Database
+- Navigate to the directory .../server
+- Copy the backup file `backup_db.sql` to the `database` container:
+    ```bash
+    sudo docker cp ./backup_db.sql database:/tmp/backup_db.sql
+    ```
+- Access the shell of the `database` container:
+    ```bash
+    sudo docker exec -it database bash
+    ```
+- Access the PostgreSQL command line interface:
+    ```bash
+    psql -U year3 -d smartfarm
+    ```
+- Execute the following commands in the PostgreSQL shell:
+    ```sql
+    DROP SCHEMA public CASCADE;
+    CREATE SCHEMA public;
+    exit
+    ```
+- Change directory to `/tmp`:
+    ```bash
+    cd tmp
+    ```
+- Restore the database from the backup file:
+    ```bash
+    psql -U year3 -d smartfarm -f backup_db.sql
+    ```
