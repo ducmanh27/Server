@@ -320,8 +320,8 @@ def getDataForAqiRef():
             data = requests.get(url)
             if data.status_code == 200:
                 data_json = data.json()
-                time_of_data = data_json["data"]["time"]["v"]
-                print(time_of_data)
+                time_of_data = data_json["data"]["time"]["v"] - 7*60*60
+                print(f"time: {time_of_data}")
                 new_data = {}
                 conn = psycopg2.connect(
                     database = "smartfarm",
