@@ -23,5 +23,5 @@ COPY ./requirements.txt /usr/src/app/requirements.txt
 RUN pip3 install --upgrade pip setuptools &&\
     pip install -r requirements.txt
 
-# COPY ./supervisor.conf /etc/supervisor/conf.d/supervisor.conf
-# CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisor.conf"]
+COPY ./supervisor.conf /etc/supervisor/conf.d/supervisor.conf
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisor.conf"]

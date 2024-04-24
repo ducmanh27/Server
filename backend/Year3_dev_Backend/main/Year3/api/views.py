@@ -1170,12 +1170,11 @@ class EnergyDataChartAPIView(generics.ListAPIView):
         for month in range(month_start, month_end+1):
             obj = queryset.filter(time__lte=self.end_of_month_unixtimestamp(self.year, month)).order_by('-time').first()
             data_return.append(obj)
-            
         return data_return
     def list(self, request, *args, **kwargs):
+        print(request.GET.get("room_id"))
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
-        print(serializer.data)
         month_year_list = []
         active_power_list = []
         time_activeEnergy_List = []
@@ -1186,7 +1185,6 @@ class EnergyDataChartAPIView(generics.ListAPIView):
         active_power_list[0] -= self.offset_energy
         energy_consumption_in_month = [active_power_list[0]]
         for i in range(1, len(active_power_list)):
-            print(len(active_power_list))
             if i == 1:
                 adjusted_value = active_power_list[i] - active_power_list[i - 1]
             else:
@@ -1194,7 +1192,6 @@ class EnergyDataChartAPIView(generics.ListAPIView):
             energy_consumption_in_month.append(adjusted_value)
         time_activeEnergy_List.append(month_year_list)
         time_activeEnergy_List.append(energy_consumption_in_month)
-        print(time_activeEnergy_List)
         return Response(time_activeEnergy_List)
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
