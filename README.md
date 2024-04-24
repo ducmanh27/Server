@@ -20,6 +20,7 @@
       sudo apt-get update
     ```
 ### Install the Docker packages.
+- To install the latest version, run:
     ```bash
     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     ```
