@@ -1,0 +1,9 @@
+id,node_id,x_axis,y_axis,function,room_id,mac,status,time,aim
+48,2,360,480,sensor,1,EA:DB:84:AA:86:49,sync,1711987797,air_monitor
+49,3,360,90,sensor,1,EE:FA:BC:B0:64:1F,sync,1711987888,air_monitor
+53,4,30,0,sensor,1,EA:DB:84:A9:DA:2F,sync,1711988758,air_monitor
+58,5,30,480,sensor,1,EE:FA:BC:28:45:FE,sync,1711989238,air_monitor
+59,6,180,210,sensor,1,EE:FA:BC:28:46:25,sync,1711989261,air_monitor
+60,7,180,300,sensor,1,EE:FA:BC:27:52:F2,sync,1711989336,air_monitor
+61,8,0,60,sensor,1,E0:5A:1B:A7:13:AD,sync,1711989560,energy_monitor
+65,9,420,450,air,1,E4:65:B8:76:7D:C5,sync,1713633944,
