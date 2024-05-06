@@ -3,7 +3,7 @@ import requests
 import time
 start_ip = 180
 end_ip = 198
-baseURL = 'http://192.168.1.199:8000/api'
+baseURL = 'http://192.168.2.199:8000/api'
 urlGatewaySync = f'{baseURL}/gateway'
 urlActuatorStatus = f'{baseURL}/actuator_status'
 def getTimeCurrent():
@@ -17,8 +17,8 @@ def add_gateway():
     payload = {
         'add_gateway': 'true',
         'room_id': '1',
-        'ip_start': f'192.168.1.{start_ip}',
-        'ip_end': f'192.168.1.{end_ip}'
+        'ip_start': f'192.168.2.{start_ip}',
+        'ip_end': f'192.168.2.{end_ip}'
     }
     response = requests.post(urlGatewaySync, payload)
     timeCurrent = getTimeCurrent()

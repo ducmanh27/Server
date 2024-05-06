@@ -1130,7 +1130,7 @@ def getWeatherdata(request, *args, **kwargs):
         "info":
             {
                 "room_id": 1,
-                "IP": "192.168.1.192",
+                "IP": "192.168.2.192",
                 "time": 1711620315s
             }
     }
@@ -1144,7 +1144,7 @@ from . import config
 class GatewayListCreateAPIView(generics.ListCreateAPIView):
     queryset = Gateway.objects.all()
     serializer_class = GatewaySerializer
-    def send_json_to_mqtt_server(self, json_data, broker_address="192.168.1.199", broker_port=1883, topic="farm/monitor/alive"):
+    def send_json_to_mqtt_server(self, json_data, broker_address="192.168.2.199", broker_port=1883, topic="farm/monitor/alive"):
         print(json_data)
         client = mqtt.Client()
         client.connect(broker_address, broker_port)
@@ -1176,8 +1176,8 @@ class GatewayListCreateAPIView(generics.ListCreateAPIView):
             {
                 'add_gateway': 'true',
                 'room_id': '1',
-                'ip_start': '192.168.1.180',
-                'ip_end': '192.168.1.198'
+                'ip_start': '192.168.2.180',
+                'ip_end': '192.168.2.198'
             }
         '''
         add_gateway = request.data.get('add_gateway')
@@ -1203,7 +1203,7 @@ class GatewayListCreateAPIView(generics.ListCreateAPIView):
             if len(ip_start_parts) != 4 or len(ip_end_parts) != 4:
                 return Response({'error': 'Invalid IP format'}, status=status.HTTP_400_BAD_REQUEST)
 
-            ip_range = [f"192.168.1.{i}" for i in range(ip_start_parts[3], ip_end_parts[3] + 1)]
+            ip_range = [f"192.168.2.{i}" for i in range(ip_start_parts[3], ip_end_parts[3] + 1)]
 
             # Get the current Unix timestamp
             current_unix_timestamp = int(time.time())

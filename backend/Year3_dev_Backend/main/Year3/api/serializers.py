@@ -77,7 +77,7 @@ class GatewaySerializer(serializers.ModelSerializer):
       "operator": "keep_alive",
       "info":{
          "room_id":3,
-         "IP":"192.168.1.192",
+         "IP":"192.168.2.192",
          "time": ...s
       }
    }
