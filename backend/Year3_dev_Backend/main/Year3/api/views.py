@@ -284,6 +284,7 @@ from .kriging import Kriging
 @api_view(["POST","GET"])     
 # @authentication_classes([jwtauthentication.JWTAuthentication])
 # @permission_classes([permissions.IsAuthenticated])      
+# api process to slow
 def kriging(request, *args, **kwargs):
     try:
         room_id = request.GET.get("room_id")
@@ -316,8 +317,6 @@ def kriging(request, *args, **kwargs):
         return Response(response, status=status.HTTP_200_OK)     
     except:
         return Response({"Response": "Error on server!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
 
 
 
@@ -1071,7 +1070,6 @@ class CustomTokeObtainPairview(TokenObtainPairView):
     
 
 
-
 from api.models import WeatherData
 from api.serializers import WeatherDataSerializer
 @api_view(["GET"])
@@ -1089,40 +1087,6 @@ def getWeatherdata(request, *args, **kwargs):
  
     except:
         return Response({"Response": 0}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
-
-##
-# @brief: This view is for getting energy data 
-#
-# @params: 
-#       urls: "api/energydata"
-# @return:
-#       
-#      if there is none:
-#       []
-#       
-##
-# @brief: This view is for sending Weatherdata to Frontend, component Weatherdata
-#
-# @params: 
-#       urls: "api/weatherdata"
-# @return:
-#  
-#      if there is none:
-#       []
-#           {  "node_id":[8],
-#              "voltage":[225.8],
-#              "current":[0.92],
-#              "active_power":[],
-#              "red":[],
-#              "light":[],
-#              "co2":[],
-#              "blue":[],
-#              "motion":[],
-#              "time":[],
-#              "temp":[],
-#              "dust":[]}
-
 
 '''
     {
@@ -1141,6 +1105,7 @@ from rest_framework.response import Response
 from .models import Gateway
 from .serializers import GatewaySerializer
 from . import config
+# api need to rewrite
 class GatewayListCreateAPIView(generics.ListCreateAPIView):
     queryset = Gateway.objects.all()
     serializer_class = GatewaySerializer
@@ -1269,12 +1234,10 @@ class EnergyDataChartAPIView(generics.ListAPIView):
         end_of_month = first_day_of_next_month - datetime.timedelta(seconds=1)
         return int(end_of_month.timestamp() - 7 * 60 * 60)
     def filter_queryset(self, queryset):
-        first_object = queryset.first()
+        # get list month in db
         dataFirstObj = self.get_serializer(queryset.first(), many=False)
         month_start = datetime.datetime.fromtimestamp(dataFirstObj.data['time']).month
-        last_object = queryset.last()
         dataLastObj = self.get_serializer(queryset.last(), many=False)
-
         month_end = datetime.datetime.fromtimestamp(dataLastObj.data['time']).month
         data_return = []
         for month in range(month_start, month_end+1):
@@ -1282,7 +1245,7 @@ class EnergyDataChartAPIView(generics.ListAPIView):
             data_return.append(obj)
         return data_return
     def list(self, request, *args, **kwargs):
-        print(request.GET.get("room_id"))
+
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
         month_year_list = []
@@ -1303,5 +1266,52 @@ class EnergyDataChartAPIView(generics.ListAPIView):
         time_activeEnergy_List.append(month_year_list)
         time_activeEnergy_List.append(energy_consumption_in_month)
         return Response(time_activeEnergy_List)
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+# View for heatmap version 2
+
+# lay nhung node co trong bang resgistration co status = sync, aim = air_monitor.
+# tao ra mot arr data_response = []
+# lay ra cac node id trong querry [node_id_i] => them vao array
+# voi moi node id lay ra tri tri [position_x] [position_y] => them vao array
+# tuong tu nhu the voi moi node id lay ra nhiet do gan nhat va so sanh voi datetime neu <= 2 phut thi oke
+# truong hop filter trong khoang (datetime.now - 120) < x < datetime.now khong co record thi xoa node id day ra khoi arr
+# lay thoi diem hien tai => datetime.now sau do convert thanh unixtimestamp
+# 
+class HeatMapData(generics.ListAPIView):
+
+    queryset = Registration.objects.all()
+    serializer_class = RegistrationSerializer
+    # list node which monitoring air
+    def filter_queryset(self, queryset, room_id):
+        return queryset.filter(room_id=room_id, status = 'sync', aim = 'air_monitor')
+    def list(self, request, *args, **kwargs):
+        room_id = request.GET.get("room_id")
+        queryset = self.filter_queryset(self.get_queryset(), room_id)
+
+        serializer = self.get_serializer(queryset, many=True)
+        HeatMapData = []
+        node_id = []
+        node_type = []
+        x_axis = []
+        y_axis = []
+        temp = []
+        
+        timeQueryUpper = int(datetime.datetime.now().timestamp())
+        timeQueryLower = timeQueryUpper - 2*60
+        for record in serializer.data:
+            lastest_record = RawSensorMonitor.objects.all().filter(room_id = room_id, node_id = record['node_id']).last()
+            lastest_record_data = RawSensorMonitorSerializer(lastest_record, many = False)
+            node_id.append(record['node_id'])
+            node_type.append(record['function'])
+            x_axis.append(record['x_axis'])
+            y_axis.append(record['y_axis'])
+            temp.append(lastest_record_data.data['temp'])
+        HeatMapData.append(node_id)
+        HeatMapData.append(node_type)
+        HeatMapData.append(x_axis)
+        HeatMapData.append(y_axis)
+        HeatMapData.append(temp)
+        return Response(HeatMapData)
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

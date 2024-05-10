@@ -30,13 +30,13 @@ while True:
         params = {
             'lat': 21.006706,
             'lon': 105.840057,
-            'appid': 'f9d3af5d7ee1344c87f970db508d88d2',
+            'appid': '93e34bbdd21109078a123d27a9f4afe9',
             'units': 'metric',
             'exclude': 'hourly,daily'
         }
         response = requests.get(api_url, params=params)
         data = response.json()
-        #print(f"data response: {data}")
+        # print(f"data response: {data}")
         # Conver data JSON to string JSON
         json_string = json.dumps(data, indent=4)
 
