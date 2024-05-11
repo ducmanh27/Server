@@ -3,7 +3,7 @@ import requests
 import time
 start_ip = 180
 end_ip = 198
-baseURL = 'http://192.168.1.199:8000/api'
+baseURL = 'http://27.71.227.1:8000/api'
 urlGatewaySync = f'{baseURL}/gateway'
 urlActuatorStatus = f'{baseURL}/actuator_status'
 def getTimeCurrent():

@@ -16,7 +16,7 @@ import SignUp from "./scenes/signUp";
 import Weatherdata from "./scenes/weatherdata/Weatherdata";
 
 
-const debug_mode = process.env.REACT_APP_DEBUG_MODE ; 
+const debug_mode = process.env.REACT_APP_DEBUG_MODE === true; 
 export const host = process.env.REACT_APP_BACKEND_URL;
 
 
