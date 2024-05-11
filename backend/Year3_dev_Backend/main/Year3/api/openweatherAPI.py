@@ -25,12 +25,12 @@ api_url = 'https://api.openweathermap.org/data/3.0/onecall'
 request_interval = 90
 
 while True:
-    try:
+    try: 
         # Request API
         params = {
-            'lat': 21.006706,
-            'lon': 105.840057,
-            'appid': 'ab975d3ed888ef5c4d272b60277b1112',
+            'lat': 21.005721,
+            'lon': 105.844523,
+            'appid': '93e34bbdd21109078a123d27a9f4afe9',
             'units': 'metric',
             'exclude': 'hourly,daily'
         }

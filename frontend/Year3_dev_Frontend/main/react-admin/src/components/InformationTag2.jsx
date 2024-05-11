@@ -342,7 +342,7 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Temperature</Typography>
-                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>
+                                    <Typography textAlign='center' variant='h5'>
                                     {((temp) => {
                                         if (infoData["temp"]["value"] == 'No data') temp = infoData["temp"]["value"];
                                         else temp = `${infoData["temp"]["value"]} ${dict_of_enviroment_para_names['temp']['unit']}`
@@ -362,7 +362,7 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>CO2</Typography>
-                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((temp) => {
+                                    <Typography textAlign='center' variant='h5'>{((temp) => {
                                         if (infoData["co2"]["value"] == 'No data') temp = infoData["co2"]["value"];
                                         else temp = `${infoData["co2"]["value"]} ${dict_of_enviroment_para_names['co2']['unit']}`
                                         return temp;
@@ -381,7 +381,7 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Humidity</Typography>
-                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((temp) => {
+                                    <Typography textAlign='center' variant='h5'>{((temp) => {
                                         if (infoData["hum"]["value"] == 'No data') temp = infoData["hum"]["value"];
                                         else temp = `${infoData["hum"]["value"]} ${dict_of_enviroment_para_names['hum']['unit']}`
                                         return temp;
@@ -400,7 +400,7 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>TVOC</Typography>
-                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((temp) => {
+                                    <Typography textAlign='center' variant='h5'>{((temp) => {
                                         if (infoData["tvoc"]["value"] == 'No data') temp = infoData["tvoc"]["value"];
                                         else temp = `${infoData["tvoc"]["value"]} ${dict_of_enviroment_para_names['tvoc']['unit']}`
                                         return temp;
@@ -419,7 +419,7 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Dust</Typography>
-                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((temp) => {
+                                    <Typography textAlign='center' variant='h5'>{((temp) => {
                                         if (infoData["dust"]["value"] == 'No data') temp = infoData["dust"]["value"];
                                         else temp = `${infoData["dust"]["value"]} ${dict_of_enviroment_para_names['dust']['unit']}`
                                         return temp;
@@ -438,7 +438,7 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Light</Typography>
-                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((temp) => {
+                                    <Typography textAlign='center' variant='h5'>{((temp) => {
                                         if (infoData["light"]["value"] == 'No data') temp = infoData["light"]["value"];
                                         else temp = `${infoData["light"]["value"]} ${dict_of_enviroment_para_names['light']['unit']}`
                                         return temp;
@@ -457,7 +457,7 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Sound</Typography>
-                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((temp) => {
+                                    <Typography textAlign='center' variant='h5'>{((temp) => {
                                         if (infoData["sound"]["value"] == 'No data') temp = infoData["sound"]["value"];
                                         else temp = `${infoData["sound"]["value"]} ${dict_of_enviroment_para_names['sound']['unit']}`
                                         return temp;
@@ -476,7 +476,7 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Motion</Typography>
-                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{infoData["motion"]["value"]}</Typography>
+                                    <Typography textAlign='center' variant='h5'>{infoData["motion"]["value"]}</Typography>
                                 </Grid>
                             </Grid>
                         </Paper>

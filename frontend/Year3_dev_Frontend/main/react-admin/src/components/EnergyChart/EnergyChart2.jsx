@@ -62,7 +62,7 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                         count++;
                     }
                     else newEnergyData.active_energy.push(0);
-                    newEnergyData.time.push(`${months[month]}\n${year}`)
+                    newEnergyData.time.push(`${months[month]} ${year}`)
                 }
             }
         }
@@ -319,7 +319,7 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                             ticks: { stroke: "black", size: 0},
                             tickLabels: {fontSize: 4, padding: 3} //size of label of x-axis value and position of them
                         }}
-                        tickCount={12}
+                        tickCount={2}
                     />
                     <VictoryAxis
                         fixLabelOverlap={false}  
@@ -328,7 +328,7 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                         style={{
                             axis: { stroke: "black" },
                             ticks: { stroke: "black", size: 0},
-                            tickLabels: { fontSize: 6, padding: 3}       //size of label of y-axis value, padding: position of them
+                            tickLabels: { fontSize: 4, padding: 3}       //size of label of y-axis value, padding: position of them
                         }}
                         tickCount={4}  //number of label on y-axis
                     />

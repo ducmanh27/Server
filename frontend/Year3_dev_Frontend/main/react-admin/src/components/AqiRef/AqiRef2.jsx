@@ -280,7 +280,7 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                                 </Grid>
                                 <Grid item marginY={0.5} />
                                 <Grid item>
-                                    <Typography fontWeight='bold' variant='h3'>{data['rating']['rate']}</Typography>
+                                    <Typography variant='h5'>{data['rating']['rate']}</Typography>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -295,7 +295,7 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Temperature</Typography>
-                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>
+                                    <Typography textAlign='center' variant='h5'>
                                         {((temp) => {
                                         if (data['t'] == 'No data') temp = data['t'];
                                         else temp = `${data['t']} °C`
@@ -316,7 +316,7 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Pressure</Typography>
-                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((p) => {
+                                    <Typography textAlign='center' variant='h5'>{((p) => {
                                         if (data['p'] == 'No data') p = data['p'];
                                         else p = `${data['p']} hPa`
                                         return p;
@@ -335,7 +335,7 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Humidity</Typography>
-                                    <Typography textAlign='center' variant='h3' fontWeight='bold'>{((h) => {
+                                    <Typography textAlign='center' variant='h5'>{((h) => {
                                         if (data['h'] == 'No data') h = data['h'];
                                         else h = `${data['h']} %`
                                         return h;
@@ -354,7 +354,7 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Wind</Typography>
-                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((w) => {
+                                    <Typography textAlign='center' variant='h5'>{((w) => {
                                         if (data['w'] == 'No data') w = data['w'];
                                         else w = `${data['w']} m/s`
                                         return w;

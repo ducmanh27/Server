@@ -15,8 +15,8 @@ import Configuration from "./scenes/configuration/Configuration";
 import SignUp from "./scenes/signUp";
 import Weatherdata from "./scenes/weatherdata/Weatherdata";
 
-// export const host = "27.71.227.1:8002";
-const debug_mode = process.env.REACT_APP_DEBUG_MODE === "true";
+
+const debug_mode = process.env.REACT_APP_DEBUG_MODE ; 
 export const host = process.env.REACT_APP_BACKEND_URL;
 
 

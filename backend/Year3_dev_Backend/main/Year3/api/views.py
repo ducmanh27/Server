@@ -280,42 +280,42 @@ def setTimerActuator(request, *args, **kwargs):
 #           "resolutionX":10,
 #           "resolutionY":10}
 ###############################################################
-from .kriging import Kriging
-@api_view(["POST","GET"])     
-# @authentication_classes([jwtauthentication.JWTAuthentication])
-# @permission_classes([permissions.IsAuthenticated])      
-def kriging(request, *args, **kwargs):
-    try:
-        room_id = request.GET.get("room_id")
-        default_X = []          #default axis x of id 3,4,5,6
-        default_Y = []     #default axis y of id 3,4,5,6
-        default_value = []    #this is default-type value of all known-points
-        all_sensor_node_in_this_room = RegistrationSerializer(Registration.objects.filter(room_id=room_id, function="sensor", status="sync", aim = "air_monitor"), 
-                                                                many=True).data #!< have to add many=True
-        print(all_sensor_node_in_this_room)
-        room_size = RoomSerializer(Room.objects.filter(room_id=room_id), many=True).data[0] #!< have to add many=True
-        for node in all_sensor_node_in_this_room:
-            # 1. Get the x axis and y axis of all sensor nodes
-            default_X.append(node["x_axis"])
-            default_Y.append(node["y_axis"])
-            # 2. Get all sensor nodes' values (in order according to the two above array of course)
-            if RawSensorMonitor.objects.filter(node_id=node["node_id"]).count() >= 1:
-                default_value.append((RawSensorMonitorSerializer(RawSensorMonitor.objects.filter(node_id=node["node_id"]).order_by('-time'),
-                                                                many=True).data)[0]["temp"]) #!< have to add many=True
-            else:
-                # if len(default_X) >=1 and len(default_Y) >=1: 
-                #    default_X.pop()
-                #    default_Y.pop()
-                default_value.append(0)
+# from .kriging import Kriging
+# @api_view(["POST","GET"])     
+# # @authentication_classes([jwtauthentication.JWTAuthentication])
+# # @permission_classes([permissions.IsAuthenticated])      
+# def kriging(request, *args, **kwargs):
+#     try:
+#         room_id = request.GET.get("room_id")
+#         default_X = []          #default axis x of id 3,4,5,6
+#         default_Y = []     #default axis y of id 3,4,5,6
+#         default_value = []    #this is default-type value of all known-points
+#         all_sensor_node_in_this_room = RegistrationSerializer(Registration.objects.filter(room_id=room_id, function="sensor", status="sync", aim = "air_monitor"), 
+#                                                                 many=True).data #!< have to add many=True
+#         print(all_sensor_node_in_this_room)
+#         room_size = RoomSerializer(Room.objects.filter(room_id=room_id), many=True).data[0] #!< have to add many=True
+#         for node in all_sensor_node_in_this_room:
+#             # 1. Get the x axis and y axis of all sensor nodes
+#             default_X.append(node["x_axis"])
+#             default_Y.append(node["y_axis"])
+#             # 2. Get all sensor nodes' values (in order according to the two above array of course)
+#             if RawSensorMonitor.objects.filter(node_id=node["node_id"]).count() >= 1:
+#                 default_value.append((RawSensorMonitorSerializer(RawSensorMonitor.objects.filter(node_id=node["node_id"]).order_by('-time'),
+#                                                                 many=True).data)[0]["temp"]) #!< have to add many=True
+#             else:
+#                 # if len(default_X) >=1 and len(default_Y) >=1: 
+#                 #    default_X.pop()
+#                 #    default_Y.pop()
+#                 default_value.append(0)
 
         
-        k = Kriging(10, 10, default_value, default_X, default_Y, room_size["x_length"], room_size["y_length"])
-        test = k.interpolation()
-        response = {'data': test[2], 'resolutionX': k.resolutionX, 'resolutionY': k.resolutionY}
+#         k = Kriging(10, 10, default_value, default_X, default_Y, room_size["x_length"], room_size["y_length"])
+#         test = k.interpolation()
+#         response = {'data': test[2], 'resolutionX': k.resolutionX, 'resolutionY': k.resolutionY}
 
-        return Response(response, status=status.HTTP_200_OK)     
-    except:
-        return Response({"Response": "Error on server!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+#         return Response(response, status=status.HTTP_200_OK)     
+#     except:
+#         return Response({"Response": "Error on server!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
@@ -571,6 +571,13 @@ def getRoomInformationTag(request, *args, **kwargs):
 #           "hourly": ...,
 #           "daily": ...,
 #       }
+
+# position temp map 100*100
+# [0 10] 25
+# [0 10] 25
+# [0 10] 25
+# [0 10] 25
+
 @api_view(["GET"])
 # @authentication_classes([jwtauthentication.JWTAuthentication])
 # @permission_classes([permissions.IsAuthenticated])
@@ -1302,3 +1309,50 @@ class GatewayListCreateAPIView(generics.ListCreateAPIView):
         return self.create(request, *args, **kwargs)
 
 
+# View for heatmap version 2
+
+# lay nhung node co trong bang resgistration co status = sync, aim = air_monitor.
+# tao ra mot arr data_response = []
+# lay ra cac node id trong querry [node_id_i] => them vao array
+# voi moi node id lay ra tri tri [position_x] [position_y] => them vao array
+# tuong tu nhu the voi moi node id lay ra nhiet do gan nhat va so sanh voi datetime neu <= 2 phut thi oke
+# truong hop filter trong khoang (datetime.now - 120) < x < datetime.now khong co record thi xoa node id day ra khoi arr
+# lay thoi diem hien tai => datetime.now sau do convert thanh unixtimestamp
+# 
+class HeatMapData(generics.ListAPIView):
+
+    queryset = Registration.objects.all()
+    serializer_class = RegistrationSerializer
+    # list node which monitoring air
+    def filter_queryset(self, queryset, room_id):
+        return queryset.filter(room_id=room_id, status = 'sync', aim = 'air_monitor')
+    def list(self, request, *args, **kwargs):
+        room_id = request.GET.get("room_id")
+        queryset = self.filter_queryset(self.get_queryset(), room_id)
+
+        serializer = self.get_serializer(queryset, many=True)
+        HeatMapData = []
+        node_id = []
+        node_type = []
+        x_axis = []
+        y_axis = []
+        temp = []
+        
+        timeQueryUpper = int(datetime.datetime.now().timestamp())
+        timeQueryLower = timeQueryUpper - 2*60
+        for record in serializer.data:
+            lastest_record = RawSensorMonitor.objects.all().filter(room_id = room_id, node_id = record['node_id']).last()
+            lastest_record_data = RawSensorMonitorSerializer(lastest_record, many = False)
+            node_id.append(record['node_id'])
+            node_type.append(record['function'])
+            x_axis.append(record['x_axis'])
+            y_axis.append(record['y_axis'])
+            temp.append(lastest_record_data.data['temp'])
+        HeatMapData.append(node_id)
+        HeatMapData.append(node_type)
+        HeatMapData.append(x_axis)
+        HeatMapData.append(y_axis)
+        HeatMapData.append(temp)
+        return Response(HeatMapData)
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)

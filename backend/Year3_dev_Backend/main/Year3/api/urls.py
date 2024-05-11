@@ -7,7 +7,7 @@ urlpatterns = [
     path('room/set_timer', views.setTimerActuator),
     path('v1.1/monitor/data', views.getSensorSecondlyData),
     path('v1.1/monitor/data/history', views.historyChart),
-    path('room/kriging', views.kriging),
+    # path('room/kriging', views.kriging),
     path('v1.1/control/fans',views.send_setpoint), #view to send setpoint to gateway
     path('get/token_auth', obtain_auth_token), #api to get token authentication
     # path('token', TokenObtainPairView.as_view()),

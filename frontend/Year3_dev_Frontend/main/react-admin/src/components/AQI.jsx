@@ -294,7 +294,7 @@ const AQI = ({room_id, callbackSetSignIn}) =>
             </Grid>
             <Grid item marginY={0.6} />
             <Grid item>
-                <Typography fontWeight='bold' variant='h3'>{aqi['level']}</Typography>
+                <Typography variant="h5">{aqi['level']}</Typography>
             </Grid>
         </Grid>
     );

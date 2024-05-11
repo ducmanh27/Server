@@ -10,7 +10,7 @@ import Chart from "../../data/Chart2";
 import {host} from "../../App";
 import InformationTag from "../../components/InformationTag2";
 import { useLocation } from "react-router-dom"; 
-import RoomMap from "../../components/RoomMap/RoomMap2";
+import RoomMap from "../../components/RoomMap/RoomMap";
 import AqiRef from "../../components/AqiRef/AqiRef2";
 import Actuator from "../../components/Actuator/Actuator";
 import EnergyChart from "../../components/EnergyChart/EnergyChart2";
@@ -123,7 +123,7 @@ const Dashboard = () => {
                         sx={{boxShadow: 1,
                             borderRadius: '5px', 
                             backgroundColor: "white"}}
-                        minHeight={477}
+                        minWidth={477}
                         width="100%" height="100%"
                         display="flex"
                         flexDirection="column"

@@ -6,7 +6,7 @@ import mqtt
 import time
 import json
 import random
-broker = "192.168.1.199"
+broker = "27.71.227.1"
 topic = "farm/test"
 data = {
     "operator": "room_sync",
