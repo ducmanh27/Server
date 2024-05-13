@@ -90,13 +90,13 @@ const RoomMap = ({room_id, callbackSetSignIn, backend_host}) =>
             let newNodePosition = [];
             setNodeList(data_response[0]);
             setNodeFunction(data_response[1]);
-            for (let i = 0; i < data_response[2].length; i++) {
-                const newObj = {
-                    x: data_response[2][i],
-                    y: data_response[3][i],
-                    value: data_response[4][i],
-                    radius: 300,
-                };
+                for (let i = 0; i < data_response[2].length; i++) {
+                    const newObj = {
+                        x: data_response[2][i],
+                        y: data_response[3][i],
+                        value: data_response[4][i],
+                        radius: 300,
+                    };
                 newNodePosition.push(newObj);
             }
             // [

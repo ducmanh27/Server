@@ -210,7 +210,7 @@ const SetTimer = ({actuatorStatus,
 
             <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" >
                 <MobileDateTimePicker onChange={(new_value)=>{
-                                            setStartTimeInSetTimer(Date.parse(new_value)/1000 + 7*60*60);
+                                            setStartTimeInSetTimer(Date.parse(new_value)/1000 );
                                         }
                                     }
                 />
@@ -227,7 +227,7 @@ const SetTimer = ({actuatorStatus,
                             }}
                         variant="contained"
                         onClick={()=>{
-                            if(startTimeInSetTimer <= (new Date()).getTime()/1000 + 7*60*60 + 1*60)
+                            if(startTimeInSetTimer <= (new Date()).getTime()/1000 + 1*60)
                                 alert("Start time is not valid! Only accept time 1 minute at least beyond current time!");
                             else handleClickOpen();
                         }}
@@ -278,7 +278,7 @@ const SetTimer = ({actuatorStatus,
                 display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" 
             >
                 <MobileDateTimePicker onChange={(new_value)=>{
-                                            setEndTimeInSetTimer(Date.parse(new_value)/1000 + 7*60*60);
+                                            setEndTimeInSetTimer(Date.parse(new_value)/1000 );
                                         }
                                     }
                 />
@@ -295,7 +295,7 @@ const SetTimer = ({actuatorStatus,
                             }}
                         variant="contained"
                         onClick={()=>{
-                            if(endTimeInSetTimer <= (new Date()).getTime()/1000 + 7*60*60 + 1*60)
+                            if(endTimeInSetTimer <= (new Date()).getTime()/1000 +  1*60)
                                 alert("End time is not valid! Only accept time 1 minute at least beyond  time!");
                             else handleClickOpen();
                         }}
