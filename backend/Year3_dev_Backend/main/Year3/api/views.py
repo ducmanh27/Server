@@ -1278,6 +1278,7 @@ class EnergyDataChartAPIView(generics.ListAPIView):
 # truong hop filter trong khoang (datetime.now - 120) < x < datetime.now khong co record thi xoa node id day ra khoi arr
 # lay thoi diem hien tai => datetime.now sau do convert thanh unixtimestamp
 # 
+from .models import Room
 class HeatMapData(generics.ListAPIView):
 
     queryset = Registration.objects.all()
@@ -1290,7 +1291,10 @@ class HeatMapData(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset(), room_id)
 
         serializer = self.get_serializer(queryset, many=True)
+        room_record = Room.objects.all().filter(room_id = room_id).first()
+        room_obj = RoomSerializer(room_record, many = False)
         HeatMapData = []
+        area = [room_obj.data['x_length'], room_obj.data['y_length']]
         node_id = []
         node_type = []
         x_axis = []
@@ -1299,6 +1303,7 @@ class HeatMapData(generics.ListAPIView):
         
         timeQueryUpper = int(datetime.datetime.now().timestamp())
         timeQueryLower = timeQueryUpper - 2*60
+
         for record in serializer.data:
             lastest_record = RawSensorMonitor.objects.all().filter(room_id = room_id, node_id = record['node_id']).last()
             lastest_record_data = RawSensorMonitorSerializer(lastest_record, many = False)
@@ -1307,6 +1312,7 @@ class HeatMapData(generics.ListAPIView):
             x_axis.append(record['x_axis'])
             y_axis.append(record['y_axis'])
             temp.append(lastest_record_data.data['temp'])
+        HeatMapData.append(area)
         HeatMapData.append(node_id)
         HeatMapData.append(node_type)
         HeatMapData.append(x_axis)
