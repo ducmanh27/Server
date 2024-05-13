@@ -966,11 +966,10 @@ def signUp(request, *args, **kwargs):
 # @authentication_classes([jwtauthentication.JWTAuthentication])  #!< use JWTAuthentication
 # @permission_classes([permissions.IsAuthenticated])              #!< permitted to use APi only if JWT is authenticated
 def getActuatorStatus(request, *args, **kwargs):
-    print(request)
+    # print(request)
     room_id = request.GET.get("room_id")
     node_id = request.GET.get("node_id")
-    print(room_id)
-    print(node_id)
+    print(f"Get actuator status in room id: {room_id} node id: {node_id}")
     if Registration.objects.filter(room_id=room_id, node_id=node_id, status="sync").count() == 0:
         return Response({"Response": "Actuator not available"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     actuator_node = RegistrationSerializer(Registration.objects.filter(room_id=room_id, node_id=node_id, status="sync"), many=True).data
@@ -978,9 +977,9 @@ def getActuatorStatus(request, *args, **kwargs):
     if RawActuatorMonitor.objects.filter(node_id=data_actuator_node["node_id"], room_id=data_actuator_node["room_id"]).count() == 0:
         print("No actuator status data")
         return Response({"Response": "No actutor status data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    status_record = RawActuatorMonitorSerializer(RawActuatorMonitor.objects.filter(node_id=data_actuator_node["node_id"], room_id=data_actuator_node["room_id"]).order_by("-time"),
-                                                 many=True).data
-    return Response({"Response": status_record[0]}, status=status.HTTP_200_OK) 
+    status_record = RawActuatorMonitorSerializer(RawActuatorMonitor.objects.filter(node_id=data_actuator_node["node_id"], room_id=data_actuator_node["room_id"]).order_by("-time").first()).data
+    print(f"actuator status {status_record}")
+    return Response({"Response": status_record}, status=status.HTTP_200_OK) 
 
 
 ##
@@ -1319,6 +1318,7 @@ class GatewayListCreateAPIView(generics.ListCreateAPIView):
 # truong hop filter trong khoang (datetime.now - 120) < x < datetime.now khong co record thi xoa node id day ra khoi arr
 # lay thoi diem hien tai => datetime.now sau do convert thanh unixtimestamp
 # 
+from .models import Room
 class HeatMapData(generics.ListAPIView):
 
     queryset = Registration.objects.all()
@@ -1331,7 +1331,10 @@ class HeatMapData(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset(), room_id)
 
         serializer = self.get_serializer(queryset, many=True)
+        room_record = Room.objects.all().filter(room_id = room_id).first()
+        room_obj = RoomSerializer(room_record, many = False)
         HeatMapData = []
+        area = [room_obj.data['x_length'], room_obj.data['y_length']]
         node_id = []
         node_type = []
         x_axis = []
@@ -1340,6 +1343,7 @@ class HeatMapData(generics.ListAPIView):
         
         timeQueryUpper = int(datetime.datetime.now().timestamp())
         timeQueryLower = timeQueryUpper - 2*60
+
         for record in serializer.data:
             lastest_record = RawSensorMonitor.objects.all().filter(room_id = room_id, node_id = record['node_id']).last()
             lastest_record_data = RawSensorMonitorSerializer(lastest_record, many = False)
@@ -1348,6 +1352,7 @@ class HeatMapData(generics.ListAPIView):
             x_axis.append(record['x_axis'])
             y_axis.append(record['y_axis'])
             temp.append(lastest_record_data.data['temp'])
+        HeatMapData.append(area)
         HeatMapData.append(node_id)
         HeatMapData.append(node_type)
         HeatMapData.append(x_axis)

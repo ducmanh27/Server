@@ -469,3 +469,16 @@
 2024-05-12 01:01:48,049 WARN stopped: openweatherAPI (terminated by SIGTERM)
 2024-05-12 01:01:49,051 WARN stopped: getDataFromGateway (terminated by SIGTERM)
 2024-05-12 01:01:49,149 INFO stopped: django (exit status 0)
+2024-05-13 04:22:56,928 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2024-05-13 04:22:56,931 INFO supervisord started with pid 1
+2024-05-13 04:22:58,298 INFO spawned: 'django' with pid 16
+2024-05-13 04:22:58,301 INFO spawned: 'getDataFromGateway' with pid 17
+2024-05-13 04:22:58,303 INFO spawned: 'openweatherAPI' with pid 18
+2024-05-13 04:22:58,957 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2024-05-13 04:23:00,047 INFO success: getDataFromGateway entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2024-05-13 04:23:00,047 INFO success: openweatherAPI entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2024-05-13 04:46:02,588 WARN received SIGTERM indicating exit request
+2024-05-13 04:46:02,588 INFO waiting for django, getDataFromGateway, openweatherAPI to die
+2024-05-13 04:46:02,591 WARN stopped: openweatherAPI (terminated by SIGTERM)
+2024-05-13 04:46:03,594 WARN stopped: getDataFromGateway (terminated by SIGTERM)
+2024-05-13 04:46:03,721 INFO stopped: django (exit status 0)

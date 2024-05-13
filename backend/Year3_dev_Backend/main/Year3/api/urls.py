@@ -29,5 +29,6 @@ urlpatterns = [
     path('energydata/monitor',views.EnergyDataChartAPIView.as_view()),
     # path('alive',views.EnergyDataAPIView.as_view()),
     path('gateway', views.GatewayListCreateAPIView.as_view()),
+    path('heatmap', views.HeatMapData.as_view())
     #______________________________________________________
 ]
