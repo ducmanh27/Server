@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Typography, Stack, Button, colors } from "@mui/material";
+import { Grid, Typography, Stack, Button, useTheme } from "@mui/material";
 import { VictoryBar, VictoryChart, VictoryTheme, VictoryAxis, VictoryTooltip, VictoryLine, Flyout } from "victory";
 
 const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => {
@@ -7,6 +7,7 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
     const [dataType, setDataType] = useState(0) // 0 is energyData, 1 is powerData
     const [maxYAxis, setMaxYAxis] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const theme = useTheme();
     const [energyData, setEnergyData] = useState({'time': [], 'active_energy': []});
     const [powerData, setPowerData] = useState({
         'hour': [
@@ -246,7 +247,7 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
         <Grid container textAlign='center' justifyContent='center'>
                 <Grid container display='flex' flexDirection='column' justifyContent='center' xs={12} marginY={1}>
                     <Grid item>
-                        <Typography component='span' textAlign='center' fontSize='20px' color='black'>
+                        <Typography component='span' textAlign='center' fontSize='20px'>
                             {dataType ? 'Average active power' : 'Total active energy per month'}
                         </Typography>
                     </Grid>
@@ -257,6 +258,9 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                                             "min-width": "30px",
                                             fontSize: "18px",
                                             fontWeight: "bold",
+                                        }}
+                                        style={{
+                                            color: theme.palette.text.primary,
                                         }}
                                         variant={dataType ? 'outlined' : 'contained'}
                                         onClick={() => {

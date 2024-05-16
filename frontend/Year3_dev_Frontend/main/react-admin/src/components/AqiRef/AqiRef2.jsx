@@ -18,7 +18,7 @@ export default function AqiRef({callbackSetSignIn, time_delay})
     const rating_index = {
         1 : {"level": "Good" , "colour": "green"},
         2 : {"level": "Moderate", "colour": "yellow"},
-        3 : {"level": "Unhealthy for Sensitive Groups", "colour": "orange"},
+        3 : {"level": "Poor", "colour": "orange"},
         4 : {"level": "Unhealthy", "colour": "red"},
         5 : {"level": "Very Unhealthy", "colour": "purple"},
         6 : {"level": "Hazardous", "colour": "maroon"},
@@ -226,7 +226,7 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                 isLoading ?
                 <h1>Loading...</h1>
                 :
-                <Grid container textAlign='center'>
+                <Grid container item textAlign='center'>
                 <Grid xs={12} sm={12} md={12} textAlign="center">
                     <Typography fontSize='21px' fontWeight="bold">
                         Hanoi AQI: Hanoi Real-time Air Quality Index (AQI)
@@ -235,13 +235,13 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                 <Grid container spacing={1} marginY={0.5} px='10px'>
                     <Grid item xs={2.4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
+                        <Paper style={{ flex: 1, backgroundColor: theme.palette.background.paper, padding: '10px' }} sx={{ boxShadow: "0px 0px 0px 0px", border: `1px solid ${theme.palette.grey[400]}`}}>
                             <Grid container display="flex" flexDirection="column" justifyItems='center' textAlign='center'>
                                 <Grid container item justifyContent='center' alignContent='center'>
                                     <Tooltip style={{
                                         fontSize: theme.typography.pxToRem(24),
                                         backgroundColor: theme.palette.common.white,
-                                        border: '1px solid #dadde9',
+                                        border: '1px solid #eeeeee',
                                         maxWidth: 220,
                                     }}
                                         title={
@@ -269,7 +269,7 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                                     }}>
                                         <span style={{
                                             position: 'relative',
-                                            color: 'black',
+                                            color: theme.palette.text.primary,
                                             fontSize: '28px',
                                             fontWeight: 'bold'
                                         }}>
@@ -280,7 +280,7 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                                 </Grid>
                                 <Grid item marginY={0.5} />
                                 <Grid item>
-                                    <Typography variant='h5'>{data['rating']['rate']}</Typography>
+                                    <Typography fontWeight='bold' variant='h3'>{data['rating']['rate']}</Typography>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -288,14 +288,14 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                     </Grid>
                     <Grid item xs={2.4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
+                        <Paper style={{ flex: 1, backgroundColor: theme.palette.background.paper, padding: '10px' }} sx={{ boxShadow: "0px 0px 0px 0px", border: `1px solid ${theme.palette.grey[400]}`}}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' alignItems='center' textAlign='center'>
                                 <Grid item>
                                     <ThermostatIcon style={{fontSize: '5.1rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Temperature</Typography>
-                                    <Typography textAlign='center' variant='h5'>
+                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>
                                         {((temp) => {
                                         if (data['t'] == 'No data') temp = data['t'];
                                         else temp = `${data['t']} °C`
@@ -309,14 +309,14 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                     </Grid>
                     <Grid item xs={2.4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
+                        <Paper style={{ flex: 1, backgroundColor: theme.palette.background.paper, padding: '10px' }} sx={{ boxShadow: "0px 0px 0px 0px", border: `1px solid ${theme.palette.grey[400]}`}}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' textAlign='center'>
                                 <Grid item>
                                     <SpeedIcon style={{fontSize: '5.1rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Pressure</Typography>
-                                    <Typography textAlign='center' variant='h5'>{((p) => {
+                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((p) => {
                                         if (data['p'] == 'No data') p = data['p'];
                                         else p = `${data['p']} hPa`
                                         return p;
@@ -328,14 +328,14 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                     </Grid>
                     <Grid item xs={2.4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
+                        <Paper style={{ flex: 1, backgroundColor: theme.palette.background.paper, padding: '10px' }} sx={{ boxShadow: "0px 0px 0px 0px", border: `1px solid ${theme.palette.grey[400]}`}}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' textAlign='center'>
                                 <Grid item>
                                     <InvertColorsIcon style={{fontSize: '5.1rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Humidity</Typography>
-                                    <Typography textAlign='center' variant='h5'>{((h) => {
+                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((h) => {
                                         if (data['h'] == 'No data') h = data['h'];
                                         else h = `${data['h']} %`
                                         return h;
@@ -347,14 +347,14 @@ export default function AqiRef({callbackSetSignIn, time_delay})
                     </Grid>
                     <Grid item xs={2.4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
+                        <Paper style={{ flex: 1, backgroundColor: theme.palette.background.paper, padding: '10px' }} sx={{ boxShadow: "0px 0px 0px 0px", border: `1px solid ${theme.palette.grey[400]}`}}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' textAlign='center'>
                                 <Grid item>
                                     <FilterDramaIcon style={{fontSize: '5.1rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Wind</Typography>
-                                    <Typography textAlign='center' variant='h5'>{((w) => {
+                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((w) => {
                                         if (data['w'] == 'No data') w = data['w'];
                                         else w = `${data['w']} m/s`
                                         return w;

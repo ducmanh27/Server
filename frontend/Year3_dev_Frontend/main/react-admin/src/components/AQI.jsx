@@ -1,16 +1,17 @@
 import { React, useEffect, useState } from "react";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, useTheme } from "@mui/material";
 import { host } from "../App";
 
 const AQI = ({room_id, callbackSetSignIn}) =>
 {
     const [aqi, setAqi] = useState({"level": ""})
-    const url = `http://${host}/api/room/AQIdustpm2_5?room_id=${room_id}`
+    const url = `http://${host}/api/room/AQIdustpm2_5?room_id=${room_id}`;
+    const theme = useTheme();
 
     const rating_index = {
         1 : {"level": "Good" , "colour": "green"},
         2 : {"level": "Moderate", "colour": "yellow"},
-        3 : {"level": "Unhealthy for Sensitive Groups", "colour": "orange"},
+        3 : {"level": "Poor", "colour": "orange"},
         4 : {"level": "Unhealthy", "colour": "red"},
         5 : {"level": "Very Unhealthy", "colour": "purple"},
         6 : {"level": "Hazardous", "colour": "maroon"},
@@ -284,7 +285,7 @@ const AQI = ({room_id, callbackSetSignIn}) =>
             }}>
                 <span style={{
                     position: 'relative',
-                    color: 'black',
+                    color: theme.palette.text.primary,
                     fontSize: '28px',
                     fontWeight: 'bold'
                 }}>
@@ -294,7 +295,7 @@ const AQI = ({room_id, callbackSetSignIn}) =>
             </Grid>
             <Grid item marginY={0.6} />
             <Grid item>
-                <Typography variant="h5">{aqi['level']}</Typography>
+                <Typography fontWeight='bold' variant='h3'>{aqi['level']}</Typography>
             </Grid>
         </Grid>
     );

@@ -26,10 +26,10 @@ const HeatmapOverlay = styled('div')({
   left: 0,
   width: '100%',
   height: '100%',
-  opacity: '75%'
+  opacity: '200%'
 });
 
-const HeatmapComponent = ({nodeData, nodeList, nodeFunction, pic_src}) => {
+const HeatmapComponent = ({nodeData, nodeList, nodeFunction, pic_src, showHeatmap}) => {
   const heatmapRef = useRef(null);
   
   const SensorButton = styled(IconButton)({
@@ -63,7 +63,7 @@ const HeatmapComponent = ({nodeData, nodeList, nodeFunction, pic_src}) => {
     });
 
     const data = {
-      max: 50,
+      max: 60,
       data: nodeData,
     };
 
@@ -72,8 +72,8 @@ const HeatmapComponent = ({nodeData, nodeList, nodeFunction, pic_src}) => {
 
   return (
     <HeatmapContainer>
-      <HeatmapImg src={pic_src} alt="Map view" />
-      <HeatmapOverlay ref={heatmapRef} />
+      <HeatmapImg hidden={showHeatmap ? true : false} src={pic_src} alt="Map view" />
+      <HeatmapOverlay hidden={showHeatmap ? false : true} ref={heatmapRef} />
       {nodeData.map((sensor, index) => (
           <SensorButton
             size='large'
@@ -83,7 +83,11 @@ const HeatmapComponent = ({nodeData, nodeList, nodeFunction, pic_src}) => {
             style={{ top: sensor.y - 25, left: sensor.x - 25, backgroundColor: (nodeFunction[index] === 'sensor' ? 'white' : 'aqua') }} 
             startIcon={<AddCircleOutline />}
           >
+            {nodeFunction[index] === 'sensor' ?
             <SensorsIcon fontSize='inherit' />
+            :
+            <AirIcon fontSize='inherit' />
+            }
             <span className="sensor-label">{nodeList[index]}</span>
           </SensorButton>
       ))}

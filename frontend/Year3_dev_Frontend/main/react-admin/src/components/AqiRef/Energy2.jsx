@@ -1,13 +1,14 @@
 import { React, useEffect, useState } from "react";
-import { Grid, Paper, Typography, useTheme } from "@mui/material";
-import { host } from "../../App";
-import { set } from "date-fns";
+import { Grid, Paper, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { tokens } from "../../theme";
 
 const Energy = ({room_id, callbackSetSignIn, time_delay, backend_host}) =>{
     const url = `http://${backend_host}/api/energydata/realtime/monitor?room_id=${room_id}`;
     const [isLoading, setIsLoading] = useState(true);
     const [energyData, setEnergyData] = useState(null);
     const colors = ['white', 'red', 'blue', 'green', 'orange', 'magenta', 'deepskyblue', 'black'];
+    const preferMd = useMediaQuery('(max-width:900px)');    
+    const theme = useTheme();
 
     const define_energy_data = {
         'node_id': {'name': 'null', 'unit': null},
@@ -225,31 +226,32 @@ const Energy = ({room_id, callbackSetSignIn, time_delay, backend_host}) =>{
         <>
         {
             isLoading ? <h1>Loading...</h1> :
-            <Grid container textAlign='center' justifyContent='center'>
-                <Grid item xs={12} sm={12} md={12} textAlign="center" >
+            <Grid container item textAlign='center' paddingTop={preferMd ? 0 : 0.5} 
+            justifyContent='center'>
+                <Grid item xs={12} sm={12} md={12} textAlign="center" my={0.25} >
                     <Typography fontWeight="bold" fontSize='21px'>
                         Energy Data
                     </Typography>
                 </Grid>
-                <Grid item container spacing={1} px='10px' marginY={0.5} justifyContent='center'>
+                <Grid item container spacing={1} px='10px' marginBottom={0.5} justifyContent='center'>
                     {energy_data_property_array.map((value, index) => {
                         if (index !== 0 && index !==7)
                         return (
                             <Grid item xs={4}>
-                            <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                            <Paper style={{ flex: 1, backgroundColor: `${colors[index]}`, padding: '10px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', height: '100%', boxShadow: 0 }}>
+                            <Paper style={{ flex: 1, backgroundColor: theme.palette.background.paper, padding: '10px'}} sx={{ boxShadow: "0px 0px 0px 0px", border: `1px solid ${theme.palette.grey[400]}`}}>
                                 <Grid container display="flex" flexDirection="column" justifyItems='center' textAlign='center'>
                                     <Grid container item justifyContent='center' alignContent='center'>
-                                        <Typography color={colors[0]} fontWeight='bold' variant='h4'>{define_energy_data[value]['name']}</Typography>
+                                        <Typography variant='h5'>{define_energy_data[value]['name']}</Typography>
                                     </Grid>
                                     <Grid item>
-                                        <Typography variant='h5' fontWeight='bold' color={colors[0]}>
+                                        <Typography variant='h2' fontWeight='bold'>
                                             {((temp) => {
                                                 if (energyData[value] == 'NULL' || index == 4) temp = energyData[value];
                                                 else temp = `${energyData[value]} ${define_energy_data[value]['unit']}`
                                                 return temp;
                                             })()}
-                                            </Typography>
+                                        </Typography>
                                     </Grid>
                                 </Grid>
                             </Paper>

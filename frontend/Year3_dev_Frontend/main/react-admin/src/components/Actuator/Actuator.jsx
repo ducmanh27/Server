@@ -4,10 +4,6 @@ import ActuatorStatus from "./ActuatorStatus";
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import HistoryToggleOffOutlinedIcon from '@mui/icons-material/HistoryToggleOffOutlined';
-import { LineChartApex } from "../../components/ApexChart/LineChartApex";
-import { BarChartApex } from "../../components/ApexChart/BarChartApex";
 import { useState, useEffect } from "react";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -29,12 +25,9 @@ export default function Actuator({room_id, callbackSetSignIn})
         => just the value of key "actuator"
      */
     
-    const [actuatorCommand, setActuatorCommand] = useState(null);
     const [actuatorStatus, setActuatorStatus] = useState(null);
     const [actuatorInfoOfRoom, setActuatorInfoOfRoom] = useState(null);
-    const [startTime, setStartTime] = useState(null);
-    const [endTime, setEndTime] = useState(null);
-    const [temperature, setTemperature] = useState(null);
+    const theme = useTheme();
     const [isLoading, setIsLoading] = useState(true);
     
     const url = `http://${host}/api/room/information_tag?room_id=${room_id}`;
@@ -220,9 +213,9 @@ export default function Actuator({room_id, callbackSetSignIn})
                                     direction="column"
                                 >
                                     <Box 
-                                        sx={{boxShadow: 1,
+                                        sx={{boxShadow: 0,
                                             borderRadius: '5px', 
-                                            backgroundColor: "white"}}
+                                            backgroundColor: theme.palette.background.paper}}
                                         width="100%"
                                         height="100%"
                                         display="flex"
@@ -245,9 +238,9 @@ export default function Actuator({room_id, callbackSetSignIn})
                                     direction="column"
                                 >
                                     <Box 
-                                        sx={{boxShadow: 1,
+                                        sx={{boxShadow: 0,
                                             borderRadius: '5px', 
-                                            backgroundColor: "white"}}
+                                            backgroundColor: theme.palette.background.paper}}
                                         width="100%"
                                         height="100%"
                                         display="flex"
@@ -278,9 +271,9 @@ export default function Actuator({room_id, callbackSetSignIn})
                                         
                                     >
                                         <Box 
-                                            sx={{boxShadow: 1,
+                                            sx={{boxShadow: 0,
                                                 borderRadius: '5px', 
-                                                backgroundColor: "white"}}
+                                                backgroundColor: theme.palette.background.paper}}
                                             width="100%"
                                             height="100%"
                                             display="flex"
@@ -306,9 +299,9 @@ export default function Actuator({room_id, callbackSetSignIn})
                                     direction="column"
                                 >
                                     <Box
-                                        sx={{boxShadow: 1,
+                                        sx={{boxShadow: 0,
                                             borderRadius: '5px', 
-                                            backgroundColor: "white"}}
+                                            backgroundColor: theme.palette.background.paper}}
                                         width="100%"
                                         height="100%"
                                         display="flex"

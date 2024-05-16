@@ -36,6 +36,7 @@ import { Boy, VolumeMute } from '@mui/icons-material';
 const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuatorInfoOfRoom}) => {
     const backend_host = host;
     const api_informationtag = url;
+    const theme = useTheme();
     
     const [isLoading, setIsLoading] = useState(true);
     const [infoData, getInfoData] = useState(null);
@@ -321,28 +322,28 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
             :
             <Grid container textAlign='center'>
                 <Grid xs={12} sm={12} md={12} textAlign="center" columnSpacing={2}>
-                    <Typography variant='h4' fontWeight="bold">
+                    <Typography fontWeight="bold" fontSize='21px'>
                         Room info
                     </Typography>
                 </Grid>
                 <Grid container spacing={1} marginY={0.5} marginX={1}>
                     <Grid item xs={4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
+                        <Paper style={{ flex: 1, backgroundColor: theme.palette.background.paper, padding: '10px' }} sx={{ boxShadow: "0px 0px 0px 0px", border: `1px solid ${theme.palette.grey[400]}`}}>
                             <AQI room_id={room_id} callbackSetSignIn={callbackSetSignIn} />
                         </Paper>
                         </div>
                     </Grid>
                     <Grid item xs={4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
+                        <Paper style={{ flex: 1, backgroundColor: theme.palette.background.paper, padding: '10px' }} sx={{ boxShadow: "0px 0px 0px 0px", border: `1px solid ${theme.palette.grey[400]}`}}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' alignItems='center' textAlign='center'>
                                 <Grid item>
                                     <ThermostatIcon style={{fontSize: '5.1rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Temperature</Typography>
-                                    <Typography textAlign='center' variant='h5'>
+                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>
                                     {((temp) => {
                                         if (infoData["temp"]["value"] == 'No data') temp = infoData["temp"]["value"];
                                         else temp = `${infoData["temp"]["value"]} ${dict_of_enviroment_para_names['temp']['unit']}`
@@ -355,14 +356,14 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                     </Grid>
                     <Grid item xs={4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
+                        <Paper style={{ flex: 1, backgroundColor: theme.palette.background.paper, padding: '10px' }} sx={{ boxShadow: "0px 0px 0px 0px", border: `1px solid ${theme.palette.grey[400]}`}}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' textAlign='center'>
                                 <Grid item>
                                     <Co2Icon style={{fontSize: '5.1rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>CO2</Typography>
-                                    <Typography textAlign='center' variant='h5'>{((temp) => {
+                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((temp) => {
                                         if (infoData["co2"]["value"] == 'No data') temp = infoData["co2"]["value"];
                                         else temp = `${infoData["co2"]["value"]} ${dict_of_enviroment_para_names['co2']['unit']}`
                                         return temp;
@@ -374,14 +375,14 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                     </Grid>
                     <Grid item xs={4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
+                        <Paper style={{ flex: 1, backgroundColor: theme.palette.background.paper, padding: '10px' }} sx={{ boxShadow: "0px 0px 0px 0px", border: `1px solid ${theme.palette.grey[400]}`}}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' textAlign='center'>
                                 <Grid item>
                                     <InvertColorsIcon style={{fontSize: '3rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Humidity</Typography>
-                                    <Typography textAlign='center' variant='h5'>{((temp) => {
+                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((temp) => {
                                         if (infoData["hum"]["value"] == 'No data') temp = infoData["hum"]["value"];
                                         else temp = `${infoData["hum"]["value"]} ${dict_of_enviroment_para_names['hum']['unit']}`
                                         return temp;
@@ -393,14 +394,14 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                     </Grid>
                     <Grid item xs={4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
+                        <Paper style={{ flex: 1, backgroundColor: theme.palette.background.paper, padding: '10px' }} sx={{ boxShadow: "0px 0px 0px 0px", border: `1px solid ${theme.palette.grey[400]}`}}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' textAlign='center'>
                                 <Grid item>
                                     <FilterDramaIcon style={{fontSize: '3rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>TVOC</Typography>
-                                    <Typography textAlign='center' variant='h5'>{((temp) => {
+                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((temp) => {
                                         if (infoData["tvoc"]["value"] == 'No data') temp = infoData["tvoc"]["value"];
                                         else temp = `${infoData["tvoc"]["value"]} ${dict_of_enviroment_para_names['tvoc']['unit']}`
                                         return temp;
@@ -412,14 +413,14 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                     </Grid>
                     <Grid item xs={4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
+                        <Paper style={{ flex: 1, backgroundColor: theme.palette.background.paper, padding: '10px' }} sx={{ boxShadow: "0px 0px 0px 0px", border: `1px solid ${theme.palette.grey[400]}`}}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' textAlign='center'>
                                 <Grid item>
                                     <LensBlurIcon style={{fontSize: '3rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Dust</Typography>
-                                    <Typography textAlign='center' variant='h5'>{((temp) => {
+                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((temp) => {
                                         if (infoData["dust"]["value"] == 'No data') temp = infoData["dust"]["value"];
                                         else temp = `${infoData["dust"]["value"]} ${dict_of_enviroment_para_names['dust']['unit']}`
                                         return temp;
@@ -431,14 +432,14 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                     </Grid>
                     <Grid item xs={4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
+                        <Paper style={{ flex: 1, backgroundColor: theme.palette.background.paper, padding: '10px' }} sx={{ boxShadow: "0px 0px 0px 0px", border: `1px solid ${theme.palette.grey[400]}`}}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' textAlign='center'>
                                 <Grid item>
                                     <LightModeIcon style={{fontSize: '3rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Light</Typography>
-                                    <Typography textAlign='center' variant='h5'>{((temp) => {
+                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((temp) => {
                                         if (infoData["light"]["value"] == 'No data') temp = infoData["light"]["value"];
                                         else temp = `${infoData["light"]["value"]} ${dict_of_enviroment_para_names['light']['unit']}`
                                         return temp;
@@ -450,14 +451,14 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                     </Grid>
                     <Grid item xs={4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
+                        <Paper style={{ flex: 1, backgroundColor: theme.palette.background.paper, padding: '10px' }} sx={{ boxShadow: "0px 0px 0px 0px", border: `1px solid ${theme.palette.grey[400]}`}}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' textAlign='center'>
                                 <Grid item>
                                     <VolumeUpIcon style={{fontSize: '3rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Sound</Typography>
-                                    <Typography textAlign='center' variant='h5'>{((temp) => {
+                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{((temp) => {
                                         if (infoData["sound"]["value"] == 'No data') temp = infoData["sound"]["value"];
                                         else temp = `${infoData["sound"]["value"]} ${dict_of_enviroment_para_names['sound']['unit']}`
                                         return temp;
@@ -469,14 +470,14 @@ const InformationTag = ({url, callbackSetSignIn, time_delay, room_id, setActuato
                     </Grid>
                     <Grid item xs={4}>
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <Paper style={{ flex: 1, backgroundColor: 'white', padding: '10px' }}>
+                        <Paper style={{ flex: 1, backgroundColor: theme.palette.background.paper, padding: '10px' }} sx={{ boxShadow: "0px 0px 0px 0px", border: `1px solid ${theme.palette.grey[400]}`}}>
                             <Grid container display="flex" flexDirection="column" alignContent='center' textAlign='center'>
                                 <Grid item>
                                     <BoyIcon style={{fontSize: '3rem'}}/>
                                 </Grid>
                                 <Grid item>
                                     <Typography textAlign='center' variant='h5'>Motion</Typography>
-                                    <Typography textAlign='center' variant='h5'>{infoData["motion"]["value"]}</Typography>
+                                    <Typography textAlign='center' fontWeight='bold' variant='h3'>{infoData["motion"]["value"]}</Typography>
                                 </Grid>
                             </Grid>
                         </Paper>

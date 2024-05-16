@@ -1,13 +1,9 @@
-import Header from "../Header";
-import { Box, Grid } from "@mui/material";
-import plan from "../../assets/plan.svg";
+import { Box, Button, Grid, Typography, useTheme } from "@mui/material";
 import plan_409 from "../../assets/409.svg";
 import plan_410 from "../../assets/410.svg";
 import plan_411 from "../../assets/411.svg";
 import { host } from "../../App";
 import { React, useState, useEffect, useRef } from "react";
-import { styled } from "@mui/material";
-import h337 from "heatmap.js";
 
 import HeatmapComponent from "./HeatmapComponent";
 
@@ -18,11 +14,11 @@ import HeatmapComponent from "./HeatmapComponent";
  */
 const RoomMap = ({room_id, callbackSetSignIn, backend_host}) => 
 {
-    const [imageWidth, setImageWidth] = useState(0);
-    const boxRef = useRef(null);
     const [nodeData, setNodeData] = useState([]);
     const [nodeList, setNodeList] = useState([]);
     const [nodeFunction, setNodeFunction] = useState([]);
+    const [showHeatmap, setShowHeatmap] = useState(true);
+    const theme = useTheme();
     
     /**
      * @brief nodePosition is an array of all node in this room with informations,
@@ -37,8 +33,8 @@ const RoomMap = ({room_id, callbackSetSignIn, backend_host}) =>
      *  node_info -> sensor(array 7) -> x_axis, y_axis, node_id
      */
     const[isLoading, setIsLoading] = useState(false);
-    const api_to_fetch = `http://${backend_host}/api/room/information_tag?room_id=${room_id}`;
-    // const api_to_fetch_heatmap_data = `http://${backend_host}/api/room/kriging?room_id=${room_id}`;
+    // const api_to_fetch = `http://${backend_host}/api/room/information_tag?room_id=${room_id}`;
+    const api_to_fetch = `http://${backend_host}/api/heatmap?room_id=${room_id}`;
 
     const dict_plan = {
         1: plan_409,
@@ -46,12 +42,12 @@ const RoomMap = ({room_id, callbackSetSignIn, backend_host}) =>
         3: plan_409,
         4: plan_411,
     }
-    const pic_resolution = {
-        1: [321,351],
-        2: [321,351],
-        3: [321,351],
-        4: [322,352],
-    }
+    // const pic_resolution = {
+    //     1: [321,351],
+    //     2: [321,351],
+    //     3: [321,351],
+    //     4: [322,352],
+    // }
 
     const fetch_data_function = async (url, access_token) =>
     {
@@ -78,31 +74,19 @@ const RoomMap = ({room_id, callbackSetSignIn, backend_host}) =>
         }
         if(response && response.status === 200)
         {   
-            // const data_response = await response.json();
-            const data_response = [
-                [1, 2, 3, 4],                               // node_id
-                ['sensor', 'actuator', 'actuator', 'fan'],   // node_function
-                [50, 100, 210, 321],                        // x_axis
-                [200, 90, 70, 351],                       // y_axis
-                [25, 26, 27, 28]                    // temp
-            ];
-            console.log(data_response);
+            const data_response = await response.json();
             let newNodePosition = [];
-            setNodeList(data_response[0]);
-            setNodeFunction(data_response[1]);
-            for (let i = 0; i < data_response[2].length; i++) {
+            setNodeList(data_response[1]);
+            setNodeFunction(data_response[2]);
+            for (let i = 0; i < data_response[3].length; i++) {
                 const newObj = {
-                    x: data_response[2][i],
-                    y: data_response[3][i],
-                    value: data_response[4][i],
-                    radius: 300,
+                    x: Math.round(data_response[3][i] * 321.0 / data_response[0][0]),
+                    y: Math.round(data_response[4][i] * 351.0 / data_response[0][1]),
+                    value: Math.round(data_response[5][i]),
+                    radius: 350,
                 };
                 newNodePosition.push(newObj);
             }
-            // [
-            //     {x: x_axis, y: y_axis, value: temp},
-            //     ...
-            // ]
             setNodeData(newNodePosition);
             setIsLoading(false);
         }
@@ -219,15 +203,6 @@ const RoomMap = ({room_id, callbackSetSignIn, backend_host}) =>
         }
     }
 
-    const sensorData = [
-        { x: 0, y: 321, value: 30, radius: 300 },
-        { x: 321, y: 351, value: 22, radius: 300 },
-        { x: 321, y: 0, value: 44, radius: 300 },
-        { x: 0, y: 0, value: 25, radius: 300 },
-    ];
-    const list_data = [4, 1, 8, 3];
-    const function_data = ['sensor', 'actuator', 'actuator', 'fan'];
-
     useEffect(()=>{
         if(nodeData === null)            //!< this is for the total component always render the first time and then the next time will be setTimeOut
         {
@@ -237,7 +212,7 @@ const RoomMap = ({room_id, callbackSetSignIn, backend_host}) =>
         {
             const timer = setTimeout(()=>{
                     verify_and_get_data(fetch_data_function, callbackSetSignIn, host, api_to_fetch); 
-                }, 15000);
+                }, 10000);
             return () => clearTimeout(timer);
         }
     },[]);
@@ -247,6 +222,11 @@ const RoomMap = ({room_id, callbackSetSignIn, backend_host}) =>
         {
             isLoading ? <h1>Loading...</h1> :
             <Grid container justifyContent='center' justifyItems='center'>
+                <Grid item xs={12} sm={12} md={12} textAlign="center" >
+                    <Typography fontWeight="bold" fontSize='21px'>
+                        Map view
+                    </Typography>
+                </Grid>
                 <Grid item xs={12} p={1} />
                 <Grid container item xs={12} justifyContent='center'>
                     <HeatmapComponent
@@ -254,7 +234,18 @@ const RoomMap = ({room_id, callbackSetSignIn, backend_host}) =>
                         nodeList={nodeList}
                         nodeFunction={nodeFunction}
                         pic_src={dict_plan[room_id]}
+                        showHeatmap={showHeatmap}
                     />
+                </Grid>
+                <Grid item container justifyContent='center' xs={12} marginY={3}>
+                    <Button size="large" variant='outlined' sx={{borderColor: theme.palette.text.primary}}
+                        onClick={() => {
+                            setShowHeatmap(!showHeatmap);
+                        }}>
+                        <Typography variant='h4' fontWeight='bold' color={theme.palette.text.primary}>
+                            {showHeatmap ? 'Heatmap OFF' : 'Heatmap ON'}
+                        </Typography>
+                    </Button>
                 </Grid>
             </Grid>
         }

@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Topbar from "./scenes/global/Topbar";
 import Dashboard from "./scenes/dashboard";
 import Landing from "./scenes/landing";
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import SignIn from "./scenes/signIn";
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -25,6 +25,7 @@ function App() {
     const [isSignIn, setIsSignin] = useState(debug_mode);		//set true for debungging
     const [signUp, setSignUp] = useState(false);
     const [theme, colorMode] = useMode();
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
         <UserContext.Provider value={setIsSignin}>

@@ -208,7 +208,7 @@ const Chart = ({room_id, callbackSetSignIn, timedelay, optionData, apiInformatio
         <Grid container textAlign='center' justifyContent='center'>
             <Grid container display='flex' flexDirection='column' justifyContent='center' xs={12} marginY={1}>
                 <Grid item>
-                    <Typography component='span' textAlign='center' fontSize='20px' color='black'>
+                    <Typography component='span' textAlign='center' fontSize='20px' >
                         Environment parameter chart
                     </Typography>
                 </Grid>

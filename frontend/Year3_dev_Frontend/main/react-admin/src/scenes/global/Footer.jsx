@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, useTheme } from '@mui/material/styles';
 import { useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -83,23 +83,31 @@ const Footer = (props) => {
       ];
       
     //   TODO remove, this demo shouldn't need to reset the theme.
-      const defaultTheme = createTheme();
-
+      const theme = useTheme();
+      
     return (
         <Container
-            maxWidth="lg"
+            maxWidth={2000}
             component="footer"
             sx={{
                 borderTop: (theme) => `1px solid ${theme.palette.divider}`,
-                mt: 8,
-                py: [3, 6],
+                mt: 0, ml: 0, mr: 0,
+                py: 10,
+                backgroundColor: theme.palette.background.default
             }}
+            style={{
+                display: 'flex', flexDirection:'column', alignItems: 'center'
+            }}
+            color={theme.palette.background.default}
         >
-            <Grid container spacing={5} justifyContent="center">
-                <Grid item xs={12} sm={12} md={4} justifyContent="right">
+            <Grid container item spacing={5} justifyContent="center" maxWidth='lg'>
+                <Grid item xs={12} sm={12} md={4} justifyContent="center">
                     <Box 
                         display="flex"
                         justifyContent="center"
+                        sx={{
+                            px: 0,
+                        }}
                     >
                         <Typography variant="h4" color="text.primary" gutterBottom>
                         Smart Farm

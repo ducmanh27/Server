@@ -10,7 +10,7 @@ import Chart from "../../data/Chart2";
 import {host} from "../../App";
 import InformationTag from "../../components/InformationTag2";
 import { useLocation } from "react-router-dom"; 
-import RoomMap from "../../components/RoomMap/RoomMap";
+import RoomMap from "../../components/RoomMap/RoomMap2";
 import AqiRef from "../../components/AqiRef/AqiRef2";
 import Actuator from "../../components/Actuator/Actuator";
 import EnergyChart from "../../components/EnergyChart/EnergyChart2";
@@ -37,10 +37,10 @@ const Dashboard = () => {
         component="main"
         sx={{
             flexGrow: 1,
-            // py: 8
+            bgcolor: theme.palette.background.default
         }}
     >
-        <Box m={1}/>
+        <Box m={2}/>
         {/* Container of all componment */}
         <Container 
             maxWidth="false"
@@ -49,56 +49,49 @@ const Dashboard = () => {
         {/* <Box> */}
             {/* Container of Information, overall quality, controlling, image of room  */}
             <Grid
-                container
-                alignItems="stretch"
+                container alignItems="stretch" spacing={2} p='10px'
                 style={{
                         display: "flex", 
                         height: "100%", 
                         // backgroundColor: "red"
                     }}
-                spacing={2}
-                p='10px'
             >
-                <Grid item xs={12} sm={12} md={12} lg={12} xl={4.5}
-                    container display='flex' flexDirection='column' justifyContent='center'
-                    spacing={2}
-                >
-                    <Grid item>
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={4.5} container>
+                    <Box                   
+                        width="100%" height="100%" display="flex"
+                        flexDirection="column" alignItems="center" justifyContent="center"
+                    >
                         <Box 
-                            sx={{boxShadow: 1,
+                            sx={{boxShadow: 0,
                                 borderRadius: '5px', 
-                                backgroundColor: "white"}}
-                            width="100%"
-                            height="100%"
-                            display="flex"
-                            flexDirection="column"
-                            alignItems="center"
-                            justifyContent="center"
+                                backgroundColor: theme.palette.background.paper}}
+                            width="100%" height="100%" display="flex"
+                            flexDirection="column" alignContent="center" justifyContent="center"
                         >
                             <AqiRef callbackSetSignIn={callbackSetSignIn} time_delay={60000}/>
                         </Box>
-                    </Grid>
-                    <Grid item>
                         <Box 
-                            sx={{boxShadow: 1,
+                            sx={{boxShadow: 0,
                                 borderRadius: '5px', 
-                                backgroundColor: "white"}}
+                                backgroundColor: theme.palette.background.paper}}
                             width="100%" height="100%"
                             display="flex"
-                            flexDirection="column"
-                            alignItems="center"
+                            flexDirection="row"
+                            alignSelf='center'
+                            alignContent="center"
                             justify="center"
+                            marginTop={2}
                         >
                             <Energy room_id={room_id} callbackSetSignIn={callbackSetSignIn} time_delay={15000} backend_host={backend_host} />  
                         </Box>
-                    </Grid>
+                    </Box>
                 </Grid>
                 {/* Container of everything except image of room, this is set to the most left */}
                 <Grid item xs={12} sm={12} md={12} lg={6} xl={4.5} container>
                     <Box 
-                        sx={{boxShadow: 1,
+                        sx={{boxShadow: 0,
                             borderRadius: '5px', 
-                            backgroundColor: "white"}}
+                            backgroundColor: theme.palette.background.paper}}
                         width="100%"
                         height="100%"
                         alignContent="center"
@@ -114,23 +107,21 @@ const Dashboard = () => {
                 </Grid>
 
                 {/* Container of image */}
-                <Grid item xs={12} sm={12} md={12} lg={6} xl={3}
+                <Grid item xs={12} sm={12} md={12} lg={6} xl={3} container
                     direction="column"
                     alignItems="center"
                     justify="center"
                 >
                     <Box 
-                        sx={{boxShadow: 1,
+                        sx={{boxShadow: 0,
                             borderRadius: '5px', 
-                            backgroundColor: "white"}}
-                        minWidth={477}
+                            backgroundColor: theme.palette.background.paper}}
                         width="100%" height="100%"
                         display="flex"
                         flexDirection="column"
                         alignItems="center"
                         justify="center"
                     >
-                        <Header title="Map view" fontSize="20px"/>
                         <RoomMap 
                             room_id={room_id} callbackSetSignIn={callbackSetSignIn} backend_host={host}
                         />
@@ -138,9 +129,9 @@ const Dashboard = () => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
                     <Box 
-                        sx={{boxShadow: 1,
+                        sx={{boxShadow: 0,
                             borderRadius: '5px', 
-                            backgroundColor: "white"}}
+                            backgroundColor: theme.palette.background.paper}}
                         width="100%" height="100%"
                         display="flex"
                         flexDirection="column"
@@ -152,9 +143,9 @@ const Dashboard = () => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={12} lg={6}>
                     <Box 
-                        sx={{boxShadow: 1,
+                        sx={{boxShadow: 0,
                             borderRadius: '5px', 
-                            backgroundColor: "white"}}
+                            backgroundColor: theme.palette.background.paper}}
                         width="100%" height="100%"
                         display="flex"
                         flexDirection="column"
