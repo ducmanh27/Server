@@ -15,7 +15,6 @@ const Header = ({ title, subtitle, variant = "h2", fontSize, color="black", font
     >
       <Typography
         // variant= {variant}
-        color={color}
         fontWeight={fontWeight}
         fontSize={{ xs: subtractPixel(fontSize,10), md: subtractPixel(fontSize,5), lg: fontSize}} // Adjust font size based on screen size
         sx={{ m: "0 0 0 0" }}

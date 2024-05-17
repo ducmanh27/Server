@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box, Button, ButtonGroup } from "@mui/material";
+import { Box, Button, ButtonGroup, Typography, useTheme } from "@mui/material";
 import { host } from "../../App";
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
@@ -13,7 +13,7 @@ import Header from "../Header";
 export default function SetTemperature({actuatorStatus, node_id, callbackSetSignIn, room_id}) 
 {
     const [temperatureInSetTemperature, setTemperatureInSetTemperature] = useState(16);
-
+    const theme = useTheme();
     const url = `http://${host}/api/actuator_command`;
 
     const handleIncreTemp = () => {
@@ -209,9 +209,11 @@ export default function SetTemperature({actuatorStatus, node_id, callbackSetSign
             <Box m="10px"/>
             <Box>
                 <ButtonGroup variant='outlined'>
-                    <Button style={{fontSize: '30px'}} onClick={handleDecreTemp}><ArrowCircleDownIcon style={{fontSize: '2.5rem'}} /></Button>
-                    <Button style={{fontSize: '30px', fontWeight: 'bolder'}}>{`${temperatureInSetTemperature} °C`}</Button>
-                    <Button style={{fontSize: '30px'}} onClick={handleIncreTemp}><ArrowCircleUpIcon style={{fontSize: '2.5rem'}} /></Button>
+                    <Button style={{fontSize: '30px'}} sx={{ borderColor: theme.palette.text.primary}} onClick={handleDecreTemp}><ArrowCircleDownIcon style={{fontSize: '2.5rem', color: theme.palette.text.primary}} /></Button>
+                    <Button style={{fontSize: '30px', fontWeight: 'bolder', color: theme.palette.text.primary}} sx={{ borderColor: theme.palette.text.primary}}>
+                    {`${temperatureInSetTemperature} °C`}
+                    </Button>
+                    <Button style={{fontSize: '30px'}} sx={{ borderColor: theme.palette.text.primary}} onClick={handleIncreTemp}><ArrowCircleUpIcon style={{fontSize: '2.5rem', color: theme.palette.text.primary}} /></Button>
                 </ButtonGroup>
             </Box>
             <Box>
