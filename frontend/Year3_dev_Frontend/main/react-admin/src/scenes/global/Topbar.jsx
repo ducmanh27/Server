@@ -1,17 +1,21 @@
-import { Box, IconButton, useTheme, Typography, Fade } from "@mui/material";
-import { useContext } from "react";
+import { Box, IconButton, useTheme, Typography, Menu, MenuItem, Button } from "@mui/material";
+import { useState } from "react";
 import { ColorModeContext, tokens } from "../../theme";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { Link } from "react-router-dom";
-import PhoneIcon from '@mui/icons-material/Phone';
-import PeopleIcon from '@mui/icons-material/People';
+import ContrastIcon from '@mui/icons-material/Contrast';
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import logo from '../../assets/logo_lab.png'
+import { useMode } from "../../theme";
 
 const Topbar = ({setIsSignin}) => {
-  const theme = useTheme();
   const username = localStorage.getItem("username");
+  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered2, setIsHovered2] = useState(false);
+  const [openMenu, setOpenMenu] = useState(null);
+  const [theme, colorMode] = useMode();
 
   return (
     <Box display="flex" justifyContent="space-between"
@@ -45,12 +49,16 @@ const Topbar = ({setIsSignin}) => {
 					alignItems="center"
 					paddingLeft="5%">
 					<Link to="/landing">
-						<IconButton>
+						<IconButton
+							onMouseEnter={() => setIsHovered(true)}
+							onMouseLeave={() => setIsHovered(false)}
+						>
 							<HomeIcon style={{ fill: 'white' }}/>
 							<Typography variant="h5" 
 										color="white"
 										display="inline"
-										paddingLeft="5%">
+										paddingLeft="5%"
+										style={{ fontWeight: isHovered ? 'bold' : 'normal' ,  transition: 'font-weight 0.15s' }}>
 								Home
 							</Typography>
 						</IconButton>	
@@ -66,12 +74,16 @@ const Topbar = ({setIsSignin}) => {
                     localStorage.getItem("is_superuser").toString() === "1" 
                     && 
 					<Link to="/configuration">
-						<IconButton >
+						<IconButton 
+							onMouseEnter={() => setIsHovered2(true)}
+							onMouseLeave={() => setIsHovered2(false)}
+						>
 							<SettingsIcon style={{ fill: 'white' }}/>
 							<Typography variant='h5'
 										color="white" 
 										display="inline"
-										paddingLeft="5%">
+										paddingLeft="5%"
+										style={{ fontWeight: isHovered2 ? 'bold' : 'normal' ,  transition: 'font-weight 0.15s' }}>
 								Configuration
 							</Typography>
 						</IconButton>	
@@ -83,11 +95,85 @@ const Topbar = ({setIsSignin}) => {
 		{/* ICONS */}
 		<Box display="flex">
 				<Box display="flex" alignItems="center"> {/* Wrap the icon and text in a Box component */}
-					<IconButton>
+					<IconButton
+						aria-control='profile-menu'
+						onClick={e => setOpenMenu(e.currentTarget)}
+					>
 						<PersonOutlinedIcon style={{ fill: 'white' }}/>
 					</IconButton>
+					<Menu
+						id='profile-menu'
+						open={Boolean(openMenu)}
+						anchorEl={openMenu}
+						onClose={() => setOpenMenu(null)}
+						disableAutoFocusItem
+						slotProps={{
+							paper: {
+								style: {
+									minWidth: '200px'
+								}
+							}
+						}}
+					>
+						<div>
+							<Typography variant="h4" py={1} pl={2}>
+								Welcome, {username}!
+							</Typography>
+						</div>
+						<MenuItem>
+							<AccountCircleOutlinedIcon />
+							<Typography component='span' pl={2}>
+							Profile
+							</Typography>
+						</MenuItem>
+						<MenuItem>
+							<SettingsIcon /> 
+							<Typography component='span' pl={2}>
+							Settings
+							</Typography>
+						</MenuItem>
+						<MenuItem>
+							<ContrastIcon /> 
+							<Typography component='span' pl={2}>
+							Change theme
+							</Typography>
+						</MenuItem>
+						<div style={{
+							marginLeft: 15,
+							marginTop: 5,
+							marginBottom: 5,
+						}}>
+							<Button
+								size="small"
+								variant='outlined'
+								style={{
+									fontWeight: 'bold',
+									color: theme.palette.background.default,
+									backgroundColor: theme.palette.text.primary,
+								}}
+								onClick={()=>{
+									localStorage.clear();
+									setIsSignin(false);
+								}}
+							>
+								<Typography variant="h5" p={0.3}>
+									Sign out!
+								</Typography>
+							</Button>
+							{/* <Link color="white" display="inline" href="/"
+									onClick={()=>{
+									localStorage.clear();
+									setIsSignin(false);
+									}}
+							>
+								<Typography variant="h4" weight='medium' p={1} color={theme.palette.text.primary}>
+								Sign out!
+								</Typography>
+							</Link> */}
+						</div>
+					</Menu>
 
-					<Typography variant="h5" color="white" display="inline" mr="10px">
+					{/* <Typography variant="h5" color="white" display="inline" mr="10px">
 						Welcome {username},
 					</Typography>
 
@@ -100,7 +186,7 @@ const Topbar = ({setIsSignin}) => {
                         <Typography variant="h5" color="white" display="inline">
 						Sign out!
 					    </Typography>
-                    </Link>
+                    </Link> */}
 				</Box>
 		</Box>
 	</Box>
