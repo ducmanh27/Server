@@ -260,7 +260,8 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                                             fontWeight: "bold",
                                         }}
                                         style={{
-                                            color: theme.palette.text.primary,
+                                            color: (!dataType ? theme.palette.background.default : theme.palette.text.primary),
+                                            backgroundColor: (!dataType ? theme.palette.text.primary : theme.palette.background.default),
                                         }}
                                         variant={dataType ? 'outlined' : 'contained'}
                                         onClick={() => {
@@ -273,6 +274,10 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                                             "min-width": "30px",
                                             fontSize: "18px",
                                             fontWeight: "bold",
+                                        }}
+                                        style={{
+                                            color: (dataType ? theme.palette.background.default : theme.palette.text.primary),
+                                            backgroundColor: (dataType ? theme.palette.text.primary : theme.palette.background.default),
                                         }}
                                         variant={dataType ? 'contained' : 'outlined'}
                                         onClick={() => {
@@ -290,6 +295,10 @@ const EnergyChart = ({room_id, callbackSetSignIn, time_delay, backend_host}) => 
                                             fontSize: "18px",
                                             fontWeight: "bold",
                                         }}
+                                        style={{
+                                            borderColor: theme.palette.text.primary,
+                                            color: theme.palette.text.primary,
+                                        }} 
                                         size="small"
                                         value={i.value}
                                         variant='outlined'

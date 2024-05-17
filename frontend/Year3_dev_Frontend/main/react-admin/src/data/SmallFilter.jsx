@@ -1,6 +1,5 @@
 import React, {useState} from "react"
-import { Box } from "@mui/material"
-import Grid from "@mui/material/Grid"
+import { Box, useTheme } from "@mui/material"
 import {Button} from "@mui/material";
 
 const SmallFilter = ({setNumberOfData, setDataChart, setIsLoading}) => 
@@ -11,7 +10,7 @@ const SmallFilter = ({setNumberOfData, setDataChart, setIsLoading}) =>
                         {"name": "6M", "value": 4},
                         {"name": "1Y", "value": 5},]
     let time  = new Date().toLocaleTimeString()
-
+    const theme = useTheme();
     const [ctime,setTime] = useState(time)
     const UpdateTime=()=>{
         time =  new Date().toLocaleTimeString()
@@ -31,6 +30,10 @@ const SmallFilter = ({setNumberOfData, setDataChart, setIsLoading}) =>
                             fontSize: "18px",
                             fontWeight: "bold",
                             }}
+                            style={{
+                                borderColor: theme.palette.text.primary,
+                                color: theme.palette.text.primary,
+                            }} 
                         value={i.value}
                         onClick={(e)=>{
                             setNumberOfData(e.target.value);
