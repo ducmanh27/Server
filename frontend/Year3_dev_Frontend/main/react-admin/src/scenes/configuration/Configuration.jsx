@@ -7,7 +7,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Header from '../../components/Header';
-import { Container, Box } from '@mui/material';
+import { Container, Box, useTheme } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import RoomConfig from './room/RoomConfig';
 import NodeConfig from './node/NodeConfig';
@@ -16,20 +16,21 @@ export default function Configuration() {
     const [config, setConfig] = useState(0);
     const [roomIdForNodeConfig, setRoomIdForNodeConfig] = useState(0);
     const [roomSize, setRoomSize] = useState({x: 0, y: 0});
+    const theme = useTheme();
     const dict = {
         0: <RoomConfig setConfig={setConfig} setRoomIdForNodeConfig={setRoomIdForNodeConfig} setRoomSize={setRoomSize}/>, 
         1: <NodeConfig roomIdForNodeConfig={roomIdForNodeConfig} setConfig={setConfig} roomSize={roomSize}/>
     };
     return (
-        <Container maxWidth="lg"
+        <Container maxWidth="2000px"
             sx={{
-                marginTop: '20px',
+                marginTop: '0px',
                 // boxShadow: 1,
                 // borderRadius: '5px', 
-                // backgroundColor: "white"
+                bgcolor: theme.palette.background.default,
             }}
         >
-            <Box m="20px" />
+            <Box p="20px" />
             {
                 dict[config]
             }

@@ -3,15 +3,13 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import { useContext } from 'react';
 import { host, UserContext } from '../../App';
 import { localStorageAvailable } from '@mui/x-data-grid/utils/utils';
@@ -30,14 +28,12 @@ function Copyright(props) {
 	);
 }
 
-const theme = createTheme();
+
 
 export default function SignIn({setSignUp, setIsSignin}) 
 {
     // const backend_host = "27.71.227.1:800";
     const [isLoading, setIsLoading] = useState(true);
-    
-    
     const backend_host = host;
     const checkIfAlreadySignIn = () => 
     {
@@ -136,9 +132,6 @@ export default function SignIn({setSignUp, setIsSignin})
         }
     }
 
-
-
-
 	const callbackSetIsSignIn = useContext(UserContext);
 	/*
 	*brief: function to get token-authentication from user 
@@ -217,10 +210,7 @@ export default function SignIn({setSignUp, setIsSignin})
         <>
         {
         !isLoading 
-        
         &&
-
-        <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
             <CssBaseline />
 
@@ -295,7 +285,6 @@ export default function SignIn({setSignUp, setIsSignin})
 
             <Copyright sx={{ mt: 8, mb: 4 }} />
         </Container>
-        </ThemeProvider>
     }
     </>
     );

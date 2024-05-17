@@ -208,16 +208,7 @@ const Landing = () => {
 
     
     return (
-        <Box m="20px">
-            {/* not necessary, only for spacing */}
-            {/* HEADER 
-            <Container sx={{ py: 1 }} maxWidth="lg">
-                <Box display="flex" justifyContent="center" alignItems="center" >
-                </Box>
-            </Container>
-            End HEADER */}
-
-            {/* Body */}
+        <Box p="20px" sx={{ backgroundColor: theme.palette.background.default}}>
             <main>
             <Container sx={{ py: 6 }} maxWidth="xl">    {/* This container is the most ouside*/}
                 <Grid container spacing={5}>            {/* This Grid container is the one that make every child Grid inside in order*/}
