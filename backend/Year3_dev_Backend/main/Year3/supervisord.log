@@ -482,3 +482,26 @@
 2024-05-13 04:46:02,591 WARN stopped: openweatherAPI (terminated by SIGTERM)
 2024-05-13 04:46:03,594 WARN stopped: getDataFromGateway (terminated by SIGTERM)
 2024-05-13 04:46:03,721 INFO stopped: django (exit status 0)
+2024-05-16 04:21:24,918 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2024-05-16 04:21:24,921 INFO supervisord started with pid 1
+2024-05-16 04:21:26,053 INFO spawned: 'django' with pid 16
+2024-05-16 04:21:26,056 INFO spawned: 'getDataFromGateway' with pid 17
+2024-05-16 04:21:26,058 INFO spawned: 'openweatherAPI' with pid 18
+2024-05-16 04:21:27,409 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2024-05-16 04:21:27,410 INFO success: getDataFromGateway entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2024-05-16 04:21:27,410 INFO success: openweatherAPI entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2024-05-16 19:04:26,957 WARN received SIGTERM indicating exit request
+2024-05-16 19:04:28,447 INFO waiting for django, getDataFromGateway, openweatherAPI to die
+2024-05-16 19:04:28,993 WARN stopped: openweatherAPI (terminated by SIGTERM)
+2024-05-16 19:04:30,235 WARN stopped: getDataFromGateway (terminated by SIGTERM)
+2024-05-16 19:04:32,241 INFO waiting for django to die
+2024-05-16 19:04:33,242 INFO reaped unknown pid 24 (exit status 1)
+2024-05-16 19:04:34,705 INFO stopped: django (exit status 0)
+2024-05-20 02:46:58,218 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2024-05-20 02:46:58,239 INFO supervisord started with pid 1
+2024-05-20 02:46:59,488 INFO spawned: 'django' with pid 16
+2024-05-20 02:46:59,491 INFO spawned: 'getDataFromGateway' with pid 17
+2024-05-20 02:46:59,494 INFO spawned: 'openweatherAPI' with pid 18
+2024-05-20 02:47:00,534 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2024-05-20 02:47:00,534 INFO success: getDataFromGateway entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2024-05-20 02:47:00,534 INFO success: openweatherAPI entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)

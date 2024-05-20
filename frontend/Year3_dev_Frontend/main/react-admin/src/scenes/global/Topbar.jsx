@@ -15,7 +15,11 @@ const Topbar = ({setIsSignin}) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isHovered2, setIsHovered2] = useState(false);
   const [openMenu, setOpenMenu] = useState(null);
-  const [theme, colorMode] = useMode();
+  const theme = useTheme();
+  const [, colorMode] = useMode();
+  const toggleMode = () => {
+	colorMode.toggleColorMode();
+  }
 
   return (
     <Box display="flex" justifyContent="space-between"
@@ -132,7 +136,9 @@ const Topbar = ({setIsSignin}) => {
 							Settings
 							</Typography>
 						</MenuItem>
-						<MenuItem>
+						<MenuItem
+							onClick={toggleMode}
+						>
 							<ContrastIcon /> 
 							<Typography component='span' pl={2}>
 							Change theme

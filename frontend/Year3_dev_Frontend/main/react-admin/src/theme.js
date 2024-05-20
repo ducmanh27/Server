@@ -1,5 +1,5 @@
 import { createContext, useState, useMemo } from "react";
-import { createTheme } from "@mui/material/styles";
+import { createTheme, useColorScheme } from "@mui/material/styles";
 
 // color design tokens export
 export const tokens = (mode) => ({
@@ -245,23 +245,23 @@ export const themeSettings = (mode) => {
 
 // context for color mode, don't know how the hell this work
 export const ColorModeContext = createContext({
-    toggleColorMode: () => {},  //this line is unnecessary
-  });
+  toggleColorMode: () => {},  //this line is unnecessary
+});
   
-  export const useMode = () => {
-    const [mode, setMode] = useState("dark");
-  
-    const colorMode = useMemo(
-      () => ({
-        toggleColorMode: () =>
-          setMode((prev) => (prev === "light" ? "dark" : "light")),
-      }),
-      []
-    );
-  
-    const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
-    //theme is a object that function createTheme of MUI return
-    //function createTheme of MUI will put the object returned by themeSettings(mode) to MUI
-    return [theme, colorMode];
-  };
+export const useMode = () => {
+  const [mode, setMode] = useState("light");
+
+  const colorMode = useMemo(
+    () => ({
+      toggleColorMode: () =>
+        setMode((prev) => (prev === "light" ? "dark" : "light")),
+    }),
+    []
+  );
+
+  const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+  //theme is a object that function createTheme of MUI return
+  //function createTheme of MUI will put the object returned by themeSettings(mode) to MUI
+  return [theme, colorMode];
+};
 

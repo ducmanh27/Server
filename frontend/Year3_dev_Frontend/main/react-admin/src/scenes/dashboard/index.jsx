@@ -1,6 +1,4 @@
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
-import { tokens } from "../../theme";
-import Header from "../../components/Header";
 import { useState, useContext } from "react";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -21,7 +19,6 @@ const Dashboard = () => {
     const data_passed_from_landingpage = location.state;
     let room_id = data_passed_from_landingpage == null ? 1 : data_passed_from_landingpage.room_id
     const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
     const callbackSetSignIn = useContext(UserContext);
     const [id, setId] = useState(1);
     const [optionData, setOptionData] = useState("now");        //change option to show different Chart
