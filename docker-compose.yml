@@ -27,7 +27,7 @@ services:
     environment:
       - DEBUG=1
       - SECRET_KEY=django-insecure-lvmv%!as*-*mh#s69am))4x#&f0vkqy(-i0wd4*(t=qnh!oj%9
-      - ALLOWED_HOSTS=27.71.227.1,localhost,.vercel.app
+      - ALLOWED_HOSTS=localhost,.vercel.app 
       - ENGINE=django.db.backends.postgresql
       - NAME=smartfarm
       - USER=year3
