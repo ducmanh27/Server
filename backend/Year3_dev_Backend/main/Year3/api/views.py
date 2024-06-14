@@ -60,13 +60,13 @@ def getSensorSecondlyData(request , *args, **kwargs):
         room_id = int(request.GET.get("room_id"))   #!< the query parameter is in string form
         filter = int(request.GET.get("filter"))
         node_id = int(request.GET.get("node_id"))
-        print(node_id)
-        print(filter)
+        # print(node_id)
+        # print(filter)
         dict_filter = {"1D": 1, "1W": 2, "1M": 3, "6M": 4, "1Y": 5}
         #Notice that: the timestamp in database is the utc timestamp + 7hour
         #Our local time stamp is faster than than the utc timestamp 7 hour
         ctime = int((datetime.datetime.now()).timestamp()) + (7*60*60) #!< convert to our local timestamp
-        print(f"current time: {ctime}")
+        # print(ctime)
         filter_time = 0 
         if filter == 1:
             filter_time = ctime - ctime%(24*60*60)
@@ -81,7 +81,7 @@ def getSensorSecondlyData(request , *args, **kwargs):
         else:
             filter_time = ctime - ctime%(24*60*60) - 24*60*60*31*12
         
-        print(filter_time)
+        # print(filter_time)
             
         parameter_key_list = ["co2", "temp", "hum", "light", 
                                 "dust", "sound", "red", "green", 
@@ -92,7 +92,7 @@ def getSensorSecondlyData(request , *args, **kwargs):
         #Get all 100 record for each node_id and put all in an list
         total_list = []
         if node_id == 0:
-            print(filter_time)
+            # print(filter_time)
             for each_node_id in sensor_node_id_list:
                 if models.RawSensorMonitor.objects.filter(time__gt=filter_time, room_id=room_id, node_id=each_node_id).count() > 0:
                     data = RawSensorMonitorSerializer(models.RawSensorMonitor.objects.filter(time__gt=filter_time, room_id=room_id, node_id=each_node_id).order_by("-time"), many=True).data #!< have to add many=True
@@ -113,24 +113,24 @@ def getSensorSecondlyData(request , *args, **kwargs):
             return Response(return_data, status=status.HTTP_204_NO_CONTENT) 
         #!< Get an average data of each group of records id (ignore the 0 value) and the time of one record (latest) and add them to return data 
 
-        for i in total_list:
-            print(len(i))
-        print("////....")
+        # for i in total_list:
+        #     print(len(i))
+        # print("////....")
         min_len_of_array_in_total_list = min([len(i) for i in total_list])
         max_len_of_array_in_total_list = max([len(i) for i in total_list])
-        print(min_len_of_array_in_total_list)
-        print(max_len_of_array_in_total_list)
+        # print(min_len_of_array_in_total_list)
+        # print(max_len_of_array_in_total_list)
         # total_list = [i[-min_len_of_array_in_total_list:] for i in total_list]
-        for i in total_list:
-            print(len(i))
+        # for i in total_list:
+        #     print(len(i))
 
         for i in total_list:
             if len(i) < max_len_of_array_in_total_list:
                 for j in range(0, max_len_of_array_in_total_list - len(i)):
                     i.insert(0, {k: -1 for k in parameter_key_list})
 
-        for i in total_list:
-            print(len(i))
+        # for i in total_list:
+        #     print(len(i))
 
         
         return_data = {}
@@ -141,7 +141,7 @@ def getSensorSecondlyData(request , *args, **kwargs):
                 buffer[i] = {"value": 0, "number": 0}
             else:
                 buffer[i] = []    #!< is used to get the max value of time
-        print(len(total_list[0]))
+        # print(len(total_list[0]))
         for i in range(len(total_list[0])):
             for each_element_in_total_list in total_list:
                 for j in  parameter_key_list:
@@ -202,7 +202,7 @@ from .djangoClient import client as setpoint_client
 @permission_classes([permissions.IsAuthenticated])
 def send_setpoint(request, *arg, **kwargs):
     monitor_data = json.loads(request.body)
-    print(monitor_data)
+    # print(monitor_data)
     # print(request.data)
     try:
         insert_to_table_ControlSetpoint(monitor_data)
@@ -238,7 +238,7 @@ def setTimerActuator(request, *args, **kwargs):
     try:
         room_id = request.GET.get("room_id")
         timer = json.loads(request.body)
-        print(timer)
+        # print(timer)
         result = send_timer_to_gateway(client, {"timer": timer["time"],"temperature": timer["temperature"] ,"room_id": room_id})
         #send data to gateway and wait for return
         new_data = {"room_id": room_id, 
@@ -280,44 +280,43 @@ def setTimerActuator(request, *args, **kwargs):
 #           "resolutionX":10,
 #           "resolutionY":10}
 ###############################################################
-# from .kriging import Kriging
-# @api_view(["POST","GET"])     
-# # @authentication_classes([jwtauthentication.JWTAuthentication])
-# # @permission_classes([permissions.IsAuthenticated])      
-# def kriging(request, *args, **kwargs):
-#     try:
-#         room_id = request.GET.get("room_id")
-#         default_X = []          #default axis x of id 3,4,5,6
-#         default_Y = []     #default axis y of id 3,4,5,6
-#         default_value = []    #this is default-type value of all known-points
-#         all_sensor_node_in_this_room = RegistrationSerializer(Registration.objects.filter(room_id=room_id, function="sensor", status="sync", aim = "air_monitor"), 
-#                                                                 many=True).data #!< have to add many=True
-#         print(all_sensor_node_in_this_room)
-#         room_size = RoomSerializer(Room.objects.filter(room_id=room_id), many=True).data[0] #!< have to add many=True
-#         for node in all_sensor_node_in_this_room:
-#             # 1. Get the x axis and y axis of all sensor nodes
-#             default_X.append(node["x_axis"])
-#             default_Y.append(node["y_axis"])
-#             # 2. Get all sensor nodes' values (in order according to the two above array of course)
-#             if RawSensorMonitor.objects.filter(node_id=node["node_id"]).count() >= 1:
-#                 default_value.append((RawSensorMonitorSerializer(RawSensorMonitor.objects.filter(node_id=node["node_id"]).order_by('-time'),
-#                                                                 many=True).data)[0]["temp"]) #!< have to add many=True
-#             else:
-#                 # if len(default_X) >=1 and len(default_Y) >=1: 
-#                 #    default_X.pop()
-#                 #    default_Y.pop()
-#                 default_value.append(0)
+from .kriging import Kriging
+@api_view(["POST","GET"])     
+# @authentication_classes([jwtauthentication.JWTAuthentication])
+# @permission_classes([permissions.IsAuthenticated])      
+# api process to slow
+def kriging(request, *args, **kwargs):
+    try:
+        room_id = request.GET.get("room_id")
+        default_X = []          #default axis x of id 3,4,5,6
+        default_Y = []     #default axis y of id 3,4,5,6
+        default_value = []    #this is default-type value of all known-points
+        all_sensor_node_in_this_room = RegistrationSerializer(Registration.objects.filter(room_id=room_id, function="sensor", status="sync", aim = "air_monitor"), 
+                                                                many=True).data #!< have to add many=True
+        # print(all_sensor_node_in_this_room)
+        room_size = RoomSerializer(Room.objects.filter(room_id=room_id), many=True).data[0] #!< have to add many=True
+        for node in all_sensor_node_in_this_room:
+            # 1. Get the x axis and y axis of all sensor nodes
+            default_X.append(node["x_axis"])
+            default_Y.append(node["y_axis"])
+            # 2. Get all sensor nodes' values (in order according to the two above array of course)
+            if RawSensorMonitor.objects.filter(node_id=node["node_id"]).count() >= 1:
+                default_value.append((RawSensorMonitorSerializer(RawSensorMonitor.objects.filter(node_id=node["node_id"]).order_by('-time'),
+                                                                many=True).data)[0]["temp"]) #!< have to add many=True
+            else:
+                # if len(default_X) >=1 and len(default_Y) >=1: 
+                #    default_X.pop()
+                #    default_Y.pop()
+                default_value.append(0)
 
         
-#         k = Kriging(10, 10, default_value, default_X, default_Y, room_size["x_length"], room_size["y_length"])
-#         test = k.interpolation()
-#         response = {'data': test[2], 'resolutionX': k.resolutionX, 'resolutionY': k.resolutionY}
+        k = Kriging(10, 10, default_value, default_X, default_Y, room_size["x_length"], room_size["y_length"])
+        test = k.interpolation()
+        response = {'data': test[2], 'resolutionX': k.resolutionX, 'resolutionY': k.resolutionY}
 
-#         return Response(response, status=status.HTTP_200_OK)     
-#     except:
-#         return Response({"Response": "Error on server!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
+        return Response(response, status=status.HTTP_200_OK)     
+    except:
+        return Response({"Response": "Error on server!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
@@ -361,7 +360,7 @@ def historyChart(request, *args, **kwargs):
             node_id = request.GET.get("node_id")   #!< query parameter inside an URL is a string not a integer
             time_start = request.GET.get("time_start")   #!< query parameter inside an URL is a string not a integer
             time_end = request.GET.get("time_end") #!< query parameter inside an URL is a string not a integer
-            print(str(option), int(room_id), int(node_id), int(time_start), int(time_end))
+            # print(str(option), int(room_id), int(node_id), int(time_start), int(time_end))
             result_data = None
             if(option == "day"): 
                 result_data = getOptionDayData(int(time_start), int(room_id), int(node_id))
@@ -491,7 +490,7 @@ def getRoomData(request, *args, **kwargs):
 def getRoomInformationTag(request, *args, **kwargs):
     try:
         room_id = request.GET["room_id"]
-        print(room_id)
+        # print(room_id)
         if RawSensorMonitor.objects.count() != 0:
             # 1.Get all node_id s that belong to this room
             if Registration.objects.filter(room_id=room_id, function="sensor", status="sync", aim = "air_monitor").count() == 0:
@@ -505,7 +504,7 @@ def getRoomInformationTag(request, *args, **kwargs):
             RegistrationSerializer_instance = RegistrationSerializer(all_node_id_of_this_room_id, many=True)   #!< Have to add many=True
             
             all_node_id_of_this_room_id_list = [ i["node_id"] for i in RegistrationSerializer_instance.data]
-            print(all_node_id_of_this_room_id_list)
+            # print(all_node_id_of_this_room_id_list)
             # 2.get the latest data for each node_id
             latest_data_of_each_node_id_in_this_room = []
             for each_node_id in all_node_id_of_this_room_id_list:
@@ -547,7 +546,7 @@ def getRoomInformationTag(request, *args, **kwargs):
             # 6. Get room size 
             room_size_data = RoomSerializer(Room.objects.filter(room_id=room_id), many=True).data #!< have to include many=True
             average_data_to_return["room_size"] = {"x_length": room_size_data[0]["x_length"], "y_length": room_size_data[0]["y_length"]}
-            print(average_data_to_return)
+            # print(average_data_to_return)
             return Response(average_data_to_return, status=status.HTTP_200_OK)
             # data = RawSensorMonitor.objects.order_by('-time')[0]     #!< get the latest record in model according to timeline
             # RawSensorMonitorSerializer_instance = RawSensorMonitorSerializer(data)
@@ -571,13 +570,6 @@ def getRoomInformationTag(request, *args, **kwargs):
 #           "hourly": ...,
 #           "daily": ...,
 #       }
-
-# position temp map 100*100
-# [0 10] 25
-# [0 10] 25
-# [0 10] 25
-# [0 10] 25
-
 @api_view(["GET"])
 # @authentication_classes([jwtauthentication.JWTAuthentication])
 # @permission_classes([permissions.IsAuthenticated])
@@ -595,11 +587,11 @@ def AQIdustpm2_5(request, *args, **kwargs):
         hourly = 0
         daily = 0
         ctime = int((datetime.datetime.now()).timestamp()) + (7*60*60) #!< convert to our local timestamp
-        print(ctime)
+        # print(ctime)
         #calculate hourly data
         latest_time = int(RawSensorMonitor.objects.order_by("-time")[0].time)
-        print(latest_time)
-        print("____________________________________________________________")
+        # print(latest_time)
+        # print("____________________________________________________________")
         filter_time = latest_time - 12*60*60
         node_sensor_list = RegistrationSerializer(Registration.objects.filter(room_id=room_id, status="sync"),many=True)
         hourly_dust_data = RawSensorMonitorSerializer(RawSensorMonitor.objects.filter(room_id=room_id, time__gt=filter_time, dust__gt=0), many=True).data #!< have to add many=True
@@ -610,7 +602,7 @@ def AQIdustpm2_5(request, *args, **kwargs):
             df["hour"] = df["datetime"].dt.hour
             df = df.groupby(['hour'], as_index=False).mean()
             df.sort_values(by='hour', ascending=False, inplace=True)
-            print(df)
+            # print(df)
             power_index = 0
             pre_row = None
             l = []
@@ -626,7 +618,7 @@ def AQIdustpm2_5(request, *args, **kwargs):
                     power_index = int(power_index + dif)
                     l.append({"value": row["dust"], "pow": power_index})
 
-            print(l)
+            # print(l)
             temp_list = [i["value"] for i in l]
             range = round(max(temp_list) - min(temp_list),1)
             scaled_rate_of_change = range/max(temp_list)
@@ -655,7 +647,7 @@ def AQIdustpm2_5(request, *args, **kwargs):
                     aqihi = i["aqihi"]
                     hourly = round((aqihi - aqilo)*(hourly-conclo)/(conchi-conclo) + aqilo)
                     break
-            print(hourly)
+            # print(hourly)
             return Response({"hourly": hourly, "daily": 0, "time": latest_time}, status=200)
         else:
             return Response({"Response": "No data available!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -740,28 +732,28 @@ def configurationRoom(request, *args, **kwargs):
         if request.method == "POST":
             new_room = json.loads(request.body)
 
-            print(f"new room data {new_room}")
-            print(">???????????????????,,,,,,,,")
+            # print(f"new room data {new_room}")
+            # print(">???????????????????,,,,,,,,")
             if Room.objects.filter(room_id=new_room["room_id"]).count() > 0:
                 return Response({"Response": "This room already existed!"}, status=status.HTTP_400_BAD_REQUEST)
 
             new_data_serializer = RoomSerializer(data=new_room)
             if new_data_serializer.is_valid():
                 new_data_serializer.save()
-                print("Successfully save new room to database!")
+                # print("Successfully save new room to database!")
                 return Response({"Response": "Successfully create new room!"}, status=status.HTTP_200_OK)
             else:
-                print("Failed to save new room to database!")
+                # print("Failed to save new room to database!")
                 return Response({"Response": "Failed to create new room!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         elif request.method == "DELETE":
             id = json.loads(request.body)["id"]
             record = Room.objects.filter(id=id)[0]
-            print(record)
+            # print(record)
             try:
                 record.delete()
                 return Response({"Response": "Successfully delete room!"}, status=status.HTTP_200_OK)
             except:
-                print("Failed to delete room!")
+                # print("Failed to delete room!")
                 return Response({"Response": "Failed to delete room!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         elif request.method == "PUT":
             new_setting = json.loads(request.body)
@@ -824,7 +816,7 @@ def configurationNode(request, *args, **kwargs):
     try:
         if request.method == "GET":
             room_id = int(request.GET.get("room_id"))
-            print(room_id)
+            # print(room_id)
             data = Registration.objects.filter(room_id=room_id)
             data_serializer = RegistrationSerializer(data, many=True) #!< have to add many=True
             return Response(data_serializer.data, status=status.HTTP_200_OK)
@@ -846,7 +838,7 @@ def configurationNode(request, *args, **kwargs):
                 new_data_serializer.save()
                 if new_data_buffer_serialier.is_valid():
                     new_data_buffer_serialier.save()
-                    print("OK set data post node to buffer")
+                    # print("OK set data post node to buffer")
                 # sendNodeConfigToGateway(client, new_data, "add")
                 #this thread will run side by side with django main thread 
                 t = Thread(target=sendNodeConfigToGateway, args=(client, new_data, "add"))
@@ -858,24 +850,24 @@ def configurationNode(request, *args, **kwargs):
             try:
                 new_data = json.loads(request.body)
                 id = new_data["id"]
-                print(id)
+                # print(id)
                 record = Registration.objects.filter(id=id)[0]
                 record.status = "deleted"
                 record.save()
-                print(record)
+                # print(record)
                 new_data_for_buffer = {
                     "action": 0,
                     "mac": str(record.mac),
                     "room_id": str(record.room_id.room_id),         #record.room_id will result in "Room Object"
                     "time": int((datetime.datetime.now()).timestamp()) + 7*60*60,
                 }
-                print(new_data_for_buffer)
-                print("OK")
+                # print(new_data_for_buffer)
+                # print("OK")
                 new_data_buffer_serialier = NodeConfigBufferSerializer(data=new_data_for_buffer)
                 if new_data_buffer_serialier.is_valid():
-                    print("????????????????????????")
+                    # print("????????????????????????")
                     new_data_buffer_serialier.save()
-                    print("OK set data delete node to buffer")
+                    # print("OK set data delete node to buffer")
                     t = Thread(target=sendNodeConfigToGateway, args=(client, new_data, "delete"))
                     t.start()
                     return Response({"Response": "Successfully delete node!"}, status=status.HTTP_200_OK)
@@ -885,7 +877,7 @@ def configurationNode(request, *args, **kwargs):
                 return Response({"Response": "Unsuccessfully delete node!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         if request.method == "PUT":
             new_node_data = json.loads(request.body)
-            print(new_node_data)
+            # print(new_node_data)
             record = Registration.objects.filter(id=new_node_data["id"])[0]
             record.node_id = new_node_data["node_id"]   #!< each column in a record is like a property of calss object, record is not like dictionary
             record.x_axis = new_node_data["x_axis"]
@@ -942,7 +934,7 @@ def signUp(request, *args, **kwargs):
         new_user_data = json.loads(request.body)
         data = User.objects.all()
         for i in data:
-            print(i.get_username())
+            # print(i.get_username())
             if new_user_data["username"] == i.get_username():
                 return Response({"Response": "Username've already existed!"}, status=status.HTTP_417_EXPECTATION_FAILED)
         new_user = User.objects.create_user(username=new_user_data["username"], password=new_user_data["password"])
@@ -999,9 +991,7 @@ from .serializers import ControlSetpointSerializer
 def setActuator(request, *args, **kwargs):
     try:
         data_command = json.loads(request.body)
-        print('______________________________')
-        print(data_command)
-        print("++++++++++++++++++++++++++++++++++++++")
+        print(f"Data command from user: {data_command}")
         data = send_actuator_command_to_gateway(client, data_command)
         """_summary_
            send_actuator_command_to_gateway will return this 
@@ -1022,8 +1012,7 @@ def setActuator(request, *args, **kwargs):
                         } 
         """
         new_data = data["info"]
-        print("Actuator command")
-        print(new_data)
+        print(f"Actuator command {new_data}")
 
         new_data_serializer = ControlSetpointSerializer(data=new_data)
         if new_data_serializer.is_valid():
@@ -1078,9 +1067,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import MyTokenObtainPairSerializer
 class CustomTokeObtainPairview(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
-    
 
 
+# API for real-time weather data
 
 from api.models import WeatherData
 from api.serializers import WeatherDataSerializer
@@ -1101,29 +1090,7 @@ def getWeatherdata(request, *args, **kwargs):
         return Response({"Response": 0}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
-##
-# @brief: This view is for getting energy data 
-#
-# @params: 
-#       urls: "api/energydata"
-# @return:
-#       
-#      if there is none:
-#       []
-#       
-##
-# @brief: This view is for sending Weatherdata to Frontend, component Weatherdata
-#
-# @params: 
-#       urls: "api/weatherdata"
-# @return:
-#  
-#      if there is none:
-#       []
-#           {  "node_id":[8],
-#              "voltage":[225.8],
-#              "current":[0.92],
-#              "active_power":[],
+# API for real-time electric data
 from .models import EnergyData
 from .serializers import EnergyDataSerializer
 class EnergyDataAPIView(generics.RetrieveAPIView,generics.ListAPIView):
@@ -1147,6 +1114,8 @@ class EnergyDataAPIView(generics.RetrieveAPIView,generics.ListAPIView):
     
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
+ 
+# API for energy consumption in each month
 class EnergyDataChartAPIView(generics.ListAPIView):
 
     queryset = EnergyData.objects.all()
@@ -1164,11 +1133,11 @@ class EnergyDataChartAPIView(generics.ListAPIView):
         first_day_of_next_month = datetime.datetime(next_year, next_month, 1)
         end_of_month = first_day_of_next_month - datetime.timedelta(seconds=1)
         return int(end_of_month.timestamp() - 7 * 60 * 60)
+    
     def filter_queryset(self, queryset):
-        first_object = queryset.first()
+
         dataFirstObj = self.get_serializer(queryset.first(), many=False)
         month_start = datetime.datetime.fromtimestamp(dataFirstObj.data['time']).month
-        last_object = queryset.last()
         dataLastObj = self.get_serializer(queryset.last(), many=False)
 
         month_end = datetime.datetime.fromtimestamp(dataLastObj.data['time']).month
@@ -1178,7 +1147,7 @@ class EnergyDataChartAPIView(generics.ListAPIView):
             data_return.append(obj)
         return data_return
     def list(self, request, *args, **kwargs):
-        print(request.GET.get("room_id"))
+
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
         month_year_list = []
@@ -1201,123 +1170,8 @@ class EnergyDataChartAPIView(generics.ListAPIView):
         return Response(time_activeEnergy_List)
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
-'''
-    {
-        "operator": "keep_alive",
-        "info":
-            {
-                "room_id": 1,
-                "IP": "192.168.1.192",
-                "time": 1711620315s
-            }
-    }
-'''
-import paho.mqtt.client as mqtt
-from rest_framework import generics, status
-from rest_framework.response import Response
-from .models import Gateway
-from .serializers import GatewaySerializer
-from . import config
-class GatewayListCreateAPIView(generics.ListCreateAPIView):
-    queryset = Gateway.objects.all()
-    serializer_class = GatewaySerializer
-    def send_json_to_mqtt_server(self, json_data, broker_address="192.168.1.199", broker_port=1883, topic="farm/monitor/alive"):
-        print(json_data)
-        client = mqtt.Client()
-        client.connect(broker_address, broker_port)
-        client.publish(topic, json_data)
-        client.disconnect()
-        time.sleep(0.01)
-    def get_queryset(self):
-        return list(Gateway.objects.filter(ip = "192.168.1.192"))
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        ActiveGateways = Gateway.objects.filter(status = "ACTIVE")
-        for gateway in ActiveGateways:
-            data = {
-                "operator": "keep_alive",
-                "info": {
-                    "room_id": gateway.room_id.room_id,
-                    "IP": gateway.ip,
-                    "time": int(datetime.datetime.now().timestamp())
-                }
-            }
-            
-            json_data = json.dumps(data)
-            print(json_data)
-            self.send_json_to_mqtt_server(json_data, config.BROKER_ADDRESS, config.BROKER_PORT, config.BROKER_TOPIC_ALIVE)
-        # print(serializer)
-        # print(serializer.data)
-        return Response(serializer.data)
-    def create(self, request, *args, **kwargs):
-        # Extract data from request
-        '''
-            {
-                'add_gateway': 'true',
-                'room_id': '1',
-                'ip_start': '192.168.1.180',
-                'ip_end': '192.168.1.198'
-            }
-        '''
-        add_gateway = request.data.get('add_gateway')
-        room_id = int(request.data.get('room_id', 1))  # Default room_id is 1
-        ip_start = request.data.get('ip_start')
-        ip_end = request.data.get('ip_end')
-
-        # Check if add_gateway is true
-        if add_gateway == 'true':
-            # Get the Room object based on room_id
-            try:
-                room = Room.objects.get(room_id=room_id)
-            except Room.DoesNotExist:
-                return Response({'error': f'Room with id {room_id} does not exist'}, status=status.HTTP_400_BAD_REQUEST)
-
-            # Validate and calculate IP range
-            try:
-                ip_start_parts = list(map(int, ip_start.split('.')))
-                ip_end_parts = list(map(int, ip_end.split('.')))
-            except ValueError:
-                return Response({'error': 'Invalid IP format'}, status=status.HTTP_400_BAD_REQUEST)
-
-            if len(ip_start_parts) != 4 or len(ip_end_parts) != 4:
-                return Response({'error': 'Invalid IP format'}, status=status.HTTP_400_BAD_REQUEST)
-
-            ip_range = [f"192.168.1.{i}" for i in range(ip_start_parts[3], ip_end_parts[3] + 1)]
-
-            # Get the current Unix timestamp
-            current_unix_timestamp = int(time.time())
-
-            # Insert records
-            for ip in ip_range:
-                Gateway.objects.create(
-                    room_id=room,
-                    ip=ip,
-                    status='INACTIVE',
-                    error="null",
-                    time=current_unix_timestamp
-                )
-
-            return Response({'message': 'Records inserted successfully'}, status=status.HTTP_201_CREATED)
-        else:
-            return Response({'error': 'Invalid add_gateway parameter'}, status=status.HTTP_400_BAD_REQUEST)
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-
-# View for heatmap version 2
-
-# lay nhung node co trong bang resgistration co status = sync, aim = air_monitor.
-# tao ra mot arr data_response = []
-# lay ra cac node id trong querry [node_id_i] => them vao array
-# voi moi node id lay ra tri tri [position_x] [position_y] => them vao array
-# tuong tu nhu the voi moi node id lay ra nhiet do gan nhat va so sanh voi datetime neu <= 2 phut thi oke
-# truong hop filter trong khoang (datetime.now - 120) < x < datetime.now khong co record thi xoa node id day ra khoi arr
-# lay thoi diem hien tai => datetime.now sau do convert thanh unixtimestamp
-# 
+    
+# API for heatmap
 from .models import Room
 class HeatMapData(generics.ListAPIView):
 
